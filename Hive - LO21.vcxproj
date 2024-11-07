@@ -133,7 +133,6 @@
     <ClCompile Include="src\HistoriqueCoup.cpp" />
     <ClCompile Include="src\Hive.cpp" />
     <ClCompile Include="src\Joueur.cpp" />
-    <ClCompile Include="src\ListePartie.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\MainPiece.cpp" />
     <ClCompile Include="src\Partie.cpp" />
@@ -148,7 +147,6 @@
     <ClInclude Include="include\HistoriqueCoup.h" />
     <ClInclude Include="include\Hive.h" />
     <ClInclude Include="include\Joueur.h" />
-    <ClInclude Include="include\ListePartie.h" />
     <ClInclude Include="include\MainPiece.h" />
     <ClInclude Include="include\Partie.h" />
     <ClInclude Include="include\Piece.h" />
