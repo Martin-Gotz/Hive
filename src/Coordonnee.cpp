@@ -1,9 +1,8 @@
-#include "../Coordonnee.h"
-
+#include "../include/Coordonnee.h"
 
 using namespace Hive;
 using namespace std;
-
+/*
 vector<Coordonnee> Coordonnee::getVoisins() const
 {
 	vector<Coordonnee> Voisins;
@@ -17,6 +16,7 @@ vector<Coordonnee> Coordonnee::getVoisins() const
 	}
 	return Voisins;
 }
+*/
 
 void Coordonnee::afficherVoisins() const
 {

@@ -16,6 +16,5 @@ namespace Hive {
 		Case& caseDestination;
 		Joueur& joueur;
 	public:
-
 	};
 }
