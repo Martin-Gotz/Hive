@@ -10,14 +10,14 @@ namespace Hive {
 	{
 	private:
 		int ID;
-		int nombre_cellules;
-		vector<Coordonnee> Cellules;
+		int nombre_cases;
+		vector<Case> Cases;
 	public:
-		vector<Coordonnee> getCellules() const;
-		Plateau() : nombre_cellules(0) {};
+		vector<Coordonnee> getCases() const;
+		Plateau() : nombre_cases(0), ID(0) {};
 		friend ostream& operator<<(ostream& f, Plateau& p);
 		int getId() const { return ID; }
-		int getNombreCellules() const { return nombre_cellules; }
+		int getNombreCases() const { return nombre_cases; }
 	};
 	ostream& operator<<(ostream& f, const Plateau& p);
 
