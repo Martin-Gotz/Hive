@@ -11,7 +11,7 @@
 
 namespace Hive {
 	using namespace std;
-	//on définit dans un premier temps une seule cellule
+
 	class Coordonnee
 	{
 	private:
