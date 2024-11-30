@@ -8,17 +8,18 @@ vector<Case> Plateau::getCases() const
 	}
 
 ostream& operator<<(ostream& f, const Plateau& p)
+{
+	f << "Les cellules dans le plateau numéro : " << p.getId() << "\n";
+	f << "Nombre de cellules : " << p.getNombreCases() << "\n";
+	int i = 0;
+	for (const auto& cell : p.getCases())
 	{
-		f << "Les cellules dans le plateau numéro : " << p.getId() << "\n";
-		f << "Nombre de cellules : " << p.getNombreCases() << "\n";
-		int i = 0;
-		for (const auto& cell : p.getCases())
-		{
-			f << "Case numéro : " << i++ << " Coordonnées : (" << cell.getCoord().get_q() << cell.getCoord().get_r() << ")\n";
-		}
-		return f;
+		f << "Case numéro : " << i++ << " Coordonnées : (" << cell.getCoord().get_q() << cell.getCoord().get_r() << ")\n";
 	}
+	return f;
+}
 
+/*
 vector<Case> Plateau::EnsemblePlacementPossibles()
 {
 	// les placements possibles seront : 
@@ -34,4 +35,4 @@ vector<Case> Plateau::EnsemblePlacementPossibles()
 		}
 	}
 
-}
+}*/

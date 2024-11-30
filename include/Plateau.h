@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include <vector>
-#include "Coordonnee.h"
 #include "Case.h"
 
 using namespace std;

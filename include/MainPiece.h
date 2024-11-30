@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
-#include "Piece.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <ostream>
+#include "Piece.h"
 
 using namespace std;
 namespace Hive {

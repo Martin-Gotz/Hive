@@ -1,6 +1,7 @@
 #include "../include/Hive.h"
 using namespace Hive;
 
+/*
 void Hive_Game::CreerNouvellePartie() {
 
 	//à  revoir
@@ -8,3 +9,4 @@ void Hive_Game::CreerNouvellePartie() {
 
 	Parties.push_back()
 }
+*/

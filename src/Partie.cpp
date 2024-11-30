@@ -6,13 +6,14 @@ void Partie::lancerpartie()
 	cout << "Lancement de la partie ...\n";
 }
 
+/*
 void Partie::finPartie()
 {
 	const auto& pieces = joueur1.getMain().getPieces();
 	for (const auto& piece : pieces) {
 		if (piece.getName() == "Reine") {
-			const Reine* reine = dynamic_cast<const Reine*>(&piece);
-			if (reine && reine->IsSurrounded()) {
+			const Abeille* abeille = dynamic_cast<const Abeille*>(&piece);
+			if (abeille && abeille->getEstEntouree()) {
 				cout << "La Reine est entourée. Fin de la partie.\n";
 				etatPartie = Terminee;
 				return;
@@ -46,3 +47,4 @@ void Partie::TourSuivant()
 		cout << "joueur inconnu ...\n";
 	}
 }
+*/

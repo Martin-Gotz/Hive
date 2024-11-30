@@ -2,7 +2,7 @@
 
 using namespace Hive;
 using namespace std;
-/*
+
 vector<Coordonnee> Coordonnee::getVoisins() const
 {
 	vector<Coordonnee> Voisins;
@@ -16,22 +16,21 @@ vector<Coordonnee> Coordonnee::getVoisins() const
 	}
 	return Voisins;
 }
-*/
 
 void Coordonnee::afficherVoisins() const
 {
 	for (const auto& coord : getVoisins()) {
-		cout << coord << " ";
+		//cout << coord << " ";
 	}
 	cout << endl;
 }
+
 
 ostream& operator<<(ostream& f, const Coordonnee& c)
 {
 	f << "X : " << c.get_q() << ", Y : " << c.get_r();
 	return f;
 }
-
 Coordonnee Coordonnee::operator+(const Coordonnee& c)
 {
 	return Coordonnee(q + c.q, r + c.r);
