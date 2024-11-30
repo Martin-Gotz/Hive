@@ -8,63 +8,50 @@ namespace Hive {
 	class Piece
 	{
 	private:
-		Coordonnee c;
-		string name;
 		bool estPlacee;
 	public:
-		Piece(string nom) : name(nom), estPlacee(0), c(0,0) {}
-		string getName() const { return name; }
-		Coordonnee getCoord() const { return c; }
-		virtual vector<Case*> mouvementPossibles(Plateau& plateau) const = 0;
-		virtual bool deplacementpossible(Plateau& plateau) const =0;
+		Piece() : estPlacee(false) {}
+		virtual vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const = 0;
+		bool deplacementpossible(Plateau& plateau, Coordonnee& coo) const;
 	};
 
-	class Reine : Piece
+	class Abeille : public Piece
 	{
-	private :
-		bool Surrounded;
 	public:
-		Reine() : Piece("Reine"), Surrounded(0) {}
-		bool IsSurrounded() const { return Surrounded; }
-		vector<Case*> mouvementPossibles(Plateau& plateau) const override;
-		bool deplacementpossible(Plateau& plateau) const override;
+		Abeille() {}
+		vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
+		bool isSurrounded(Plateau& plateau, Coordonnee& coo) const;
 	};
 
-	class Scarabee : Piece {
-		Scarabee() : Piece("Scarabee") {}
-		bool deplacementpossible(Plateau& plateau) const override;
-		vector<Case*> mouvementPossibles(Plateau& plateau) const override;
+	class Scarabee : public Piece {
+		Scarabee() {}
+		vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 
-	class Araignee : Piece {
-		Araignee() : Piece("Araignee") {}
-		bool deplacementpossible(Plateau& plateau) const override;
-		vector<Case*> mouvementPossibles(Plateau& plateau) const override;
+	class Araignee : public Piece {
+		Araignee() {}
+		vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 
-	class Sauterelle : Piece {
-		Sauterelle() : Piece("Sauterelle") {}
-		bool deplacementpossible(Plateau& plateau) const override;
-		vector<Case*> mouvementPossibles(Plateau& plateau) const override;
+	class Sauterelle : public Piece {
+		Sauterelle() {}
+		vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 
-	class Fourmi : Piece {
-		Fourmi() : Piece("Fourmi") {}
-		bool deplacementpossible(Plateau& plateau) const override;
-		vector<Case*> mouvementPossibles(Plateau& plateau) const override;
+	class Fourmi : public Piece {
+		Fourmi() {}
+		vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 
-	class Moustique : Piece {
-		Moustique() : Piece("Moustique") {}
-		bool deplacementpossible(Plateau& plateau) const override;
-		vector<Case*> mouvementPossibles(Plateau& plateau) const override;
+	class Moustique : public Piece {
+		Moustique() {}
+		vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 
 
-	class Coccinelle : Piece {
-		Coccinelle() : Piece("Coccinelle") {}
-		bool deplacementpossible(Plateau& plateau) const override;
-		vector<Case*> mouvementPossibles(Plateau& plateau) const override;
+	class Coccinelle : public Piece {
+		Coccinelle() {}
+		vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 }
 
