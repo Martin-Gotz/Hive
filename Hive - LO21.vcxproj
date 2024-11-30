@@ -141,6 +141,7 @@
     <ClCompile Include="src\Regle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Enums.h" />
     <ClInclude Include="include\Case.h" />
     <ClInclude Include="include\Coordonnee.h" />
     <ClInclude Include="include\Coup.h" />
