@@ -4,9 +4,6 @@
 
 namespace Hive {
 
-	enum TypeJoueur {IA, humain};
-	enum Couleur {Noir, Blanc};
-
 	class Joueur
 	{
 	private:

@@ -3,6 +3,7 @@
 using namespace Hive;
 #include <algorithm>	// pour le set_difference
 
+
 ostream& operator<<(ostream& f, const Plateau& p)
 	{
 		f << "Nombre de cellules : " << p.getNombreCases() << "\n";
