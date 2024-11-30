@@ -20,5 +20,7 @@ namespace Hive {
 		// pour placer une piece, il nous faut la position des autres pieces dans le plateau
 		// il faut également regarder quelles sont les cases qui sont élligibles à ce déplacement
 		void PrendrePiece(Piece& piece);
+		string getNom() const { return nom; }
+		MainPiece getMain() const { return main; }
 	};
 }

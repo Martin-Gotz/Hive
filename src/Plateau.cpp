@@ -28,7 +28,10 @@ vector<Case> Plateau::EnsemblePlacementPossibles()
 	vector<Case> CaseElligible;
 	for (const auto& cell : getCases())
 	{
-		if(!cell.getOccuppee() && cell.getCoord().getVoisins())
+		if (!cell.getOccuppee() && cell.getHasNeighbors())
+		{
+
+		}
 	}
 
 }

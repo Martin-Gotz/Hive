@@ -1,6 +1,7 @@
 #pragma once
 #include "Coordonnee.h"
 #include "Piece.h"
+#include "Hive.h"
 #include <vector>
 #include <iostream>
 
@@ -21,4 +22,5 @@ namespace Hive {
 		bool getHasNeighbors() const { return !getNeighbors().empty(); }
 		vector<Case> getNeighbors() const;
 	}; 
+	Case* getCaseByCoord(Coordonnee& c, const Plateau& p);
 }
