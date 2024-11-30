@@ -7,7 +7,7 @@ namespace Hive {
 	};
 
 	enum Couleur {
-		BLANc,
+		BLANC,
 		NOIR
 	};
 

@@ -1,9 +1,11 @@
 #include "../include/Piece.h"
-using namespace Hive;
+namespace Hive{
 
-/*
-bool Abeille::deplacementpossible(Plateau& p)
-{
+
+	bool Piece::deplacementpossible(Plateau& plateau, Coordonnee& coo) const
+	{
+		return false;
+	}
 
 }
 */
