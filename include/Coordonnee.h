@@ -21,8 +21,8 @@ namespace Hive {
 		int get_q() const { return q; }
 		int get_r() const { return r; }
 		Coordonnee(int coord_x = 0, int coord_y = 0) : q(coord_x), r(coord_y) {}
-		/*vector<Coordonnee> getVoisins() const;
-		void afficherVoisins() const;*/
+		vector<Coordonnee> getVoisins() const;
+		/*void afficherVoisins() const;*/
 		bool operator==(const Coordonnee& c) { return q == c.q && r == c.r; }
 		Coordonnee operator+(const Coordonnee& c);
 	};

@@ -3,14 +3,19 @@
 #include "Joueur.h"
 #include "Plateau.h"
 #include <vector>
+#include "Enums.h"
 
 namespace Hive {
 	class Piece
 	{
 	private:
 		bool estPlacee;
+		Couleur couleur;
+
 	public:
-		Piece() : estPlacee(false) {}
+		Piece(Couleur c) : estPlacee(false), couleur(c) {}
+		bool GetestPlacee() { return estPlacee; }
+		bool GetCouleur() { return couleur; }
 		virtual vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const = 0;
 		bool deplacementpossible(Plateau& plateau, Coordonnee& coo) const;
 	};
@@ -18,39 +23,39 @@ namespace Hive {
 	class Abeille : public Piece
 	{
 	public:
-		Abeille() {}
+		Abeille(Couleur c) : Piece(c) {}
 		vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 		bool isSurrounded(Plateau& plateau, Coordonnee& coo) const;
 	};
 
 	class Scarabee : public Piece {
-		Scarabee() {}
+		Scarabee(Couleur c) : Piece(c) {}
 		vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 
 	class Araignee : public Piece {
-		Araignee() {}
+		Araignee(Couleur c) : Piece(c) {}
 		vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 
 	class Sauterelle : public Piece {
-		Sauterelle() {}
+		Sauterelle(Couleur c) : Piece(c) {}
 		vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 
 	class Fourmi : public Piece {
-		Fourmi() {}
+		Fourmi(Couleur c) : Piece(c) {}
 		vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 
 	class Moustique : public Piece {
-		Moustique() {}
+		Moustique(Couleur c) : Piece(c) {}
 		vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 
 
 	class Coccinelle : public Piece {
-		Coccinelle() {}
+		Coccinelle(Couleur c) : Piece(c) {}
 		vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 }

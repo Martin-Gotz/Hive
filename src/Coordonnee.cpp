@@ -2,7 +2,9 @@
 
 using namespace Hive;
 using namespace std;
-/*
+
+
+// je décommente cette méthode car j'en ai besoin
 vector<Coordonnee> Coordonnee::getVoisins() const
 {
 	vector<Coordonnee> Voisins;
@@ -16,8 +18,8 @@ vector<Coordonnee> Coordonnee::getVoisins() const
 	}
 	return Voisins;
 }
-*/
 
+/*
 void Coordonnee::afficherVoisins() const
 {
 	for (const auto& coord : getVoisins()) {
@@ -25,6 +27,7 @@ void Coordonnee::afficherVoisins() const
 	}
 	cout << endl;
 }
+*/
 
 ostream& operator<<(ostream& f, const Coordonnee& c)
 {

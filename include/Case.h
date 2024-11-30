@@ -5,6 +5,8 @@
 #include <vector>
 #include <iostream>
 
+
+// devra être modifié pour utiliser une pile au lieu d'un vecteur
 using namespace std;
 namespace Hive {
 	class Case
@@ -21,6 +23,7 @@ namespace Hive {
 		bool getOccuppee() const { return occuppee; }
 		bool getHasNeighbors() const { return !getNeighbors().empty(); }
 		vector<Case> getNeighbors() const;
+		Piece* getDessus() const { return &pieces.back(); }
 	}; 
 	Case* getCaseByCoord(Coordonnee& c, const Plateau& p);
 }
