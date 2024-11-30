@@ -16,5 +16,6 @@ namespace Hive {
 		void AjouterPiece(Piece& piece);
 		void RetirerPiece(Piece& piece);
 		bool getEstVide() const { return estVide; }
+		vector<Piece> getPieces() const { return Pieces; }
 	};
 }

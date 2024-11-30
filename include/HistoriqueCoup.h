@@ -11,6 +11,7 @@ namespace Hive {
 		vector<Coup*> listeCoups;
 		int IndiceCourant;
 	public:
+		HistoriqueCoup() : IndiceCourant(0) {}
 		void ajouterCoup(Coup& c);
 		void annulerDernierCoup();
 	};
