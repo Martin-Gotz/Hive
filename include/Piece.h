@@ -1,75 +1,68 @@
 #pragma once
 #include "Coordonnee.h"
+#include "Joueur.h"
 #include "Plateau.h"
-#include "Case.h"
+#include <vector>
+
 namespace Hive {
-
-
-	// la pièce doit appartenir à un joueur
-	class Joueur;
-
-	enum Couleur {Blanc, Noir };
-
 	class Piece
 	{
 	private:
-		Coordonnee coord;
-		Couleur couleur;
-		bool estPlace;
-		Joueur joueur;
+		Coordonnee c;
+		string name;
+		bool estPlacee;
 	public:
-		Coordonnee getCoord() const { return coord; }
-		bool getEstPlace() const { return estPlace; }
-		Couleur getCouleur() const {return couleur;}
-		Piece& operator=(const Piece insecte);
+		Piece(string nom) : name(nom), estPlacee(0), c(0,0) {}
+		string getName() const { return name; }
+		Coordonnee getCoord() const { return c; }
 	};
 
 	class Reine : Piece
 	{
-	private:
+	private :
 		bool Surrounded;
 	public:
-		bool deplacementPossible(Plateau& plateau);
-		Case* mouvementsValides(Plateau& plateau);
-		bool IsSurrounded() const;
+		Reine() : Piece("Reine"), Surrounded(0) {}
+		bool deplacementpossible(Plateau& plateau);
+		vector<Case*> mouvementPossibles(Plateau& plateau);
+		bool IsSurrounded() const { return Surrounded; }
 	};
 
 	class Scarabee : Piece {
-	public:
+		Scarabee() : Piece("Scarabee") {}
 		bool deplacementPossible(Plateau& plateau);
-		Case* mouvementsValides(Plateau& plateau);
+		Case& mouvementPossibles(Plateau& plateau);
 	};
 
 	class Araignee : Piece {
-	public:		
+		Araignee() : Piece("Araignee") {}
 		bool deplacementPossible(Plateau& plateau);
-		Case* mouvementsValides(Plateau& plateau);
+		Case& mouvementPossibles(Plateau& plateau);
 	};
 
 	class Sauterelle : Piece {
-	public:
+		Sauterelle() : Piece("Sauterelle") {}
 		bool deplacementPossible(Plateau& plateau);
-		Case* mouvementsValides(Plateau& plateau);
+		Case& mouvementPossibles(Plateau& plateau);
 	};
 
 	class Fourmi : Piece {
-	public:
+		Fourmi() : Piece("Fourmi") {}
 		bool deplacementPossible(Plateau& plateau);
-		Case* mouvementsValides(Plateau& plateau);
+		Case& mouvementPossibles(Plateau& plateau);
 	};
 
 	class Moustique : Piece {
-	public:		
+		Moustique() : Piece("Moustique") {}
 		bool deplacementPossible(Plateau& plateau);
-		Case* mouvementsValides(Plateau& plateau);
+		Case& mouvementPossibles(Plateau& plateau);
 	};
 
-	class Coccinnelle : Piece {
-	public:
+
+	class Coccinelle : Piece {
+		Coccinelle() : Piece("Coccinelle") {}
 		bool deplacementPossible(Plateau& plateau);
-		Case* mouvementsValides(Plateau& plateau);
+		Case& mouvementPossibles(Plateau& plateau);
 	};
 }
-
-
 
