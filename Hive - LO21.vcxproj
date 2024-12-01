@@ -145,6 +145,7 @@
     <ClInclude Include="include\Coordonnee.h" />
     <ClInclude Include="include\Coup.h" />
     <ClInclude Include="include\Enums.h" />
+    <ClInclude Include="include\Exceptions.h" />
     <ClInclude Include="include\HistoriqueCoup.h" />
     <ClInclude Include="include\Hive.h" />
     <ClInclude Include="include\Joueur.h" />

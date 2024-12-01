@@ -11,8 +11,8 @@ namespace Hive {
 
 	public:
 		Piece(Couleur c) : estPlacee(false), couleur(c) {}
-		bool GetestPlacee() { return estPlacee; }
-		bool GetCouleur() { return couleur; }
+		bool GetestPlacee() const { return estPlacee; }
+		bool GetCouleur() const { return couleur; }
 		//virtual vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const = 0;
 		//bool deplacementpossible(Plateau& plateau, Coordonnee& coo) const;
 	};

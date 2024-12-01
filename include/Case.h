@@ -3,26 +3,26 @@
 #include <vector>
 #include "Coordonnee.h"
 #include "Piece.h"
+#include <stack>
 
 
-// devra être modifié pour utiliser une pile au lieu d'un vecteur
 using namespace std;
+
+
 namespace Hive {
 	class Case
 	{
 	private:
-		Coordonnee &c;
-		vector<Piece>& pieces;
-		bool occuppee;
-		bool hasNeighbors;
+		Coordonnee coo;
+		stack<const Piece*> pieces;
 	public:
-		Coordonnee getCoord() const { return c; }
-		void ajouterPiece(Piece& piece);
-		void retirerPiece(Piece& piece);
-		bool getOccuppee() const { return occuppee; }
-		bool getHasNeighbors() const { return !getNeighbors().empty(); }
-		vector<Case> getNeighbors() const;
-		Piece* getDessus() const { return &pieces.back(); }
-	}; 
-	//Case* getCaseByCoord(Coordonnee& c, const Plateau& p);
+		const Coordonnee& getCoo() const { return coo; }
+		void ajouterPiece(const Piece& piece) { pieces.push(&piece); }
+		void retirerPiece() { pieces.pop(); }
+		const Piece* getDessus() const { return pieces.top(); }
+	};
 }
+
+// Case* getCaseByCoord(Coordonnee& c, const Plateau& p)  déplacé dans la classe plateau
+// vector<Case*> getVoisins(Plateau& plateau) const;      pareil
+// car on ne peut pas include plateau.h dans case.h, ça ferait une inclusion en boucle

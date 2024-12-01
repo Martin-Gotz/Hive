@@ -22,6 +22,8 @@ namespace Hive {
 		set<Coordonnee> EnsemblePlacementPossibles(Piece& p);	// c'est quoi?
 		void ajouterPieceSurCoo(Piece&, Coordonnee&);
 		void retirerPieceDeCoo(Coordonnee&);
+		const Case& GetCaseDeCoo(Coordonnee&) const;
+		vector<const Case*> getVoisinsDeCase(Case& Case) const;
 	};
 	ostream& operator<<(ostream& f, const Plateau& p);
 

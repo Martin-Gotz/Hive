@@ -21,11 +21,5 @@ namespace Hive {
 		void SupprimerPartie();
 	};
 
-	class HiveException {
-	private:
-		string info;
-	public:
-		HiveException(const string& a): info(a) {}
-		string getInfo() const { return info; }
-	};
+	// classe d'exception mise dans un fichier .h séparé pour pour l'utiliser sans créer des boucles d'inclusions.
 }
