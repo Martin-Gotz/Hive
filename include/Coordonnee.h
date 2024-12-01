@@ -15,8 +15,13 @@ namespace Hive {
 	class Coordonnee
 	{
 	private:
-		int q; //ligne 
-		int r; //colonne
+		// Si on garde l'interprétation de q et r comme coordonnées horizontale et verticale alors on perd une 
+		// propriété importante: le fait que les voisins soit obtenus en additionnant la coo avec avec les constants
+		// { 1, 0 }, { 1, -1 }, { 0, -1 }, { -1, 0 }, { -1, 1 }, { 0, 1 }, ce qui serait embêtant.
+		// sachant les les cases pourront être empilées de bas en haut, on peut dire que r représente la coordonnée
+		// verticale. Pour q, ce sera la direction un peu en haut à droite
+		int q; //en haut à droite
+		int r; //en haut
 	public:
 		int get_q() const { return q; }
 		int get_r() const { return r; }

@@ -10,21 +10,22 @@
 using namespace std;
 namespace Hive {
 
-	class Plateau
+	class Plateau	// responsable des cases
 	{
 	private:
 		unordered_map<Coordonnee, Case*> Cases;
 	public:
-		unordered_map<Coordonnee, Case*> getCases() const { return Cases; }
+		const unordered_map<Coordonnee, Case*> getCases() const { return Cases; }
 		Plateau() {}
 		//friend ostream& operator<<(ostream& f, Plateau& p); une autre méthode est déjà présente
-		int getNombreCases() const { return Cases.size(); }
+		size_t getNombreCases() const { return Cases.size(); }
+		bool estVide() const { return Cases.empty();}
 		
-		set<Coordonnee> EnsemblePlacementPossibles(Piece& p);
-		void ajouterPieceSurCoo(Piece&, Coordonnee&);
-		void retirerPieceDeCoo(Coordonnee&);
-		Case* GetCaseDeCoo(Coordonnee&) const;
-		vector<const Case*> getVoisinsDeCase(Case& Case) const;
+		set<Coordonnee> EnsemblePlacementPossibles(const Piece& p) const;
+		void ajouterPieceSurCoo(const Piece&, const Coordonnee&);
+		void retirerPieceDeCoo(const Coordonnee&);
+		Case* getCaseDeCoo(const Coordonnee&) const;
+		vector<Case*> getVoisinsDeCase(const Case& Case) const;
 	};
 	ostream& operator<<(ostream& f, const Plateau& p);
 

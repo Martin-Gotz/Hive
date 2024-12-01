@@ -14,14 +14,16 @@ namespace Hive {
 	{
 	private:
 		Coordonnee coo;
-		stack<const Piece*> pieces;
+		// en fait il faut pouvoir accéder aux pièces d'en dessous pour afficher le plateau, d'où la suppression du stack
+		vector<const Piece*> pieces;
 	public:
 		const Coordonnee& getCoo() const { return coo; }
-		void ajouterPiece(const Piece& piece) { pieces.push(&piece); }
-		void retirerPiece() { pieces.pop(); }
-		const Piece* getDessus() const { return pieces.top(); }
+		void ajouterPiece(const Piece& piece) { pieces.push_back(&piece); }
+		void retirerPiece() { pieces.pop_back(); }
+		const Piece* getDessus() const { return pieces.back(); }
+		const vector<const Piece*>& getPieces() const { return pieces; }
 		bool estVide() const { return pieces.empty(); }
-		Case(Coordonnee& coo) : coo(coo) {}
+		Case(const Coordonnee& coo) : coo(coo) {}
 	};
 }
 

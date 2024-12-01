@@ -1,12 +1,13 @@
 #include "../include/Plateau.h"
 
 using namespace Hive;
-#include <algorithm>	// pour le set_difference
+#include <algorithm>	// pour le set_difference de EnsemblePlacementPossibles
+#include <array>
 
 
-void Plateau::ajouterPieceSurCoo(Piece& piece, Coordonnee& coo) {
+void Plateau::ajouterPieceSurCoo(const Piece& piece, const Coordonnee& coo) {
 
-	Case* case_sur_coo = GetCaseDeCoo(coo);
+	Case* case_sur_coo = getCaseDeCoo(coo);
 	
 	if (case_sur_coo == nullptr) {
 		Case* nouv_case = new Case(coo);
@@ -18,8 +19,8 @@ void Plateau::ajouterPieceSurCoo(Piece& piece, Coordonnee& coo) {
 	}
 }
 
-void Plateau::retirerPieceDeCoo(Coordonnee& coo) {
-	Case* case_sur_coo = GetCaseDeCoo(coo);
+void Plateau::retirerPieceDeCoo(const Coordonnee& coo) {
+	Case* case_sur_coo = getCaseDeCoo(coo);
 
 	if (case_sur_coo == nullptr) {
 		throw HiveException("Aucune pièce ne se trouve à ces coordonnées");
@@ -34,15 +35,26 @@ void Plateau::retirerPieceDeCoo(Coordonnee& coo) {
 	}
 }
 
-Case* Plateau::GetCaseDeCoo(Coordonnee& coo) const {
+Case* Plateau::getCaseDeCoo(const Coordonnee& coo) const {
+	// renvoie nullptr si rien n'est trouvé
+	unordered_map<Coordonnee, Case*>::const_iterator case0 = Cases.find(coo);
+
+	if (case0 != Cases.end()) {
+		return case0->second;
+	}
+	else {
+		return nullptr;
+	}
 
 }
 
+
+/*
 ostream& operator<<(ostream& f, const Plateau& p)
 	{
 		f << "Nombre de cellules : " << p.getNombreCases() << "\n";
 		int i = 0;
-		unordered_map<Coordonnee, Case*>::iterator itr;
+		unordered_map<Coordonnee, Case*>::const_iterator itr;
 		for (itr = p.getCases().begin();
 			itr != p.getCases().end(); itr++)
 		{
@@ -51,7 +63,9 @@ ostream& operator<<(ostream& f, const Plateau& p)
 		return f;
 	}
 
-set<Coordonnee> Plateau::EnsemblePlacementPossibles(Piece& piece)
+*/
+
+set<Coordonnee> Plateau::EnsemblePlacementPossibles(const Piece& piece) const
 {
 	// les placements possibles seront : 
 	// ceux qui seront en contact avec une autre case
@@ -73,7 +87,7 @@ set<Coordonnee> Plateau::EnsemblePlacementPossibles(Piece& piece)
 	const Piece* piece_dessus;
 	vector<Coordonnee> coo_voisines;
 	Coordonnee coo_case;
-	unordered_map<Coordonnee, Case*>::iterator itr;
+	unordered_map<Coordonnee, Case*>::const_iterator itr;
 
 	for (itr = Cases.begin();
 		itr != Cases.end(); itr++)
@@ -104,15 +118,15 @@ set<Coordonnee> Plateau::EnsemblePlacementPossibles(Piece& piece)
 }
 
 
-vector<const Case*> Plateau::getVoisinsDeCase(Case& case0) const
+vector<Case*> Plateau::getVoisinsDeCase(const Case& case0) const
 // on ne peut pas écrire case car c'est un mot clé
 {
-	vector<const Case*> voisins;
+	vector<Case*> voisins;
 	vector<Coordonnee> coo_voisines = case0.getCoo().getVoisins();
-	const Case* case_voisine;
+	Case* case_voisine;
 
 	for (auto coo_voisine : coo_voisines) {
-		case_voisine = GetCaseDeCoo(coo_voisine);// Si une case se trouve sur la coordonnee voisine
+		case_voisine = getCaseDeCoo(coo_voisine);// Si une case se trouve sur la coordonnee voisine
 		if (case_voisine != nullptr) {
 			voisins.push_back(case_voisine);
 		}	
@@ -122,3 +136,71 @@ vector<const Case*> Plateau::getVoisinsDeCase(Case& case0) const
 
 }
 
+ostream& operator<<(ostream& f, const Plateau& p)
+{
+	// pour afficher dans la console le plateau, peut convertir les coos hexagonales en une hauteur y(1 pour chaque ligne)
+	// et une position x(un certain nombre de caractères)
+	// Pour s'assurer qu'il y ait assez de place, la convertion sera linéaire et se fera de cette manière:
+	// y=2q+r, x=r
+	// les lignes ne s'afficheront bien que si le jeu n'est pas trop étendu sur l'axe gauche-droite, et on ne peut rien y
+	// faire
+
+	if (p.estVide()) {
+		return f;
+	}
+
+	//on commence par calculer les x et y min et max pour gacher le moins de place possible
+	int min_y = 10000;  // on suppose qu'aucune case ne sera à de telles coordonnées
+	int max_y = -10000;
+	int min_x = 10000; 
+	int max_x = -10000; 
+
+	Coordonnee coo_case;
+	int x_case;
+	int y_case;
+
+	for (auto paire : p.getCases()) {
+		coo_case = paire.first;
+		x_case = coo_case.get_r();
+		y_case = coo_case.get_r() + 2*coo_case.get_q();
+		min_y = min(min_y, y_case);
+		max_y = max(max_y, y_case);
+		min_x = min(min_x, x_case);
+		max_x = max(max_x, x_case);
+
+	}
+	int taille_x = max_x - min_x + 1;
+	int taille_y = max_y - min_y + 1;
+
+	// tableau bidimensionnel rempli de "     "
+	vector<vector<string>> tab = vector<vector<string>>(taille_y, vector<string>(taille_x, "     ")); 
+	// 5 caras par hexagone
+	Case* case0;
+	string str_case;
+	for (auto paire : p.getCases()) {
+		coo_case = paire.first;
+		case0 = paire.second;
+
+		x_case = coo_case.get_r();
+		y_case = coo_case.get_r() + 2 * coo_case.get_q();
+
+		str_case = "";
+		for (const Piece* piece : case0->getPieces()) {
+			str_case.append(piece->getSymbole());
+		}
+		while (str_case.size() < 5) {
+			str_case.append(" ");
+		}
+		tab.at(y_case).assign(x_case, str_case);
+	}
+
+	for (int i = taille_y - 1; i >= 0; i--) {		// boucle inversée car on print de bas en haut
+		for (int j = 0; j < taille_x; j++) {
+			f << tab.at(i).at(j);
+		}
+		f << "\n";
+	}
+
+	return f;
+
+}
