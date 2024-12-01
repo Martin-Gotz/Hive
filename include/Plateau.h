@@ -4,6 +4,7 @@
 #include "Case.h"
 #include <unordered_map>
 #include "Enums.h"
+#include "Exceptions.h"
 #include <set>
 
 using namespace std;

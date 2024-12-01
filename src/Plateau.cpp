@@ -2,7 +2,7 @@
 
 using namespace Hive;
 #include <algorithm>	// pour le set_difference
-#include "Exceptions.h"
+
 
 
 
