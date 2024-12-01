@@ -138,6 +138,12 @@ vector<Case*> Plateau::getVoisinsDeCase(const Case& case0) const
 
 ostream& operator<<(ostream& f, const Plateau& p)
 {
+	// résultat de l'affichage:
+	// Pour chaque hexagone, la pile de pièce est affichée: un pièce est représentée par un entier(0 pour BLANC, 1 pour
+	// NOIR) et d'un caractère pour le type d'insecte:
+	// A:abeille, a:araignée, S:scarabée, s:sauterelle, f:fourmi, m: moustique, c:coccinelle
+
+
 	// pour afficher dans la console le plateau, peut convertir les coos hexagonales en une hauteur y(1 pour chaque ligne)
 	// et une position x(un certain nombre de caractères)
 	// Pour s'assurer qu'il y ait assez de place, la convertion sera linéaire et se fera de cette manière:
@@ -148,6 +154,9 @@ ostream& operator<<(ostream& f, const Plateau& p)
 	if (p.estVide()) {
 		return f;
 	}
+
+	const int taille_str = 8;	// la taille que prendra chaque hexagone à afficher
+	const string str_espaces = string(taille_str, ' ');
 
 	//on commence par calculer les x et y min et max pour gacher le moins de place possible
 	int min_y = 10000;  // on suppose qu'aucune case ne sera à de telles coordonnées
@@ -172,9 +181,8 @@ ostream& operator<<(ostream& f, const Plateau& p)
 	int taille_x = max_x - min_x + 1;
 	int taille_y = max_y - min_y + 1;
 
-	// tableau bidimensionnel rempli de "     "
-	vector<vector<string>> tab = vector<vector<string>>(taille_y, vector<string>(taille_x, "     ")); 
-	// 5 caras par hexagone
+	// tableau bidimensionnel rempli de str_espaces
+	vector<vector<string>> tab = vector<vector<string>>(taille_y, vector<string>(taille_x, str_espaces)); 
 	Case* case0;
 	string str_case;
 	for (auto paire : p.getCases()) {
@@ -186,15 +194,24 @@ ostream& operator<<(ostream& f, const Plateau& p)
 
 		str_case = "";
 		for (const Piece* piece : case0->getPieces()) {
+			if (piece->GetCouleur() == BLANC) {
+				str_case.append("0");
+			}
+			else {
+				str_case.append("1");
+			}
 			str_case.append(piece->getSymbole());
 		}
-		while (str_case.size() < 5) {
+		str_case.append(string(taille_str - str_case.size(), ' '));
+		/*
+		while (str_case.size() < taille_str) {
 			str_case.append(" ");
 		}
+		*/
 		tab.at(y_case).assign(x_case, str_case);
 	}
 
-	for (int i = taille_y - 1; i >= 0; i--) {		// boucle inversée car on print de bas en haut
+	for (int i = taille_y - 1; i >= 0; i--) {		// boucle inversée car on print de haut en bas
 		for (int j = 0; j < taille_x; j++) {
 			f << tab.at(i).at(j);
 		}
