@@ -20,6 +20,8 @@ namespace Hive {
 		void ajouterPiece(const Piece& piece) { pieces.push(&piece); }
 		void retirerPiece() { pieces.pop(); }
 		const Piece* getDessus() const { return pieces.top(); }
+		bool estVide() const { return pieces.empty(); }
+		Case(Coordonnee& coo) : coo(coo) {}
 	};
 }
 

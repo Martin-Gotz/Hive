@@ -4,7 +4,39 @@ using namespace Hive;
 #include <algorithm>	// pour le set_difference
 
 
+void Plateau::ajouterPieceSurCoo(Piece& piece, Coordonnee& coo) {
 
+	Case* case_sur_coo = GetCaseDeCoo(coo);
+	
+	if (case_sur_coo == nullptr) {
+		Case* nouv_case = new Case(coo);
+		Cases.insert(make_pair(coo, nouv_case));
+		nouv_case->ajouterPiece(piece);
+	}
+	else {
+		case_sur_coo->ajouterPiece(piece);
+	}
+}
+
+void Plateau::retirerPieceDeCoo(Coordonnee& coo) {
+	Case* case_sur_coo = GetCaseDeCoo(coo);
+
+	if (case_sur_coo == nullptr) {
+		throw HiveException("Aucune pièce ne se trouve à ces coordonnées");
+	}
+	else {
+		case_sur_coo->retirerPiece();
+
+		if (case_sur_coo->estVide()) {
+			Cases.erase(coo);
+			delete case_sur_coo;
+		}
+	}
+}
+
+Case* Plateau::GetCaseDeCoo(Coordonnee& coo) const {
+
+}
 
 ostream& operator<<(ostream& f, const Plateau& p)
 	{
@@ -80,11 +112,10 @@ vector<const Case*> Plateau::getVoisinsDeCase(Case& case0) const
 	const Case* case_voisine;
 
 	for (auto coo_voisine : coo_voisines) {
-		try {
-			case_voisine = &GetCaseDeCoo(coo_voisine);
+		case_voisine = GetCaseDeCoo(coo_voisine);// Si une case se trouve sur la coordonnee voisine
+		if (case_voisine != nullptr) {
 			voisins.push_back(case_voisine);
-		}
-		catch (HiveException& e) {}		// Si aucune case ne se trouve sur la coordonnee voisine
+		}	
 
 	}
 	return voisins;

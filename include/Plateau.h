@@ -16,14 +16,14 @@ namespace Hive {
 		unordered_map<Coordonnee, Case*> Cases;
 	public:
 		unordered_map<Coordonnee, Case*> getCases() const { return Cases; }
-		Plateau() : Cases({}) {}
+		Plateau() {}
 		//friend ostream& operator<<(ostream& f, Plateau& p); une autre méthode est déjà présente
 		int getNombreCases() const { return Cases.size(); }
 		
-		set<Coordonnee> EnsemblePlacementPossibles(Piece& p);	// c'est quoi?
+		set<Coordonnee> EnsemblePlacementPossibles(Piece& p);
 		void ajouterPieceSurCoo(Piece&, Coordonnee&);
 		void retirerPieceDeCoo(Coordonnee&);
-		const Case& GetCaseDeCoo(Coordonnee&) const;
+		Case* GetCaseDeCoo(Coordonnee&) const;
 		vector<const Case*> getVoisinsDeCase(Case& Case) const;
 	};
 	ostream& operator<<(ostream& f, const Plateau& p);
