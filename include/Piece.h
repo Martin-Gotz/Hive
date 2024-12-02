@@ -4,6 +4,7 @@
 #include <string>
 
 namespace Hive {
+
 	class Piece
 	{
 	private:
@@ -14,9 +15,9 @@ namespace Hive {
 		Piece(Couleur c) : estPlacee(false), couleur(c) {}
 
 		bool GetestPlacee() const { return estPlacee; }
-		bool GetCouleur() const { return couleur; }
+		Couleur GetCouleur() const { return couleur; }
 
-		virtual string getSymbole() const = 0;	// une lettre pour afficher dans la console
+		virtual std::string getSymbole() const = 0;	// une lettre pour afficher dans la console
 
 		//virtual vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const = 0;
 		//bool deplacementpossible(Plateau& plateau, Coordonnee& coo) const;
@@ -27,53 +28,61 @@ namespace Hive {
 	public:
 		Abeille(Couleur c) : Piece(c) {}
 
-		string getSymbole() const { return "A"; }
-
+		std::string getSymbole() const override { return "A"; }
+		virtual ~Abeille() = default;
 		//vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 		//bool isSurrounded(Plateau& plateau, Coordonnee& coo) const;
+
+		// destructeur virtuel pour permettre le polymorphisme
 	};
 
 	class Scarabee : public Piece {
+	public:
 		Scarabee(Couleur c) : Piece(c) {}
-
-		string getSymbole() const { return "S"; }
+		virtual ~Scarabee() = default;
+		std::string getSymbole() const override { return "S"; }
 
 		//vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 
 	class Araignee : public Piece {
+	public:
 		Araignee(Couleur c) : Piece(c) {}
-
-		string getSymbole() const { return "a"; }
+		virtual ~Araignee() = default;
+		std::string getSymbole() const override { return "a"; }
 		//vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 
 	class Sauterelle : public Piece {
+	public:
 		Sauterelle(Couleur c) : Piece(c) {}
-
-		string getSymbole() const { return "s"; }
+		virtual ~Sauterelle() = default;
+		std::string getSymbole() const override { return "s"; }
 		//vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 
 	class Fourmi : public Piece {
+	public:
 		Fourmi(Couleur c) : Piece(c) {}
-
-		string getSymbole() const { return "F"; }
+		virtual ~Fourmi() = default;
+		std::string getSymbole() const override { return "F"; }
 		//vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 
 	class Moustique : public Piece {
+	public:
 		Moustique(Couleur c) : Piece(c) {}
-
-		string getSymbole() const { return "M"; }
+		virtual ~Moustique() = default;
+		std::string getSymbole() const override { return "M"; }
 		//vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 
 
 	class Coccinelle : public Piece {
+	public:
 		Coccinelle(Couleur c) : Piece(c) {}
-
-		string getSymbole() const { return "c"; }
+		virtual ~Coccinelle() = default;
+		std::string getSymbole() const override { return "c"; }
 		//vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 }

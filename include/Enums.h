@@ -21,4 +21,6 @@ namespace Hive {
 		TERMINEE,
 		ANNULEE
 	};
+
+	enum Joueur_actuel { player1, player2 };
 }
