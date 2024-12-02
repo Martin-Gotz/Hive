@@ -21,7 +21,7 @@ namespace Hive {
 		size_t getNombreCases() const { return Cases.size(); }
 		bool estVide() const { return Cases.empty();}
 		
-		set<Coordonnee> EnsemblePlacementPossibles(const Piece& p) const;
+		set<Coordonnee> EnsemblePlacementsPossibles(const Piece& piece, int tour, bool abeillePlacee) const;
 		void ajouterPieceSurCoo(const Piece&, const Coordonnee&);
 		void retirerPieceDeCoo(const Coordonnee&);
 		Case* getCaseDeCoo(const Coordonnee&) const;

@@ -1,14 +1,14 @@
 #pragma once
+#include "Enums.h"
 
 namespace Hive {
-
-	enum action {placement, deplacement};
 
 	class Coup
 	{
 	private:
+		
+		Action actions;
 		/*
-		action actions;
 		Piece& piece;
 		Case& caseOrigine;
 		Case& caseDestination;

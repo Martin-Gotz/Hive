@@ -3,6 +3,8 @@
 #include "Enums.h"
 #include <string>
 
+using namespace std;
+
 namespace Hive {
 
 	class Piece
@@ -17,7 +19,7 @@ namespace Hive {
 		bool GetestPlacee() const { return estPlacee; }
 		Couleur GetCouleur() const { return couleur; }
 
-		virtual std::string getSymbole() const = 0;	// une lettre pour afficher dans la console
+		virtual string getSymbole() const = 0;	// une lettre pour afficher dans la console
 
 		//virtual vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const = 0;
 		//bool deplacementpossible(Plateau& plateau, Coordonnee& coo) const;
@@ -28,8 +30,9 @@ namespace Hive {
 	public:
 		Abeille(Couleur c) : Piece(c) {}
 
-		std::string getSymbole() const override { return "A"; }
+		string getSymbole() const override { return "A"; }
 		virtual ~Abeille() = default;
+		//vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 		//vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 		//bool isSurrounded(Plateau& plateau, Coordonnee& coo) const;
 
@@ -40,7 +43,7 @@ namespace Hive {
 	public:
 		Scarabee(Couleur c) : Piece(c) {}
 		virtual ~Scarabee() = default;
-		std::string getSymbole() const override { return "S"; }
+		string getSymbole() const override { return "S"; }
 
 		//vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
@@ -49,7 +52,7 @@ namespace Hive {
 	public:
 		Araignee(Couleur c) : Piece(c) {}
 		virtual ~Araignee() = default;
-		std::string getSymbole() const override { return "a"; }
+		string getSymbole() const override { return "a"; }
 		//vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 
@@ -57,7 +60,7 @@ namespace Hive {
 	public:
 		Sauterelle(Couleur c) : Piece(c) {}
 		virtual ~Sauterelle() = default;
-		std::string getSymbole() const override { return "s"; }
+		string getSymbole() const override { return "s"; }
 		//vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 
@@ -65,7 +68,7 @@ namespace Hive {
 	public:
 		Fourmi(Couleur c) : Piece(c) {}
 		virtual ~Fourmi() = default;
-		std::string getSymbole() const override { return "F"; }
+		string getSymbole() const override { return "F"; }
 		//vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 
@@ -73,7 +76,7 @@ namespace Hive {
 	public:
 		Moustique(Couleur c) : Piece(c) {}
 		virtual ~Moustique() = default;
-		std::string getSymbole() const override { return "M"; }
+		string getSymbole() const override { return "M"; }
 		//vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 
@@ -82,9 +85,8 @@ namespace Hive {
 	public:
 		Coccinelle(Couleur c) : Piece(c) {}
 		virtual ~Coccinelle() = default;
-		std::string getSymbole() const override { return "c"; }
+		string getSymbole() const override { return "C"; }
 		//vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 	};
 }
-
 

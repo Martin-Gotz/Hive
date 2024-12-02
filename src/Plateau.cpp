@@ -37,6 +37,7 @@ void Plateau::retirerPieceDeCoo(const Coordonnee& coo) {
 
 Case* Plateau::getCaseDeCoo(const Coordonnee& coo) const {
 	// renvoie nullptr si rien n'est trouvé
+	// d'où le choix de renvoi d'un pointeur
 	unordered_map<Coordonnee, Case*>::const_iterator case0 = Cases.find(coo);
 
 	if (case0 != Cases.end()) {
@@ -65,13 +66,17 @@ ostream& operator<<(ostream& f, const Plateau& p)
 
 */
 
-set<Coordonnee> Plateau::EnsemblePlacementPossibles(const Piece& piece) const
+set<Coordonnee> Plateau::EnsemblePlacementsPossibles(const Piece& piece, int tour, bool abeillePlacee) const
 {
-	// les placements possibles seront : 
-	// ceux qui seront en contact avec une autre case
-	// En fait non: ne tient pas en compte l'abeille (ce sera géré plus haut)
-	// précédemment : "au 5 ème tour, on doit s'assurer que la reine a été placée"
-	// les cases déjà occupées ne sont pas éligibles
+	// les placements possibles devront respecter ces conditions: 
+	// 1)  être seront en contact avec une pièce de même couleur mais pas avec la couleur opposée
+	// 2) Si on en est au quatrième tour et que la reine abeille n'est pas placée, il faut impérativement la placer
+	// 3) les cases déjà occupées ne sont pas éligibles
+	//
+	// Exceptions pour le premier tour:
+	// Le premier joueur pose sa première pièce en (0, 0)
+	// le deuxième joueur du premier tour peut poser une pièce à coté de (0, 0) même si leur couleur est incompatible
+
 
 	// explication de l'algorithme:
 	// On crée un ensemble de case voisinsBonneCouleur qui représente l'ensembles des voisins de chaque pièces 
@@ -80,6 +85,30 @@ set<Coordonnee> Plateau::EnsemblePlacementPossibles(const Piece& piece) const
 	// Les cases sur lesquelles on peut placer la pièce sont les cases voisines d'une pièce de la même couleur, mais pas
 	// voisines d'une pièce de la couleur opposée. Ce résultat s'obtient en prenant la différence des deux ensembles
 	// avec set_difference
+
+	set<Coordonnee> resultat;
+
+	if (tour == 1) {
+		if (estVide()) {
+			resultat.insert(Coordonnee(0, 0));
+		}
+		else {
+			for (Coordonnee voisin : Coordonnee(0, 0).getVoisins()) {
+				resultat.insert(voisin);
+			}
+		}
+
+		return resultat;
+	}
+
+	if (tour == 4) {
+		const Abeille* ab = dynamic_cast<const Abeille*>(&piece);  // bricolage
+		bool estAbeille = (ab != nullptr);
+		if (!estAbeille) {
+			return resultat;	// ne contient aucun élément
+		}
+	}
+
 
 	set<Coordonnee> voisinsBonneCouleur;		// voisins des pièces de la même couleur que piece
 	set<Coordonnee> voisinsMauvaiseCouleur;	// voisins des pièces de la couleur opposée piece
@@ -108,13 +137,11 @@ set<Coordonnee> Plateau::EnsemblePlacementPossibles(const Piece& piece) const
 		}
 	}
 
-	set<Coordonnee> difference;
-
 	set_difference(
 		voisinsBonneCouleur.begin(), voisinsBonneCouleur.end(), voisinsMauvaiseCouleur.begin(), voisinsMauvaiseCouleur.end(),
-		inserter(difference, difference.begin()));
+		inserter(resultat, resultat.begin()));
 
-	return difference;
+	return resultat;
 }
 
 
