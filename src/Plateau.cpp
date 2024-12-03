@@ -66,7 +66,18 @@ ostream& operator<<(ostream& f, const Plateau& p)
 
 */
 
-set<Coordonnee> Plateau::EnsemblePlacementsPossibles(const Piece& piece, int tour) const
+size_t Hive::Plateau::getNombrePieces() const
+{
+	size_t resultat = 0;
+	Case* case0;
+	for (pair<Coordonnee, Case*> paire : Cases) {
+		case0 = paire.second;
+		resultat += case0->getNombrePieces();
+	}
+	return resultat;
+}
+
+set<Coordonnee> Plateau::ensemblePlacementsPossibles(const Piece& piece, int tour) const
 {
 	// les placements possibles devront respecter ces conditions: 
 	// 1)  être seront en contact avec une pièce de même couleur mais pas avec la couleur opposée
@@ -147,6 +158,69 @@ set<Coordonnee> Plateau::EnsemblePlacementsPossibles(const Piece& piece, int tou
 		inserter(resultat, resultat.begin()));
 
 	return resultat;
+}
+
+bool Hive::Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) const
+{
+	// idée de l'algo:
+	// si la pièce n'est pas placée, on renvoie une exception
+	// si la pièce n'est pas au dessus de sa case, elle ne peut pas bouger
+	// si la case de la pièce n'a pas de voisin (ça ne devrait pas arriver mais on sait jamais), elle peut se déplacer.
+	// sinon:
+	// On prend une(seule) case voisine et on applique un algorithme de recherche en largeur en excluant la case actuelle
+	// (pour simuler son absence). Parfois, la position initiale et la position finale possible sont toutes deux valides
+	// pour que la ruche soit connectée, mais elle doit l'être aussi pendant le glissement(sur un plateau physique)
+	// Ceci est équivalent au fait que la ruche reste connectée après la suppression de la pièce.
+	// Si l'ensemble des cases obtenues a pour taille le nombre de cases -1, alors la ruche est totalement connéctée
+	// car on peut accéder à n'importe quelle case du plateau en passant par le premier voisin choisi
+
+	// Le paramètre coo n'est pas strictement nécessaire car on peut techniquement chercher une pièce sur toutes
+	// les coordonnees du plateau mais ce serait inutilement coûteux
+
+	if (!piece.GetestPlacee()) {
+		throw HiveException("la piece n'est pas encore placee");
+	}
+
+	Case* case_de_piece = getCaseDeCoo(coo);
+
+	if (&piece != case_de_piece->getDessus()) {
+		return false;
+	}
+
+	vector<Case*> premiers_voisins = getVoisinsDeCase(*case_de_piece);
+
+	if (premiers_voisins.size() == 0) {
+		return true;
+	}
+
+	// obtention de toutes les cases accessibles à partir de premier_voisin dans visitees
+
+	Case* premier_voisin = premiers_voisins.at(0);
+	set<Case*> visitees;		// contient les cases déjà visitées
+	vector<Case*> file_attente = { premier_voisin };	// contient les voisins(pas encore visités) des cases visitées. 
+	// Il faudra les visiter par la suite
+
+	Case* case_actuelle;
+	while (file_attente.size() > 0) {
+		case_actuelle = file_attente.front();
+
+		// ajout des cases voisines non déjà visitées dans la file d'attente pour les visiter plus tard
+		// sauf si c'est la case de la pièce qu'on veut tester
+		for (Case* case_voisine : getVoisinsDeCase(*case_actuelle)) {	
+			if ((visitees.find(case_voisine) != visitees.end())  && case_voisine!=case_de_piece) {
+				file_attente.push_back(case_voisine);
+			}
+		}
+
+		visitees.insert(case_actuelle);
+	}
+
+	return visitees.size() == getNombreCases() - 1;
+
+
+
+
+
 }
 
 

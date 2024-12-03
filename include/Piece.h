@@ -14,6 +14,8 @@ namespace Hive {
 		Couleur couleur;
 
 	public:
+		// on garde l'opérateur == par défault, qui apparemment ne peut pas être défini avec un =default
+		// il compare l'adresse mémoire des pieces (pas de comparaison d'attributs)
 		Piece(Couleur c) : estPlacee(false), couleur(c) {}
 
 		bool GetestPlacee() const { return estPlacee; }

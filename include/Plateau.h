@@ -18,15 +18,21 @@ namespace Hive {
 		const unordered_map<Coordonnee, Case*> getCases() const { return Cases; }
 		Plateau() {}
 		//friend ostream& operator<<(ostream& f, Plateau& p); une autre méthode est déjà présente
+
 		size_t getNombreCases() const { return Cases.size(); }
+		size_t getNombrePieces() const;
 		bool estVide() const { return Cases.empty();}
 		
-		set<Coordonnee> EnsemblePlacementsPossibles(const Piece& piece, int tour) const;
+		set<Coordonnee> ensemblePlacementsPossibles(const Piece& piece, int tour) const;
 
-		void ajouterPieceSurCoo(const Piece&, const Coordonnee&);
-		void retirerPieceDeCoo(const Coordonnee&);
+		bool deplacementPossible(const Piece& piece, const Coordonnee& coo) const;	
+		// vérifie juste que la ruche ne devienne pas coupée
 
-		Case* getCaseDeCoo(const Coordonnee&) const;
+		void ajouterPieceSurCoo(const Piece& piece, const Coordonnee& coo);
+		void retirerPieceDeCoo(const Coordonnee& coo);
+
+		Case* getCaseDeCoo(const Coordonnee& coo) const;
+		// Case* getCaseDePiece(const Piece&) const;
 
 		vector<Case*> getVoisinsDeCase(const Case& Case) const;
 
