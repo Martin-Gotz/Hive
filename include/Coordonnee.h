@@ -9,7 +9,7 @@
 #include <ostream>
 #include <iostream>
 
-namespace Hive {
+namespace JeuHive {
 	using namespace std;
 
 	class Coordonnee
@@ -39,8 +39,8 @@ namespace Hive {
 namespace std {
 	//Hash pour permettre la lecture des coordonnées (notamment pour le map)
 	template <>
-	struct hash<Hive::Coordonnee> {
-		size_t operator()(const Hive::Coordonnee& coord) const {
+	struct hash<JeuHive::Coordonnee> {
+		size_t operator()(const JeuHive::Coordonnee& coord) const {
 			return hash<int>()(coord.get_q()) ^ (hash<int>()(coord.get_r()) << 1);
 		}
 	};

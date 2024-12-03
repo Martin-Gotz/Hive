@@ -1,5 +1,5 @@
 #include "../include/Joueur.h"
-using namespace Hive;
+using namespace JeuHive;
 
 void Joueur::jouerCoup(Coup& coup)
 {

@@ -1,5 +1,5 @@
 #include "../include/Partie.h"
-using namespace Hive;
+using namespace JeuHive;
 
 void Partie::lancerpartie()
 {

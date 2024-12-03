@@ -1,6 +1,6 @@
 #include "../include/MainPiece.h"
 #include "../include/Exceptions.h"
-using namespace Hive;
+using namespace JeuHive;
 using namespace std;
 
 

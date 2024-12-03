@@ -1,8 +1,8 @@
 #include "../include/Hive.h"
-using namespace Hive;
+using namespace JeuHive;
 
 /*
-void Hive_Game::CreerNouvellePartie() {
+void Hive::CreerNouvellePartie() {
 
 	//à  revoir
 	new Partie New_Game();

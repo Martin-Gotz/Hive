@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <iostream>
 #include <string>
@@ -9,8 +9,8 @@
 
 using namespace std;
 
-namespace Hive {
-	class Hive_Game
+namespace JeuHive {
+	class Hive
 	{
 	private:
 		vector<Partie> Parties;
@@ -21,5 +21,5 @@ namespace Hive {
 		void SupprimerPartie();
 	};
 
-	// classe d'exception mise dans un fichier .h séparé pour pour l'utiliser sans créer des boucles d'inclusions.
+	// classe d'exception mise dans un fichier .h sÃ©parÃ© pour pour l'utiliser sans crÃ©er des boucles d'inclusions.
 }

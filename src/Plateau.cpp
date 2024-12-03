@@ -1,6 +1,6 @@
 #include "../include/Plateau.h"
 
-using namespace Hive;
+using namespace JeuHive;
 #include <algorithm>	// pour le set_difference de EnsemblePlacementPossibles
 #include <array>
 
@@ -66,7 +66,7 @@ ostream& operator<<(ostream& f, const Plateau& p)
 
 */
 
-size_t Hive::Plateau::getNombrePieces() const
+size_t JeuHive::Plateau::getNombrePieces() const
 {
 	size_t resultat = 0;
 	Case* case0;
@@ -160,7 +160,7 @@ set<Coordonnee> Plateau::ensemblePlacementsPossibles(const Piece& piece, int tou
 	return resultat;
 }
 
-bool Hive::Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) const
+bool JeuHive::Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) const
 {
 	// idée de l'algo:
 	// si la pièce n'est pas placée, on renvoie une exception
@@ -270,7 +270,7 @@ vector<Case*> Plateau::getVoisinsDeCoo(const Coordonnee& coo) const
 
 }
 
-bool Hive::Plateau::estAbeillePlacee(Couleur couleur) const
+bool JeuHive::Plateau::estAbeillePlacee(Couleur couleur) const
 {
 	// on test juste chaque pièce de chaque case
 	Case* case0;

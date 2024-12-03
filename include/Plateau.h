@@ -8,7 +8,7 @@
 #include <set>
 
 using namespace std;
-namespace Hive {
+namespace JeuHive {
 
 	class Plateau	// responsable des cases
 	{

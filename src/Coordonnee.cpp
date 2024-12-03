@@ -1,6 +1,6 @@
 #include "../include/Coordonnee.h"
 
-using namespace Hive;
+using namespace JeuHive;
 using namespace std;
 
 

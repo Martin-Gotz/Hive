@@ -1,7 +1,7 @@
 #pragma once
 #include "Enums.h"
 
-namespace Hive {
+namespace JeuHive {
 
 	class Coup
 	{

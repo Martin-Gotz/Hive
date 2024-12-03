@@ -6,7 +6,7 @@
 
 using namespace std;
 
-namespace Hive {
+namespace JeuHive {
 
 	class Plateau;
 	class Case;
