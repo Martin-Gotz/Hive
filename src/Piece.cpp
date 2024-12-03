@@ -48,8 +48,6 @@ namespace JeuHive{
 
 			coos_intermediaires.erase(coos_intermediaires.begin());
 		}
+		return resultat;
 	}
-
-
-
 }
