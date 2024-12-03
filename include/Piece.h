@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <set>
 #include "Enums.h"
 #include <string>
 #include "Coordonnee.h"
@@ -33,7 +34,7 @@ namespace JeuHive {
 
 
 
-		virtual vector<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const = 0;
+		virtual set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const = 0;
 	};
 
 	class Abeille : public Piece
@@ -45,7 +46,7 @@ namespace JeuHive {
 		virtual ~Abeille() = default;
 
 		bool estAbeille() const override { return true; }
-		vector<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
+		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 		//bool isSurrounded(Plateau& plateau, Coordonnee& coo) const;
 
 		// destructeur virtuel pour permettre le polymorphisme
@@ -57,7 +58,7 @@ namespace JeuHive {
 		virtual ~Scarabee() = default;
 		string getSymbole() const override { return "S"; }
 
-		vector<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
+		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
 
 	class Araignee : public Piece {
@@ -66,7 +67,7 @@ namespace JeuHive {
 		virtual ~Araignee() = default;
 		string getSymbole() const override { return "a"; }
 		
-		vector<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
+		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
 
 	class Sauterelle : public Piece {
@@ -75,7 +76,7 @@ namespace JeuHive {
 		virtual ~Sauterelle() = default;
 		string getSymbole() const override { return "s"; }
 
-		vector<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
+		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
 
 	class Fourmi : public Piece {
@@ -84,7 +85,7 @@ namespace JeuHive {
 		virtual ~Fourmi() = default;
 		string getSymbole() const override { return "F"; }
 		
-		vector<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
+		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
 
 	class Moustique : public Piece {
@@ -93,7 +94,7 @@ namespace JeuHive {
 		virtual ~Moustique() = default;
 		string getSymbole() const override { return "M"; }
 		
-		vector<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
+		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
 
 
@@ -103,7 +104,7 @@ namespace JeuHive {
 		virtual ~Coccinelle() = default;
 		string getSymbole() const override { return "C"; }
 		
-		vector<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
+		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
 }
 

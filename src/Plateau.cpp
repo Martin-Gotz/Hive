@@ -66,7 +66,7 @@ ostream& operator<<(ostream& f, const Plateau& p)
 
 */
 
-size_t JeuHive::Plateau::getNombrePieces() const
+size_t Plateau::getNombrePieces() const
 {
 	size_t resultat = 0;
 	Case* case0;
@@ -160,11 +160,12 @@ set<Coordonnee> Plateau::ensemblePlacementsPossibles(const Piece& piece, int tou
 	return resultat;
 }
 
-bool JeuHive::Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) const
+bool Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) const
 {
 	// idée de l'algo:
 	// si la pièce n'est pas placée, on renvoie une exception
 	// si la pièce n'est pas au dessus de sa case, elle ne peut pas bouger
+	// si la pièce est au dessus de sa case et qu'il y a des pièces en dessous, elle peut bouger
 	// si la case de la pièce n'a pas de voisin (ça ne devrait pas arriver mais on sait jamais), elle peut se déplacer.
 	// sinon:
 	// On prend une(seule) case voisine et on applique un algorithme de recherche en largeur en excluant la case actuelle
@@ -185,6 +186,10 @@ bool JeuHive::Plateau::deplacementPossible(const Piece& piece, const Coordonnee&
 
 	if (&piece != case_de_piece->getDessus()) {
 		return false;
+	}
+
+	if (case_de_piece->getNombrePieces()>=2) {
+		return true;
 	}
 
 	vector<Case*> premiers_voisins = getVoisinsDeCoo(case_de_piece->getCoo());
@@ -213,6 +218,7 @@ bool JeuHive::Plateau::deplacementPossible(const Piece& piece, const Coordonnee&
 		}
 
 		visitees.insert(case_actuelle);
+		file_attente.erase(file_attente.begin());
 	}
 
 	return visitees.size() == getNombreCases() - 1;
@@ -223,16 +229,16 @@ bool JeuHive::Plateau::deplacementPossible(const Piece& piece, const Coordonnee&
 
 }
 
-vector<Coordonnee> Hive::Plateau::getCooVoisinesGlissement(const Case& case0)
+set<Coordonnee> Plateau::getCooVoisinesGlissement(const Coordonnee& coo) const
 {
 	// idée : pour chaque coo voisine de case0
 	//		si une case est déjà présente, on oublie
 	//		si elle a deux coos communes avec les voisins de case0, on oublie (ça bloquerai le glissement)
 
 	int nbr_intersections;
-	vector<Coordonnee> resultat;
-	vector<Case*> voisins = getVoisinsDeCoo(case0.getCoo());
-	for (Coordonnee coo_voisine : case0.getCoo().getVoisins()) {
+	set<Coordonnee> resultat;
+	vector<Case*> voisins = getVoisinsDeCoo(coo);
+	for (Coordonnee coo_voisine : coo.getVoisins()) {
 		if (getCaseDeCoo(coo_voisine) != nullptr) {
 			continue;
 		}
@@ -245,7 +251,7 @@ vector<Coordonnee> Hive::Plateau::getCooVoisinesGlissement(const Case& case0)
 		}
 
 		if (nbr_intersections <= 1) {
-			resultat.push_back(coo_voisine);
+			resultat.insert(coo_voisine);
 		}
 	}
 	return resultat;
@@ -270,7 +276,7 @@ vector<Case*> Plateau::getVoisinsDeCoo(const Coordonnee& coo) const
 
 }
 
-bool JeuHive::Plateau::estAbeillePlacee(Couleur couleur) const
+bool Plateau::estAbeillePlacee(Couleur couleur) const
 {
 	// on test juste chaque pièce de chaque case
 	Case* case0;

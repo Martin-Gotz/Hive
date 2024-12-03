@@ -43,7 +43,7 @@ namespace JeuHive {
 		bool deplacementPossible(const Piece& piece, const Coordonnee& coo) const;	
 		// vérifie juste que la ruche ne devienne pas coupée
 
-		vector<Coordonnee> getCooVoisinesGlissement(const Case& case0);
+		set<Coordonnee> getCooVoisinesGlissement(const Coordonnee& coo) const;
 		// renvoie les coordonnées libres que la case peu atteindre un bougeant d'une case en glissant
 		// ça rajoute une contrainte en plus que getVoisinsDeCoo car des pièces voisines peuvent bloquer un glissement
 		// (voir règles du jeu)
