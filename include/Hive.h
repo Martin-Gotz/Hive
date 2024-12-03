@@ -15,7 +15,6 @@ namespace JeuHive {
 	private:
 		vector<Partie*> parties;
 		Partie* partieEnCours;
-		int prochainIdPartie;
 
 	public:
 		Hive();
@@ -32,10 +31,10 @@ namespace JeuHive {
 
 		// Gestion de la partie en cours
 		void demarrerPartie(int idPartie);
+		void demarrerPartie(Partie* partie);
 		void terminerPartie();
 
 		Partie* getPartieEnCours() { return partieEnCours; }
-
 		const Partie* getPartieEnCours() const { return partieEnCours; }
 
 

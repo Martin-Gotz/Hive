@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\InterfaceUtilisateur.cpp" />
     <ClCompile Include="src\Case.cpp" />
     <ClCompile Include="src\Coordonnee.cpp" />
     <ClCompile Include="src\Coup.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="include\Piece.h" />
     <ClInclude Include="include\Plateau.h" />
     <ClInclude Include="include\Regle.h" />
+    <ClInclude Include="include\InterfaceUtilisateur.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

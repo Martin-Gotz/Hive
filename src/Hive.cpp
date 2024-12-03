@@ -21,7 +21,8 @@ Hive::~Hive() {
 // Ajouter une partie
 void Hive::ajouterPartie(Joueur& joueur1, Joueur& joueur2) {
     // Créer une nouvelle partie avec un identifiant unique
-    Partie* nouvellePartie = new Partie(prochainIdPartie++, joueur1, joueur2);
+    int idPartie = nombreParties();
+    Partie* nouvellePartie = new Partie(idPartie, joueur1, joueur2);
 
     parties.push_back(nouvellePartie);
 
@@ -70,7 +71,7 @@ const Partie* Hive::getPartie(int idPartie) const {
 
 // Nombre de parties
 int Hive::nombreParties() const {
-    return static_cast<int>(parties.size());
+    return parties.size();
 }
 
 
@@ -91,6 +92,21 @@ void Hive::demarrerPartie(int idPartie) {
     }
 
     partieEnCours = parties[idPartie];
+    partieEnCours->demarrer();
+}
+
+//Surcharge (si beoin)
+void Hive::demarrerPartie(Partie* partie) {
+    if (partie == nullptr) {
+        throw HiveException("La partie fournie est invalide !");
+    }
+
+    if (partieEnCours != nullptr) {
+        cout << "Une partie est déjà en cours (ID : " << partieEnCours->getId() << ")." << endl;
+        return;
+    }
+
+    partieEnCours = partie;
     partieEnCours->demarrer();
 }
 

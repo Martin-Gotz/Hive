@@ -46,6 +46,10 @@ void Partie::changerJoueurActuel() {
 }
 
 void Partie::tourSuivant() {
+    if (etatPartie != EtatPartie::EN_COURS) {
+        throw HiveException("Impossible de passer le tour d'une partie qui n'est pas en cours !");
+    }
+
     cout << "Tour suivant." << endl;
 }
 
@@ -62,9 +66,9 @@ void Partie::annulerDernierCoup() {
 
 // Methodes utilitaires
 void Partie::afficher(ostream& os) const {
-    os << "PARTIE " << id + 1 << " : " << endl << "-Joueur 1 : " << joueur1.getNom() << endl << "-Joueur 2 : " << joueur2.getNom() << endl;
+    os << id << " : " << joueur1.getNom() << " / " << joueur2.getNom() << " - ";
 
-    os << "-Etat : ";
+    os << "Etat : ";
     switch (etatPartie) {
     case EtatPartie::EN_PAUSE:
         os << "En pause";
