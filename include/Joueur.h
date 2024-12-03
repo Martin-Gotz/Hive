@@ -1,25 +1,38 @@
 #pragma once
+#pragma once
 #include "MainPiece.h"
 #include "Coup.h"
+#include "Piece.h"
+#include "Coordonnee.h"
+#include "Plateau.h"
+#include <string>
+#include <vector>
 
 namespace JeuHive {
 
-	class Joueur
-	{
-	private:
-		string nom;
-		TypeJoueur type;
-		Couleur couleur;
-		//MainPiece& main;
-	public:
-		Joueur(string nom) : nom(nom) {};
+enum class TypeJoueur { HUMAIN, IA }; // Type du joueur : humain ou IA
+enum class Couleur { NOIR, BLANC };  
 
-		void jouerCoup(Coup& coup);
-		//void placerPiece(Piece& piece, Coordonnee c, Plateau& p);
-		// pour placer une piece, il nous faut la position des autres pieces dans le plateau
-		// il faut également regarder quelles sont les cases qui sont élligibles à ce déplacement
-		void PrendrePiece(Piece& piece);
-		string getNom() const { return nom; }
-		//MainPiece getMain() const { return main; }
-	};
-}
+class Joueur {
+private:
+    std::string nom;             
+    TypeJoueur type;            
+    Couleur couleur;            
+    std::vector<Piece> main;     
+
+public:
+    Joueur(std::string nom, TypeJoueur type, Couleur couleur);
+    // MÃ©thodes principales
+    void jouerCoup(Coup& coup);
+    void placerPiece(Piece& piece, Coordonnee c, Plateau& plateau);
+    void prendrePiece(Piece& piece);
+
+    std::string getNom() const { return nom; }
+    Couleur getCouleur() const { return couleur; }
+    const std::vector<Piece>& getMain() const { return main; }
+
+    // Ajouter une piÃ¨ce Ã  la main
+    void ajouterPieceMain(Piece piece);
+};
+
+} // namespace JeuHive
