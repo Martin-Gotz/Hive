@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Enums.h"
 #include "Joueur.h"
 #include <iostream>
@@ -8,26 +8,57 @@
 #include "Coup.h"
 
 namespace JeuHive {
-
-
 	class Partie
 	{
 	private:
-		Joueur& joueur1;
-		Joueur& joueur2;
+		int id;
+		Joueur* joueur1;
+		Joueur* joueur2;
 		Plateau plateau;
 		Regle regles;
 		HistoriqueCoup historique;
-		Joueur_actuel joueur_actuel;
 		EtatPartie etatPartie;
-		float temps;
+		Joueur* joueurActuel;
 	public:
-		void lancerpartie();
-		void finPartie();
-		void TourSuivant();
-		Coup& JouerCoup();
-		void AnnulerDernierCoup();
-		Partie(Joueur& joueur_x, Joueur& joueur_y, Regle r, Joueur_actuel j) : joueur1(joueur_x), joueur2(joueur_y), plateau(), temps(0), etatPartie(EN_COURS), joueur_actuel(j) {}
+		Partie(int id, Joueur* j1, Joueur* j2);
+		~Partie() = default;
+
+		// Accesseurs
+		int getId() const { return id; }
+
+		const Joueur* getJoueur1() const { return joueur1; }
+		Joueur* getJoueur1() { return joueur1; }
+
+		const Joueur* getJoueur2() const { return joueur2; }
+		Joueur* getJoueur2() { return joueur2; }
+
+		const Plateau& getPlateau() const { return plateau; }
+		Plateau& getPlateau() { return plateau; } // Version non const pour modifier le plateau si besoin
+
+		const HistoriqueCoup& getHistorique() const { return historique; }
+		HistoriqueCoup& getHistorique() { return historique; } // Version non const pour modifier l'historique si besoin
+		
+		const EtatPartie& getEtatPartie() const { return etatPartie; }
+
+		const Joueur* getJoueurActuel() const { return joueurActuel; }
+		Joueur* getJoueurActuel() { return joueurActuel;}
+
+
+		// Mutateurs
+		void setEtatPartie(EtatPartie nouvelEtat) {
+			etatPartie = nouvelEtat;
+		}
+
+		// Methodes principales
+		void demarrer();
+		void terminer();
+		void jouerCoup(const Coup& coup); // L'ajouter aussi a l'historique
+		void changerJoueurActuel();
+		void tourSuivant();
+		void annulerDernierCoup();
+
+		// Methode utilitaire pour afficher l'etat de la partie
+		void afficher(ostream& os) const;
 	};
 }
 
