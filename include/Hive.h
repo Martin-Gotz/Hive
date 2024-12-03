@@ -15,23 +15,26 @@ namespace JeuHive {
 	private:
 		vector<Partie*> parties;
 		Partie* partieEnCours;
+
 	public:
 		Hive();
 		~Hive();
 
 		// Methodes pour gerer les parties
-		void ajouterPartie(const Partie& partie); // Peut être ne pas utiliser une référence constante (par valeur ou création d'une nouvelle partie dans la méthode ?)
+
+		void ajouterPartie(Joueur& joueur1, Joueur& joueur2); // Asignation des couleurs et autres paramètres à voir
 		void supprimerPartie(int idPartie);
+
 		Partie* getPartie(int idPartie);
 		const Partie* getPartie(int idPartie) const;
 		int nombreParties() const;
 
 		// Gestion de la partie en cours
 		void demarrerPartie(int idPartie);
+		void demarrerPartie(Partie* partie);
 		void terminerPartie();
 
 		Partie* getPartieEnCours() { return partieEnCours; }
-
 		const Partie* getPartieEnCours() const { return partieEnCours; }
 
 

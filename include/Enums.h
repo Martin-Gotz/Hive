@@ -19,7 +19,6 @@ namespace JeuHive {
 	enum EtatPartie {
 		EN_PAUSE,
 		EN_COURS,
-		TERMINEE,
-		ANNULEE
+		TERMINEE
 	};
 }

@@ -2,7 +2,7 @@
 using namespace JeuHive;
 
 //Constructeurs
-Partie::Partie(int id, Joueur* j1, Joueur* j2) :
+Partie::Partie(int id, Joueur& j1, Joueur& j2) :
     id(id),
     joueur1(j1),
     joueur2(j2),
@@ -39,15 +39,21 @@ void Partie::jouerCoup(const Coup& coup) {
     historique.ajouterCoup(coup);
     tourSuivant();
 }
+*/
 
 void Partie::changerJoueurActuel() {
     joueurActuel = (joueurActuel.getNom() == joueur1.getNom()) ? joueur2 : joueur1; // Le getNom est temporaire en attendant l'opérateur de comparaison
 }
 
 void Partie::tourSuivant() {
+    if (etatPartie != EtatPartie::EN_COURS) {
+        throw HiveException("Impossible de passer le tour d'une partie qui n'est pas en cours !");
+    }
+
     cout << "Tour suivant." << endl;
 }
 
+/*
 void Partie::annulerDernierCoup() {
     if (historique.estVide()) {
         throw HiveException("Il n'y a aucun coup � annuler.");
@@ -60,9 +66,9 @@ void Partie::annulerDernierCoup() {
 
 // Methodes utilitaires
 void Partie::afficher(ostream& os) const {
-    os << " -PARTIE " << id << " : " << endl << " Joueur 1 : " << joueur1->getNom() << " - Joueur 2 : " << joueur2->getNom();
+    os << id << " : " << joueur1.getNom() << " / " << joueur2.getNom() << " - ";
 
-    os << " / Etat : ";
+    os << "Etat : ";
     switch (etatPartie) {
     case EtatPartie::EN_PAUSE:
         os << "En pause";
@@ -72,9 +78,6 @@ void Partie::afficher(ostream& os) const {
         break;
     case EtatPartie::TERMINEE:
         os << "Terminee";
-        break;
-    case EtatPartie::ANNULEE:
-        os << "Annulee";
         break;
     default:
         os << "Inconnu";

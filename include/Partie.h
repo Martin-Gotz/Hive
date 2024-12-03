@@ -12,25 +12,25 @@ namespace JeuHive {
 	{
 	private:
 		int id;
-		Joueur* joueur1;
-		Joueur* joueur2;
+		Joueur joueur1;
+		Joueur joueur2;
 		Plateau plateau;
 		Regle regles;
 		HistoriqueCoup historique;
 		EtatPartie etatPartie;
-		Joueur* joueurActuel;
+		Joueur joueurActuel;
 	public:
-		Partie(int id, Joueur* j1, Joueur* j2);
+		Partie(int id, Joueur& j1, Joueur& j2);
 		~Partie() = default;
 
 		// Accesseurs
 		int getId() const { return id; }
 
-		const Joueur* getJoueur1() const { return joueur1; }
-		Joueur* getJoueur1() { return joueur1; }
+		const Joueur& getJoueur1() const { return joueur1; }
+		Joueur& getJoueur1() { return joueur1; }
 
-		const Joueur* getJoueur2() const { return joueur2; }
-		Joueur* getJoueur2() { return joueur2; }
+		const Joueur& getJoueur2() const { return joueur2; }
+		Joueur& getJoueur2() { return joueur2; }
 
 		const Plateau& getPlateau() const { return plateau; }
 		Plateau& getPlateau() { return plateau; } // Version non const pour modifier le plateau si besoin
@@ -40,8 +40,8 @@ namespace JeuHive {
 		
 		const EtatPartie& getEtatPartie() const { return etatPartie; }
 
-		const Joueur* getJoueurActuel() const { return joueurActuel; }
-		Joueur* getJoueurActuel() { return joueurActuel;}
+		const Joueur& getJoueurActuel() const { return joueurActuel; }
+		Joueur& getJoueurActuel() { return joueurActuel;}
 
 
 		// Mutateurs
