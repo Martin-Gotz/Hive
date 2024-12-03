@@ -26,7 +26,9 @@ namespace JeuHive {
 		int get_q() const { return q; }
 		int get_r() const { return r; }
 		Coordonnee(int coord_x = 0, int coord_y = 0) : q(coord_x), r(coord_y) {}
+
 		vector<Coordonnee> getVoisins() const;
+
 		/*void afficherVoisins() const;*/
 		bool operator==(const Coordonnee& c) const { return q == c.q && r == c.r; }
 		bool operator<(const Coordonnee& c) const { return (q < c.q) || (q == c.q && r < c.r); }	//inutile je crois
@@ -34,6 +36,8 @@ namespace JeuHive {
 	};
 
 	ostream& operator<<(ostream& f, const Coordonnee& c);
+
+	vector<Coordonnee> getDirections();
 }
 
 namespace std {

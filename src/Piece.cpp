@@ -16,8 +16,20 @@ namespace JeuHive{
 			return set<Coordonnee>();
 		}
 
-		vector<Coordonnee> coos_voisines = coo.getVoisins();
-		set<Coordonnee> resultat(coos_voisines.begin(), coos_voisines.end());	// convertion de set à vector
+		// s'il est sur une autre pièce alors il peut aller partout autour
+		Case* case0 = plateau.getCaseDeCoo(coo);
+		if (case0->getNombrePieces() > 1) {
+			vector<Coordonnee> coo_voisines = coo.getVoisins();
+			return set<Coordonnee>(coo_voisines.begin(), coo_voisines.end());
+		}
+
+		// union des glissements et des chevauchements
+		set<Coordonnee> resultat = plateau.getCooVoisinesGlissement(coo);
+		
+		for (Case* case_voisine : plateau.getVoisinsDeCoo(coo)) {
+			resultat.insert(case_voisine->getCoo());
+		}
+		return resultat;
 	}
 
 	set<Coordonnee> Araignee::ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const
@@ -48,8 +60,13 @@ namespace JeuHive{
 
 			coos_intermediaires.erase(coos_intermediaires.begin());
 		}
+		return resultat;
 	}
 
+	set<Coordonnee> Sauterelle::ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const
+	{
+		vector<Coordonnee> directions = getDirections();
 
+	}
 
 }

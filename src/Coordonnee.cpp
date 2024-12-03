@@ -19,6 +19,14 @@ vector<Coordonnee> Coordonnee::getVoisins() const
 	return Voisins;
 }
 
+
+vector<Coordonnee> JeuHive::getDirections() {
+	return vector<Coordonnee>({ Coordonnee(1, 0), Coordonnee(1, -1), Coordonnee(0, -1),
+								Coordonnee(-1, 0), Coordonnee(-1, 1), Coordonnee(0, 1) });
+}
+
+
+
 /*
 void Coordonnee::afficherVoisins() const
 {
@@ -30,12 +38,16 @@ void Coordonnee::afficherVoisins() const
 */
 
 
-ostream& operator<<(ostream& f, const Coordonnee& c)
+ostream& JeuHive::operator<<(ostream& f, const Coordonnee& c)
 {
 	f << "X : " << c.get_q() << ", Y : " << c.get_r();
 	return f;
 }
+
+
 Coordonnee Coordonnee::operator+(const Coordonnee& c)
 {
 	return Coordonnee(q + c.q, r + c.r);
 }
+
+

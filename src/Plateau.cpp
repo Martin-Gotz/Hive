@@ -249,8 +249,9 @@ set<Coordonnee> Plateau::getCooVoisinesGlissement(const Coordonnee& coo) const
 				nbr_intersections++;
 			}
 		}
-
-		if (nbr_intersections <= 1) {
+		// 2 -> impossible de glisser
+		// 0 -> sort de la ruche (au moins pendant le glissement physique sur le plateau)
+		if (nbr_intersections == 1) {
 			resultat.insert(coo_voisine);
 		}
 	}
