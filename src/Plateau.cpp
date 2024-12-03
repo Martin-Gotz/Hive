@@ -66,7 +66,7 @@ ostream& operator<<(ostream& f, const Plateau& p)
 
 */
 
-set<Coordonnee> Plateau::EnsemblePlacementsPossibles(const Piece& piece, int tour, bool abeillePlacee) const
+set<Coordonnee> Plateau::EnsemblePlacementsPossibles(const Piece& piece, int tour) const
 {
 	// les placements possibles devront respecter ces conditions: 
 	// 1)  être seront en contact avec une pièce de même couleur mais pas avec la couleur opposée
@@ -86,6 +86,10 @@ set<Coordonnee> Plateau::EnsemblePlacementsPossibles(const Piece& piece, int tou
 	// voisines d'une pièce de la couleur opposée. Ce résultat s'obtient en prenant la différence des deux ensembles
 	// avec set_difference
 
+	if (piece.GetestPlacee()) {
+		throw HiveException("La piece est deja placee");
+	}
+
 	set<Coordonnee> resultat;
 
 	if (tour == 1) {
@@ -101,10 +105,11 @@ set<Coordonnee> Plateau::EnsemblePlacementsPossibles(const Piece& piece, int tou
 		return resultat;
 	}
 
-	if (tour == 4) {
-		const Abeille* ab = dynamic_cast<const Abeille*>(&piece);  // bricolage
-		bool estAbeille = (ab != nullptr);
-		if (!estAbeille) {
+	if (tour == 4 && !estAbeillePlacee(piece.GetCouleur())) {
+		// commentaire au cas où l'autre méthode ne marche pas
+		//const Abeille* ab = dynamic_cast<const Abeille*>(&piece);  // bricolage
+		//bool estAbeille = (ab != nullptr);
+		if (!piece.estAbeille()) {
 			return resultat;	// ne contient aucun élément
 		}
 	}
@@ -161,6 +166,24 @@ vector<Case*> Plateau::getVoisinsDeCase(const Case& case0) const
 	}
 	return voisins;
 
+}
+
+bool Hive::Plateau::estAbeillePlacee(Couleur couleur) const
+{
+	// on test juste chaque pièce de chaque case
+	Case* case0;
+	for (pair<Coordonnee, Case*> paire : Cases) {
+		case0 = paire.second;
+		for (const Piece* piece : case0->getPieces()) {
+
+			if (piece->estAbeille() && piece->GetCouleur()==couleur) {
+				return true;
+			}
+
+		}
+
+	}
+	return false;
 }
 
 ostream& operator<<(ostream& f, const Plateau& p)

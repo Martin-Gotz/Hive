@@ -21,6 +21,9 @@ namespace Hive {
 
 		virtual string getSymbole() const = 0;	// une lettre pour afficher dans la console
 
+		virtual bool estAbeille() const { return false; }
+		// redéfinie uniquement dans la classe Abeille
+
 		//virtual vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const = 0;
 		//bool deplacementpossible(Plateau& plateau, Coordonnee& coo) const;
 	};
@@ -32,6 +35,9 @@ namespace Hive {
 
 		string getSymbole() const override { return "A"; }
 		virtual ~Abeille() = default;
+
+		bool estAbeille() const override { return true; }
+
 		//vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 		//vector<Coordonnee*> mouvementsPossibles(Plateau& plateau, Coordonnee& coo) const override;
 		//bool isSurrounded(Plateau& plateau, Coordonnee& coo) const;
