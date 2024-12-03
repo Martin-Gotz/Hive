@@ -1,5 +1,5 @@
 #include "../include/HistoriqueCoup.h"
-using namespace Hive;
+using namespace JeuHive;
 
 void HistoriqueCoup::ajouterCoup(Coup& c)
 {

@@ -9,7 +9,7 @@
 using namespace std;
 
 
-namespace Hive {
+namespace JeuHive {
 	class Case
 	{
 	private:

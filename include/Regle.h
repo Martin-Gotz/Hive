@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Hive {
+namespace JeuHive {
 	class Regle
 	{
 	private:

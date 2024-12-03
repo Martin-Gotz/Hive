@@ -1,6 +1,6 @@
 #include "../include/Case.h"
 
-using namespace Hive;
+using namespace JeuHive;
 using namespace std;
 
 

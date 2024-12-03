@@ -4,7 +4,7 @@
 
 using namespace std;
 
-namespace Hive {
+namespace JeuHive {
 
 	class HiveException {
 	private:

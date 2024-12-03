@@ -2,7 +2,7 @@
 #include "MainPiece.h"
 #include "Coup.h"
 
-namespace Hive {
+namespace JeuHive {
 
 	class Joueur
 	{

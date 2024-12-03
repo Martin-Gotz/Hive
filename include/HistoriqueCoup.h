@@ -4,7 +4,7 @@
 #include <iostream>
 
 using namespace std;
-namespace Hive {
+namespace JeuHive {
 	class HistoriqueCoup
 	{
 	private:

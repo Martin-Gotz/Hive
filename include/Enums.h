@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Hive {
+namespace JeuHive {
 	enum TypeJoueur {
 		HUMAIN,
 		IA

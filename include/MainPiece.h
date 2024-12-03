@@ -8,7 +8,7 @@
 
 
 using namespace std;
-namespace Hive {
+namespace JeuHive {
 	class MainPiece
 	{
 	private:

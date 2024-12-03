@@ -7,7 +7,7 @@
 #include "HistoriqueCoup.h"
 #include "Coup.h"
 
-namespace Hive {
+namespace JeuHive {
 
 
 	class Partie
