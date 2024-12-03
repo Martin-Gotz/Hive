@@ -5,17 +5,19 @@
 #include <ostream>
 #include "Piece.h"
 
+
+
 using namespace std;
 namespace Hive {
 	class MainPiece
 	{
 	private:
-		vector<Piece> Pieces;
+		vector<Piece*> Pieces;
 		bool estVide;
 	public:
 		void AjouterPiece(Piece& piece);
 		void RetirerPiece(Piece& piece);
 		bool getEstVide() const { return estVide; }
-		vector<Piece> getPieces() const { return Pieces; }
+		vector<Piece*> getPieces() const { return Pieces; }
 	};
 }
