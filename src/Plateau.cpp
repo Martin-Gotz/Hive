@@ -187,7 +187,7 @@ bool Hive::Plateau::deplacementPossible(const Piece& piece, const Coordonnee& co
 		return false;
 	}
 
-	vector<Case*> premiers_voisins = getVoisinsDeCase(*case_de_piece);
+	vector<Case*> premiers_voisins = getVoisinsDeCoo(case_de_piece->getCoo());
 
 	if (premiers_voisins.size() == 0) {
 		return true;
@@ -206,7 +206,7 @@ bool Hive::Plateau::deplacementPossible(const Piece& piece, const Coordonnee& co
 
 		// ajout des cases voisines non déjà visitées dans la file d'attente pour les visiter plus tard
 		// sauf si c'est la case de la pièce qu'on veut tester
-		for (Case* case_voisine : getVoisinsDeCase(*case_actuelle)) {	
+		for (Case* case_voisine : getVoisinsDeCoo(case_actuelle->getCoo())) {	
 			if ((visitees.find(case_voisine) != visitees.end())  && case_voisine!=case_de_piece) {
 				file_attente.push_back(case_voisine);
 			}
@@ -223,12 +223,40 @@ bool Hive::Plateau::deplacementPossible(const Piece& piece, const Coordonnee& co
 
 }
 
+vector<Coordonnee> Hive::Plateau::getCooVoisinesGlissement(const Case& case0)
+{
+	// idée : pour chaque coo voisine de case0
+	//		si une case est déjà présente, on oublie
+	//		si elle a deux coos communes avec les voisins de case0, on oublie (ça bloquerai le glissement)
 
-vector<Case*> Plateau::getVoisinsDeCase(const Case& case0) const
+	int nbr_intersections;
+	vector<Coordonnee> resultat;
+	vector<Case*> voisins = getVoisinsDeCoo(case0.getCoo());
+	for (Coordonnee coo_voisine : case0.getCoo().getVoisins()) {
+		if (getCaseDeCoo(coo_voisine) != nullptr) {
+			continue;
+		}
+		nbr_intersections = 0;
+		for (Case* case_voisine_voisine : getVoisinsDeCoo(coo_voisine)) {
+			if (find(voisins.begin(), voisins.end(), case_voisine_voisine) != voisins.end()) {
+				// si un voisin du voisin est un voisin
+				nbr_intersections++;
+			}
+		}
+
+		if (nbr_intersections <= 1) {
+			resultat.push_back(coo_voisine);
+		}
+	}
+	return resultat;
+}
+
+
+vector<Case*> Plateau::getVoisinsDeCoo(const Coordonnee& coo) const
 // on ne peut pas écrire case car c'est un mot clé
 {
 	vector<Case*> voisins;
-	vector<Coordonnee> coo_voisines = case0.getCoo().getVoisins();
+	vector<Coordonnee> coo_voisines = coo.getVoisins();
 	Case* case_voisine;
 
 	for (auto coo_voisine : coo_voisines) {

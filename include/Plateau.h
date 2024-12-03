@@ -30,9 +30,9 @@ namespace Hive {
 
 
 		Case* getCaseDeCoo(const Coordonnee& coo) const;
-		// Case* getCaseDePiece(const Piece&) const;
+		// Case* getCaseDePiece(const Piece&) const;	peu utile je crois
 
-		vector<Case*> getVoisinsDeCase(const Case& Case) const;
+		vector<Case*> getVoisinsDeCoo(const Coordonnee& coo) const;
 
 		bool estAbeillePlacee(Couleur couleur) const;
 
@@ -43,10 +43,13 @@ namespace Hive {
 		bool deplacementPossible(const Piece& piece, const Coordonnee& coo) const;	
 		// vérifie juste que la ruche ne devienne pas coupée
 
-		set<Coordonnee> ensembleDeplacementsPossibles(const Piece& piece, const Coordonnee& coo);
-		// l'idée est d'appeler cette méthode avec les même arguments que deplacementPossible uniquement 
-		// si ce dernier renvoie true
+		vector<Coordonnee> getCooVoisinesGlissement(const Case& case0);
+		// renvoie les coordonnées libres que la case peu atteindre un bougeant d'une case en glissant
+		// ça rajoute une contrainte en plus que getVoisinsDeCoo car des pièces voisines peuvent bloquer un glissement
+		// (voir règles du jeu)
 
+		// vector<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const 
+		// se trouve dans la classe Piece pour utiliser le polymorphisme
 
 	};
 	ostream& operator<<(ostream& f, const Plateau& p);

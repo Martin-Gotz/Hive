@@ -9,10 +9,11 @@ using namespace std;
 namespace Hive {
 
 	class Plateau;
+	class Case;
 
 	class Piece
 	{
-	private:
+	protected:
 		bool estPlacee;
 		Couleur couleur;
 
@@ -32,7 +33,7 @@ namespace Hive {
 
 
 
-		virtual vector<Coordonnee> ensembleDeplacementPossibles(Plateau& plateau, Coordonnee& coo) const = 0;
+		virtual vector<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const = 0;
 	};
 
 	class Abeille : public Piece
@@ -44,7 +45,7 @@ namespace Hive {
 		virtual ~Abeille() = default;
 
 		bool estAbeille() const override { return true; }
-		vector<Coordonnee> ensembleDeplacementPossibles(Plateau& plateau, Coordonnee& coo) const override;
+		vector<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 		//bool isSurrounded(Plateau& plateau, Coordonnee& coo) const;
 
 		// destructeur virtuel pour permettre le polymorphisme
@@ -56,7 +57,7 @@ namespace Hive {
 		virtual ~Scarabee() = default;
 		string getSymbole() const override { return "S"; }
 
-		vector<Coordonnee> ensembleDeplacementPossibles(Plateau& plateau, Coordonnee& coo) const override;
+		vector<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
 
 	class Araignee : public Piece {
@@ -65,7 +66,7 @@ namespace Hive {
 		virtual ~Araignee() = default;
 		string getSymbole() const override { return "a"; }
 		
-		vector<Coordonnee> ensembleDeplacementPossibles(Plateau& plateau, Coordonnee& coo) const override;
+		vector<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
 
 	class Sauterelle : public Piece {
@@ -74,7 +75,7 @@ namespace Hive {
 		virtual ~Sauterelle() = default;
 		string getSymbole() const override { return "s"; }
 
-		vector<Coordonnee> ensembleDeplacementPossibles(Plateau& plateau, Coordonnee& coo) const override;
+		vector<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
 
 	class Fourmi : public Piece {
@@ -83,7 +84,7 @@ namespace Hive {
 		virtual ~Fourmi() = default;
 		string getSymbole() const override { return "F"; }
 		
-		vector<Coordonnee> ensembleDeplacementPossibles(Plateau& plateau, Coordonnee& coo) const override;
+		vector<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
 
 	class Moustique : public Piece {
@@ -92,7 +93,7 @@ namespace Hive {
 		virtual ~Moustique() = default;
 		string getSymbole() const override { return "M"; }
 		
-		vector<Coordonnee> ensembleDeplacementPossibles(Plateau& plateau, Coordonnee& coo) const override;
+		vector<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
 
 
@@ -102,7 +103,7 @@ namespace Hive {
 		virtual ~Coccinelle() = default;
 		string getSymbole() const override { return "C"; }
 		
-		vector<Coordonnee> ensembleDeplacementPossibles(Plateau& plateau, Coordonnee& coo) const override;
+		vector<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
 }
 

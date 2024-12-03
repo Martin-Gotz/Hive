@@ -29,7 +29,7 @@ namespace Hive {
 		vector<Coordonnee> getVoisins() const;
 		/*void afficherVoisins() const;*/
 		bool operator==(const Coordonnee& c) const { return q == c.q && r == c.r; }
-		bool operator<(const Coordonnee& c) const { return (q < c.q) || (q == c.q && r < c.r); }
+		bool operator<(const Coordonnee& c) const { return (q < c.q) || (q == c.q && r < c.r); }	//inutile je crois
 		Coordonnee operator+(const Coordonnee& c);
 	};
 
