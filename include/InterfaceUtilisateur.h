@@ -4,7 +4,7 @@
 using namespace std;
 
 namespace JeuHive {
-    class InterfaceUtilisateur {
+    class InterfaceUtilisateur : public Observer {
     private:
         Hive& hive;  // Référence à l'objet Hive pour manipuler les parties
 
@@ -28,7 +28,10 @@ namespace JeuHive {
         // Terminer la partie en cours
         void terminerPartie();
 
-        // Afficher toutes les parties
         void afficherParties();
+
+        void reagir(const Evenement& evenement) {
+            cout << evenement.getDescription() << endl;
+        }
     };
 }

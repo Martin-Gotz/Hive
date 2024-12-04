@@ -16,11 +16,11 @@ Hive::~Hive() {
 
 void Hive::ajouterPartie(Joueur& joueur1, Joueur& joueur2) {
     // Créer une nouvelle partie en utilisant la factory
-    int idPartie = parties.size();
-    parties.push_back(PartieFactory::creerPartie(idPartie, joueur1, joueur2));
+    parties.push_back(PartieFactory::creerPartie(prochainIdPartie, joueur1, joueur2));
 
-    EvenementHive evenement("Nouvelle partie creee avec l'ID " + to_string(idPartie) +"\n");
-    notifierObservers(evenement);
+    EvenementHive evt("Nouvelle partie creee avec l'ID " + to_string(prochainIdPartie) +"\n");
+    prochainIdPartie++;
+    notifierObservers(evt);
 }
 
 // Supprimer une partie
@@ -42,26 +42,31 @@ void Hive::supprimerPartie(int idPartie) {
     delete* it;
     parties.erase(it);
 
-    EvenementHive evenement("Partie avec l'ID " + to_string(idPartie) + " supprimee\n");
-    notifierObservers(evenement);
+    EvenementHive evt("Partie avec l'ID " + to_string(idPartie) + " supprimee\n");
+    notifierObservers(evt);
 }
 
 
 // Obtenir une partie par index
 Partie* Hive::getPartie(int idPartie) {
-    if (idPartie < 0 || idPartie >= nombreParties()) {
-        throw HiveException("Aucune partie trouvee !");
+    for (Partie* partie : parties) {
+        if (partie != nullptr && partie->getId() == idPartie) {
+            return partie;
+        }
     }
-    return parties[idPartie];
+    return nullptr;
 }
 
 // Version const
 const Partie* Hive::getPartie(int idPartie) const {
-    if (idPartie < 0 || idPartie >= nombreParties()) {
-        throw HiveException("Aucune partie trouvee !");
+    for (const Partie* partie : parties) {
+        if (partie != nullptr && partie->getId() == idPartie) {
+            return partie;
+        }
     }
-    return parties[idPartie];
+    return nullptr;
 }
+
 
 
 // Nombre de parties
@@ -77,35 +82,36 @@ int Hive::nombreParties() const {
 
 // Démarrer une partie
 void Hive::demarrerPartie(int idPartie) {
-    if (idPartie < 0 || idPartie >= nombreParties()) {
+    if (idPartie < 0 || idPartie >= nombreParties() + 1) {
         throw HiveException("Aucune partie trouvee !");
     }
 
     if (partieEnCours != nullptr) {
-        EvenementHive evenement("Une partie est déjà en cours (ID : " + to_string(partieEnCours->getId()) + ").\n");
-        notifierObservers(evenement);
+        EvenementHive evt("Une partie est déjà en cours (ID : " + to_string(partieEnCours->getId()) + ").\n");
+        notifierObservers(evt);
         return;
     }
 
     Partie* partie = getPartie(idPartie);
+
     if (partie) {
         partieEnCours = partie;
         partie->demarrer();
 
-        EvenementHive evenement("Partie avec l'ID " + to_string(idPartie) + " demarree\n");
-        notifierObservers(evenement);
+        EvenementHive evt("Partie avec l'ID " + to_string(idPartie) + " demarree\n");
+        notifierObservers(evt);
     }
 }
 
-//Surcharge (si beoin)
+//Surcharge (si besoin)
 void Hive::demarrerPartie(Partie* partie) {
     if (partie == nullptr) {
         throw HiveException("La partie fournie est invalide !");
     }
 
     if (partieEnCours != nullptr) {
-        EvenementHive evenement("Une partie est déjà en cours (ID : " + to_string(partieEnCours->getId()) + ").\n");
-        notifierObservers(evenement);
+        EvenementHive evt("Une partie est déjà en cours (ID : " + to_string(partieEnCours->getId()) + ").\n");
+        notifierObservers(evt);
         return;
     }
 
@@ -116,37 +122,18 @@ void Hive::demarrerPartie(Partie* partie) {
 // Terminer la partie en cours
 void Hive::terminerPartie() {
     if (partieEnCours == nullptr) {
-        EvenementHive evenement("Aucune partie n'est en cours.\n");
-        notifierObservers(evenement);
+        EvenementHive evt("Aucune partie n'est en cours.\n");
+        notifierObservers(evt);
         return;
     }
 
     partieEnCours->terminer();
 
-    EvenementHive evenement("Partie avec l'ID " + to_string(partieEnCours->getId()) + " terminée\n");
-    notifierObservers(evenement);
+    EvenementHive evt("Partie avec l'ID " + to_string(partieEnCours->getId()) + " terminée\n");
+    notifierObservers(evt);
 
     partieEnCours = nullptr;
 }
-
-
-
-// Gestion des observateurs
-void Hive::ajouterObserver(Observer* observer) {
-    observers.push_back(observer);
-}
-
-void Hive::retirerObserver(Observer* observer) {
-    observers.erase(std::remove(observers.begin(), observers.end(), observer), observers.end());
-}
-
-// Notification des observateurs
-void Hive::notifierObservers(const Evenement& evenement) {
-    for (Observer* observer : observers) {
-        observer->notifier(evenement);
-    }
-}
-
 
 
 
@@ -160,6 +147,5 @@ void Hive::afficherParties() const {
     cout << "Liste des parties :" << endl;
     for (size_t i = 0; i < parties.size(); ++i) {
         parties[i]->afficher(cout);
-        cout << endl;
     }
 }

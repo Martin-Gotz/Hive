@@ -9,7 +9,7 @@
 #include "Event.h"
 
 namespace JeuHive {
-	class Partie
+	class Partie : public Observable
 	{
 	private:
 		int id;
@@ -20,7 +20,6 @@ namespace JeuHive {
 		HistoriqueCoup historique;
 		EtatPartie etatPartie;
 		Joueur joueurActuel;
-		vector<Observer*> observers;
 
 	public:
 		Partie(int id, Joueur& j1, Joueur& j2);
@@ -59,12 +58,6 @@ namespace JeuHive {
 		void changerJoueurActuel();
 		void tourSuivant();
 		void annulerDernierCoup();
-
-
-		// Gestion des observateurs
-		void ajouterObserver(Observer* observer);
-		void retirerObserver(Observer* observer);
-		void notifierObservers(const Evenement& evenement);
 
 
 		// Methode utilitaire pour afficher l'etat de la partie

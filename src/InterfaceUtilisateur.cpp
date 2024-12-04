@@ -1,6 +1,8 @@
 #include "../include/InterfaceUtilisateur.h"
 using namespace JeuHive;
-InterfaceUtilisateur::InterfaceUtilisateur(Hive& h) : hive(h) {}
+InterfaceUtilisateur::InterfaceUtilisateur(Hive& h) : hive(h) {
+    hive.ajouterObserver(this);
+}
 
 // Afficher le menu
 void InterfaceUtilisateur::afficherMenu() const {
