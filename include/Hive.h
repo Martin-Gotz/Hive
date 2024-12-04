@@ -11,15 +11,15 @@
 using namespace std;
 
 namespace JeuHive {
-	class Hive
+	class Hive : public Observable
 	{
 	private:
 		vector<Partie*> parties;
 		Partie* partieEnCours;
-		vector<Observer*> observers;
+		int prochainIdPartie;
 
 		// Constructeur privé
-		Hive() : partieEnCours(nullptr) {}
+		Hive() : partieEnCours(nullptr), prochainIdPartie(1) {}
 
 		// Suppression du constructeur par copie et de l'opérateur d'affectation
 		Hive(const Hive&) = delete;
@@ -51,12 +51,6 @@ namespace JeuHive {
 
 		Partie* getPartieEnCours() { return partieEnCours; }
 		const Partie* getPartieEnCours() const { return partieEnCours; }
-
-
-		// Gestion des observateurs
-		void ajouterObserver(Observer* observer);
-		void retirerObserver(Observer* observer);
-		void notifierObservers(const Evenement& evenement);
 
 
 		// Methode utilitaires

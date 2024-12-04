@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -50,11 +51,26 @@ public:
 
 
 
+
+
 // Interface Observer
 class Observer {
 public:
     virtual ~Observer() = default;
 
     // Méthode générique pour notifier un observateur d'un événement
-    virtual void notifier(const Evenement& evenement) = 0;
+    virtual void reagir(const Evenement& evenement) = 0;
+};
+
+class Observable {
+protected:
+    // Liste des observateurs
+    vector<Observer*> observers;
+
+public:
+    virtual ~Observable() = default;
+
+    void ajouterObserver(Observer* observer);
+    void retirerObserver(Observer* observer);
+    void notifierObservers(const Evenement& evenement);
 };
