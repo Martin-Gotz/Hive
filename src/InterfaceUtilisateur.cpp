@@ -38,36 +38,29 @@ void InterfaceUtilisateur::gererChoixUtilisateur() {
             continue;
         }
 
-        if (!traiterChoix(choix)) {
+        switch (choix) {
+        case 1:
+            ajouterPartie();
+            break;
+        case 2:
+            demarrerPartie();
+            break;
+        case 3:
+            terminerPartie();
+            break;
+        case 4:
+            supprimerPartie();
+            break;
+        case 5:
+            afficherParties();
+            break;
+        case 6:
+            cout << "Au revoir !" << endl;
+            return;
+        default:
             cout << "Option invalide, veuillez réessayer." << endl;
         }
     }
-}
-
-bool InterfaceUtilisateur::traiterChoix(int choix) {
-    switch (choix) {
-    case 1:
-        ajouterPartie();
-        break;
-    case 2:
-        demarrerPartie();
-        break;
-    case 3:
-        terminerPartie();
-        break;
-    case 4:
-        supprimerPartie();
-        break;
-    case 5:
-        afficherParties();
-        break;
-    case 6:
-        cout << "Au revoir !" << endl;
-        return false;
-    default:
-        return false;
-    }
-    return true;
 }
 
 

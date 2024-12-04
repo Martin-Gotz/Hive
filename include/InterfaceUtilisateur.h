@@ -20,8 +20,6 @@ namespace JeuHive {
         // Afficher le menu
         void afficherMenu() const;
 
-        bool traiterChoix(int choix);
-
         // Demander à l'utilisateur les informations nécessaires pour ajouter une partie
         void ajouterPartie();
 

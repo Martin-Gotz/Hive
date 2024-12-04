@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "Enums.h"
+#include "./Exceptions.h"
 
 using namespace std;
 
@@ -55,7 +56,7 @@ namespace JeuHive {
                 case TypeEvenement::SAUVEGARDE_PARTIE: return "Sauvegarde de la Partie";
                 case TypeEvenement::PIECE_PLACEE: return "Pièce Placée";
                 case TypeEvenement::ERREUR_PARTIE: return "Erreur dans la Partie";
-                default: throw exception("Type d'événement inconnu");
+                default: throw HiveException("Type d'événement inconnu");
             }
         };
 
