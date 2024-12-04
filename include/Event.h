@@ -2,75 +2,94 @@
 
 #include <string>
 #include <vector>
+#include "Enums.h"
 
 using namespace std;
 
+
 // Classe de base pour les événements
-class Evenement {
-public:
-    virtual ~Evenement() = default;
+namespace JeuHive {
 
-    // Méthode virtuelle pure pour récupérer une description de l'événement
-    virtual string getDescription() const = 0;
-};
+    class Evenement {
+    public:
+        virtual ~Evenement() = default;
 
-
-// Événement pour Hive
-class EvenementHive : public Evenement {
-private:
-    string message; // Exemple : "Nouvelle partie ajoutée"
-
-public:
-    EvenementHive(const string& msg) : message(msg) {}
-
-    string getDescription() const override {
-        return "Hive: " + message;
-    }
-
-    string getMessage() const { return message; }
-};
+        // Méthode virtuelle pure pour récupérer une description de l'événement
+        virtual string getDescription() const = 0;
+    };
 
 
-// Événement pour une partie
-class EvenementPartie : public Evenement {
-private:
-    int idPartie;
-    string typeEvenement; // Exemple : "Début", "Fin", "Coup joué"
+    // Événement pour Hive
+    class EvenementHive : public Evenement {
+    private:
+        string message;
 
-public:
-    EvenementPartie(int id, const string& type)
-        : idPartie(id), typeEvenement(type) {}
+    public:
+        EvenementHive(const string& msg) : message(msg) {}
 
-    string getDescription() const override {
-        return "Partie ID " + to_string(idPartie) + ": " + typeEvenement;
-    }
+        string getDescription() const override {
+            return "Hive: " + message;
+        }
 
-    int getIdPartie() const { return idPartie; }
-    string getTypeEvenement() const { return typeEvenement; }
-};
+        string getMessage() const { return message; }
+    };
 
 
+    // Événement pour une partie
+    class EvenementPartie : public EvenementHive {
+    private:
+        int idPartie;
+        TypeEvenement typeEvenement;
+
+    public:
+        EvenementPartie(const string& msg, int id, TypeEvenement type)
+            : EvenementHive(msg), idPartie(id), typeEvenement(type) {}
+
+        const string& typeEvenementToString(TypeEvenement type) const {
+            switch (type) {
+                case TypeEvenement::DEBUT_PARTIE: return "Début de la Partie";
+                case TypeEvenement::FIN_PARTIE: return "Fin de la Partie";
+                case TypeEvenement::CHANGEMENT_JOUEUR: return "Changement de Joueur";
+                case TypeEvenement::TOUR_SUIVANT: return "Tour Suivant";
+                case TypeEvenement::ANNULER_COUP: return "Annulation de Coup";
+                case TypeEvenement::SAUVEGARDE_PARTIE: return "Sauvegarde de la Partie";
+                case TypeEvenement::PIECE_PLACEE: return "Pièce Placée";
+                case TypeEvenement::ERREUR_PARTIE: return "Erreur dans la Partie";
+                default: throw exception("Type d'événement inconnu");
+            }
+        };
+
+        string getDescription() const override {
+            return "Partie ID " + to_string(idPartie) + " : " + typeEvenementToString(typeEvenement) + " - " + getMessage();
+        }
+
+        int getIdPartie() const { return idPartie; }
+        TypeEvenement getTypeEvenement() const { return typeEvenement; }
+    };
 
 
 
-// Interface Observer
-class Observer {
-public:
-    virtual ~Observer() = default;
 
-    // Méthode générique pour notifier un observateur d'un événement
-    virtual void reagir(const Evenement& evenement) = 0;
-};
 
-class Observable {
-protected:
-    // Liste des observateurs
-    vector<Observer*> observers;
+    // Interface Observer
+    class Observer {
+    public:
+        virtual ~Observer() = default;
 
-public:
-    virtual ~Observable() = default;
+        // Méthode générique pour notifier un observateur d'un événement
+        virtual void reagir(const Evenement& evenement) = 0;
+    };
 
-    void ajouterObserver(Observer* observer);
-    void retirerObserver(Observer* observer);
-    void notifierObservers(const Evenement& evenement);
-};
+    class Observable {
+    protected:
+        // Liste des observateurs
+        vector<Observer*> observers;
+
+    public:
+        virtual ~Observable() = default;
+
+        void ajouterObserver(Observer* observer);
+        void retirerObserver(Observer* observer);
+        void notifierObservers(const Evenement& evenement);
+    };
+}

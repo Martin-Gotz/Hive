@@ -7,9 +7,11 @@ namespace JeuHive {
     class InterfaceUtilisateur : public Observer {
     private:
         Hive& hive;  // Référence à l'objet Hive pour manipuler les parties
+        Partie* partieObservee = nullptr;
 
     public:
         InterfaceUtilisateur(Hive& h);
+        ~InterfaceUtilisateur();
 
         // Gestion des choix de l'utilisateur
         void gererChoixUtilisateur();
@@ -17,6 +19,8 @@ namespace JeuHive {
     private:
         // Afficher le menu
         void afficherMenu() const;
+
+        bool traiterChoix(int choix);
 
         // Demander à l'utilisateur les informations nécessaires pour ajouter une partie
         void ajouterPartie();
@@ -30,8 +34,6 @@ namespace JeuHive {
 
         void afficherParties();
 
-        void reagir(const Evenement& evenement) {
-            cout << evenement.getDescription() << endl;
-        }
+        void reagir(const Evenement& evenement);
     };
 }

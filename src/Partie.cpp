@@ -17,17 +17,15 @@ Partie::Partie(int id, Joueur& j1, Joueur& j2) :
 // Methodes principales
 void Partie::demarrer() {
     if (etatPartie == EtatPartie::EN_COURS) {
-        throw HiveException("La partie est deja en cours !");
+        throw HiveException("La partie est déjà en cours !");
     }
 
     if (etatPartie == EtatPartie::TERMINEE) {
-        throw HiveException("La partie est terminee !");
+        throw HiveException("La partie est terminée !");
     }
 
-    etatPartie = EtatPartie::EN_COURS;
-
-    //cout << "La partie " << id << " commence !" << endl;
-    EvenementHive evt("La partie " + to_string(id) + " commence !\n");
+    etatPartie = EtatPartie::EN_COURS; 
+    EvenementPartie evt("La partie " + to_string(id) + " commence !", id, TypeEvenement::DEBUT_PARTIE);
     notifierObservers(evt);
 }
 
@@ -35,10 +33,9 @@ void Partie::terminer() {
     if (etatPartie != EtatPartie::EN_COURS) {
         throw HiveException("Impossible de terminer une partie qui n'est pas en cours !");
     }
-    etatPartie = EtatPartie::TERMINEE;
 
-    //cout << "La partie " << id << " est terminee." << endl;
-    EvenementHive evt("La partie " + to_string(id) + " est terminee.\n");
+    etatPartie = EtatPartie::TERMINEE;
+    EvenementPartie evt("La partie " + to_string(id) + " est terminée.", id, TypeEvenement::FIN_PARTIE);
     notifierObservers(evt);
 }
 
@@ -54,6 +51,8 @@ void Partie::jouerCoup(const Coup& coup) {
 
 void Partie::changerJoueurActuel() {
     joueurActuel = (joueurActuel.getNom() == joueur1.getNom()) ? joueur2 : joueur1; // Le getNom est temporaire en attendant l'opérateur de comparaison
+    EvenementPartie evt("C'est au tour de " + joueurActuel.getNom() + ".", id, TypeEvenement::CHANGEMENT_JOUEUR);
+    notifierObservers(evt);
 }
 
 void Partie::tourSuivant() {
@@ -62,7 +61,7 @@ void Partie::tourSuivant() {
     }
 
     //cout << "Tour suivant." << endl;
-    EvenementHive evt("Tour suivant.\n");
+    EvenementPartie evt("Le tour suivant commence.", id, TypeEvenement::TOUR_SUIVANT);
     notifierObservers(evt);
 }
 
@@ -74,6 +73,8 @@ void Partie::annulerDernierCoup() {
     Coup dernierCoup = historique.getDernierCoup();
     plateau.annulerCoup(dernierCoup);
     historique.supprimerDernierCoup();
+    EvenementPartie evt("Dernier coup annulé : " + dernierCoup.getDescription(), id, EvenementPartie::TypeEvenement::ANNULER_COUP);
+    notifierObservers(evt);
 }
 */
 

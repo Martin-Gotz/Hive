@@ -4,6 +4,13 @@ InterfaceUtilisateur::InterfaceUtilisateur(Hive& h) : hive(h) {
     hive.ajouterObserver(this);
 }
 
+InterfaceUtilisateur::~InterfaceUtilisateur() {
+    if (partieObservee) {
+        partieObservee->retirerObserver(this);
+    }
+    hive.retirerObserver(this);
+}
+
 // Afficher le menu
 void InterfaceUtilisateur::afficherMenu() const {
     cout << "\n=== Menu ===" << endl;
@@ -31,29 +38,36 @@ void InterfaceUtilisateur::gererChoixUtilisateur() {
             continue;
         }
 
-        switch (choix) {
-        case 1:
-            ajouterPartie();
-            break;
-        case 2:
-            demarrerPartie();
-            break;
-        case 3:
-            terminerPartie();
-            break;
-        case 4:
-            supprimerPartie();
-            break;
-        case 5:
-            afficherParties();
-            break;
-        case 6:
-            cout << "Au revoir !" << endl;
-            return;
-        default:
+        if (!traiterChoix(choix)) {
             cout << "Option invalide, veuillez réessayer." << endl;
         }
     }
+}
+
+bool InterfaceUtilisateur::traiterChoix(int choix) {
+    switch (choix) {
+    case 1:
+        ajouterPartie();
+        break;
+    case 2:
+        demarrerPartie();
+        break;
+    case 3:
+        terminerPartie();
+        break;
+    case 4:
+        supprimerPartie();
+        break;
+    case 5:
+        afficherParties();
+        break;
+    case 6:
+        cout << "Au revoir !" << endl;
+        return false;
+    default:
+        return false;
+    }
+    return true;
 }
 
 
@@ -73,15 +87,15 @@ void InterfaceUtilisateur::ajouterPartie() {
 
 // Partie à démarrer
 void InterfaceUtilisateur::demarrerPartie() {
+    if (hive.getPartieEnCours() != nullptr) {
+        cout << "Une partie est déjà en cours." << endl;
+        return;
+    }
+
     int idPartie;
-    if (hive.nombreParties() != 0) {
-        afficherParties();
-        cout << "Entrez l'ID de la partie à démarrer : ";
-        cin >> idPartie;
-    }
-    else {
-        idPartie = 0;
-    }
+    afficherParties();
+    cout << "Entrez l'ID de la partie à démarrer : ";
+    cin >> idPartie;
 
     try {
         hive.demarrerPartie(idPartie);
@@ -103,15 +117,16 @@ void InterfaceUtilisateur::terminerPartie() {
 
 // Partie à supprimer
 void InterfaceUtilisateur::supprimerPartie() {
+    if (hive.nombreParties() == 0) {
+        cout << "Aucune partie à supprimer." << endl;
+        return;
+    }
+
     int idPartie;
-    if (hive.nombreParties() != 0) {
-        afficherParties();
-        cout << "Entrez l'ID de la partie à supprimer : ";
-        cin >> idPartie;
-    }
-    else {
-        idPartie = 0;
-    }
+    afficherParties();
+    cout << "Entrez l'ID de la partie à supprimer : ";
+    cin >> idPartie;
+
     try {
         hive.supprimerPartie(idPartie);
     }
@@ -123,4 +138,11 @@ void InterfaceUtilisateur::supprimerPartie() {
 // Afficher toutes les parties
 void InterfaceUtilisateur::afficherParties() {
     hive.afficherParties();
+}
+
+
+
+// Action de l'observateur
+void InterfaceUtilisateur::reagir(const Evenement& evenement) {
+    cout << evenement.getDescription() << endl;
 }

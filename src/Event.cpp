@@ -1,5 +1,7 @@
 #include "../include/Event.h"
 
+using namespace JeuHive;
+
 // Ajouter un observateur
 void Observable::ajouterObserver(Observer* observer) {
     if (find(observers.begin(), observers.end(), observer) == observers.end()) {

@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 namespace JeuHive {
 	enum TypeJoueur {
@@ -20,5 +21,17 @@ namespace JeuHive {
 		EN_PAUSE,
 		EN_COURS,
 		TERMINEE
+	};
+
+
+	enum TypeEvenement {
+		DEBUT_PARTIE,
+		FIN_PARTIE,
+		CHANGEMENT_JOUEUR,
+		TOUR_SUIVANT,
+		ANNULER_COUP,
+		SAUVEGARDE_PARTIE,
+		PIECE_PLACEE,
+		ERREUR_PARTIE
 	};
 }
