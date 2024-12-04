@@ -45,7 +45,7 @@ ostream& JeuHive::operator<<(ostream& f, const Coordonnee& c)
 }
 
 
-Coordonnee Coordonnee::operator+(const Coordonnee& c)
+Coordonnee Coordonnee::operator+(const Coordonnee& c) const
 {
 	return Coordonnee(q + c.q, r + c.r);
 }

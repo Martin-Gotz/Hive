@@ -32,7 +32,7 @@ namespace JeuHive {
 		/*void afficherVoisins() const;*/
 		bool operator==(const Coordonnee& c) const { return q == c.q && r == c.r; }
 		bool operator<(const Coordonnee& c) const { return (q < c.q) || (q == c.q && r < c.r); }	//inutile je crois
-		Coordonnee operator+(const Coordonnee& c);
+		Coordonnee operator+(const Coordonnee& c) const;
 	};
 
 	ostream& operator<<(ostream& f, const Coordonnee& c);

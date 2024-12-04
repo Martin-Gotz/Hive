@@ -229,19 +229,41 @@ bool Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) con
 
 }
 
-set<Coordonnee> Plateau::getCooVoisinesGlissement(const Coordonnee& coo) const
+set<Coordonnee> Plateau::getCooVoisinesGlissement(const Coordonnee& coo, const Coordonnee* ignorer_coo = nullptr) const
 {
+	// ignorer_coo est la coordonnée telle que la pièce visible de cette coordonnée si elle existe doit
+	// être ignorée, comme si elle avait été supprimé du plateau. Utile pour qu'une pièce ne se considère
+	// pas comme voisine à elle même dans les fonctions de déplacement
+	//
 	// idée : pour chaque coo voisine de case0
-	//		si une case est déjà présente, on oublie
+	//		si une case est déjà présente(en prenant en compte l'ignorer_coo), on oublie
 	//		si elle a deux coos communes avec les voisins de case0, on oublie (ça bloquerai le glissement)
 
 	int nbr_intersections;
 	set<Coordonnee> resultat;
 	vector<Case*> voisins = getVoisinsDeCoo(coo);
+
+	// suppression de la case s'il faut l'ignorer
+	for (Case* case0 : voisins) {
+		if (&(case0->getCoo()) == ignorer_coo && case0->getNombrePieces() == 1) {
+			voisins.erase(remove(voisins.begin(), voisins.end(), case0), voisins.end());
+		}
+	}
+
+	bool case_occupee;
 	for (Coordonnee coo_voisine : coo.getVoisins()) {
-		if (getCaseDeCoo(coo_voisine) != nullptr) {
+
+		case_occupee = false;
+		for (Case* case0 : voisins) {
+			if (case0->getCoo() == coo_voisine) {	// si une case est présente sur la coo_voisine
+				case_occupee = true;
+				break;
+			}
+		}
+		if (case_occupee) {
 			continue;
 		}
+
 		nbr_intersections = 0;
 		for (Case* case_voisine_voisine : getVoisinsDeCoo(coo_voisine)) {
 			if (find(voisins.begin(), voisins.end(), case_voisine_voisine) != voisins.end()) {
@@ -249,7 +271,7 @@ set<Coordonnee> Plateau::getCooVoisinesGlissement(const Coordonnee& coo) const
 				nbr_intersections++;
 			}
 		}
-		// 2 -> impossible de glisser
+		// 2 -> impossible de glisser (bloqué)
 		// 0 -> sort de la ruche (au moins pendant le glissement physique sur le plateau)
 		if (nbr_intersections == 1) {
 			resultat.insert(coo_voisine);
