@@ -26,6 +26,8 @@ namespace JeuHive {
 		bool estVide() const { return pieces.empty(); }	// très peu pertinent car une case vide devrait être supprimée
 		int getNombrePieces() const { return pieces.size(); }
 		Case(const Coordonnee& coo) : coo(coo) {}
+
+		string getString(int taille_str=8) const;
 	};
 }
 

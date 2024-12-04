@@ -336,8 +336,7 @@ ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
 		return f;
 	}
 
-	const int taille_str = 8;	// la taille que prendra chaque hexagone à afficher
-	const string str_espaces = string(taille_str, ' ');
+	int taille_str = 4;	// la taille que prendra chaque hexagone à afficher
 
 	//on commence par calculer les x et y min et max pour gacher le moins de place possible
 	int min_y = 10000;  // on suppose qu'aucune case ne sera à de telles coordonnées
@@ -351,46 +350,69 @@ ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
 
 	for (auto paire : p.getCases()) {
 		coo_case = paire.first;
-		x_case = coo_case.get_r();
-		y_case = coo_case.get_r() + 2*coo_case.get_q();
+		x_case = coo_case.get_q();
+		y_case = coo_case.get_q() + 2*coo_case.get_r();
 		min_y = min(min_y, y_case);
 		max_y = max(max_y, y_case);
 		min_x = min(min_x, x_case);
 		max_x = max(max_x, x_case);
+		taille_str = max(taille_str, paire.second->getNombrePieces() * 2);
 
 	}
 	int taille_x = max_x - min_x + 1;
 	int taille_y = max_y - min_y + 1;
+	const string str_espaces = string(taille_str, ' ');
+
+	cout << "taille_x" << taille_x << "   taille_y" <<taille_y<<"\n";
 
 	// tableau bidimensionnel rempli de str_espaces
 	vector<vector<string>> tab = vector<vector<string>>(taille_y, vector<string>(taille_x, str_espaces)); 
+	
+	/*
+	cout << "tableau vide " << "\n";
+	for (int i = tab.size() - 1; i >= 0; i--) {		// boucle inversée car on print de haut en bas
+		for (int j = 0; j < tab[0].size(); j++) {
+			f << "i:" << i << "j:" << j << " voila ";
+			f << tab.at(i).at(j) << "\n";
+		}
+		f << "\n";
+	}
+	*/
+
+	
 	Case* case0;
 	string str_case;
 	for (auto paire : p.getCases()) {
 		coo_case = paire.first;
 		case0 = paire.second;
 
-		x_case = coo_case.get_r();
-		y_case = coo_case.get_r() + 2 * coo_case.get_q();
-
-		str_case = "";
-		for (const Piece* piece : case0->getPieces()) {
-			if (piece->GetCouleur() == BLANC) {
-				str_case.append("0");
-			}
-			else {
-				str_case.append("1");
-			}
-			str_case.append(piece->getSymbole());
-		}
-		str_case.append(string(taille_str - str_case.size(), ' '));
+		x_case = coo_case.get_q();
+		y_case = coo_case.get_q() + 2 * coo_case.get_r();
+		str_case = case0->getString(taille_str);
 		/*
-		while (str_case.size() < taille_str) {
-			str_case.append(" ");
-		}
+		cout << "str_case" << coo_case << " coo_cases xy " << x_case-min_y << "  " << y_case-min_x 
+			<< " coo_cases xy " << x_case << "  " << y_case
+			<< " " << str_case << "\n";
 		*/
-		tab.at(y_case).assign(x_case, str_case);
+		tab.at(y_case-min_y).at(x_case-min_x) = str_case;
+
 	}
+	// tableau maintenant rempli
+	
+	// f << "sizey" << tab.size() << "\n";
+	// f << "sizex" << tab.at(0).size() << "\n";
+
+	/*
+	cout << "tableau rempli " << "\n";
+	for (int i = tab.size() - 1; i >= 0; i--) {		// boucle inversée car on print de haut en bas
+		for (int j = 0; j < tab[0].size(); j++) {
+			f << "i:" << i << "j:" << j << " voila ";
+			f << tab.at(i).at(j) << "\n";
+		}
+		f << "\n";
+	}
+	*/
+
 
 	for (int i = taille_y - 1; i >= 0; i--) {		// boucle inversée car on print de haut en bas
 		for (int j = 0; j < taille_x; j++) {
