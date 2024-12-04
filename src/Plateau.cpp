@@ -229,7 +229,7 @@ bool Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) con
 
 }
 
-set<Coordonnee> Plateau::getCooVoisinesGlissement(const Coordonnee& coo, const Coordonnee* ignorer_coo = nullptr) const
+set<Coordonnee> Plateau::getCooVoisinesGlissement(const Coordonnee& coo, const Coordonnee* ignorer_coo) const
 {
 	// ignorer_coo est la coordonnée telle que la pièce visible de cette coordonnée si elle existe doit
 	// être ignorée, comme si elle avait été supprimé du plateau. Utile pour qu'une pièce ne se considère
@@ -317,7 +317,7 @@ bool Plateau::estAbeillePlacee(Couleur couleur) const
 	return false;
 }
 
-ostream& operator<<(ostream& f, const Plateau& p)
+ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
 {
 	// résultat de l'affichage:
 	// Pour chaque hexagone, la pile de pièce est affichée: un pièce est représentée par un entier(0 pour BLANC, 1 pour
