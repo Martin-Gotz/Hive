@@ -6,6 +6,7 @@
 #include <vector>
 #include <ostream>
 #include "Partie.h"
+#include "Event.h"
 
 using namespace std;
 
@@ -15,9 +16,23 @@ namespace JeuHive {
 	private:
 		vector<Partie*> parties;
 		Partie* partieEnCours;
+		vector<Observer*> observers;
+
+		// Constructeur privé
+		Hive() : partieEnCours(nullptr) {}
+
+		// Suppression du constructeur par copie et de l'opérateur d'affectation
+		Hive(const Hive&) = delete;
+		Hive& operator=(const Hive&) = delete;
 
 	public:
-		Hive();
+		// Méthode statique pour accéder à l'instance unique
+		static Hive& getInstance() {
+			static Hive instance;
+			return instance;
+		}
+
+		// Destructeur
 		~Hive();
 
 		// Methodes pour gerer les parties
@@ -36,6 +51,12 @@ namespace JeuHive {
 
 		Partie* getPartieEnCours() { return partieEnCours; }
 		const Partie* getPartieEnCours() const { return partieEnCours; }
+
+
+		// Gestion des observateurs
+		void ajouterObserver(Observer* observer);
+		void retirerObserver(Observer* observer);
+		void notifierObservers(const Evenement& evenement);
 
 
 		// Methode utilitaires

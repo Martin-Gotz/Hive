@@ -1,9 +1,6 @@
 #include "../include/Hive.h"
 using namespace JeuHive;
 
-// Constructeur
-Hive::Hive() : partieEnCours(nullptr) {}
-
 // Destructeur
 Hive::~Hive() {
     // Libération de toutes les parties stockées
@@ -15,29 +12,26 @@ Hive::~Hive() {
 
 
 
-
 // Méthodes pour gérer les parties
 
-// Ajouter une partie
 void Hive::ajouterPartie(Joueur& joueur1, Joueur& joueur2) {
-    // Créer une nouvelle partie avec un identifiant unique
-    int idPartie = nombreParties();
-    Partie* nouvellePartie = new Partie(idPartie, joueur1, joueur2);
+    // Créer une nouvelle partie en utilisant la factory
+    int idPartie = parties.size();
+    parties.push_back(PartieFactory::creerPartie(idPartie, joueur1, joueur2));
 
-    parties.push_back(nouvellePartie);
-
-    cout << "Nouvelle partie creee avec l'ID : " << nouvellePartie->getId() << endl;
+    EvenementHive evenement("Nouvelle partie creee avec l'ID " + to_string(idPartie) +"\n");
+    notifierObservers(evenement);
 }
 
 // Supprimer une partie
 void Hive::supprimerPartie(int idPartie) {
     // Chercher la partie par son identifiant
-    auto it = std::find_if(parties.begin(), parties.end(),
+    auto it = find_if(parties.begin(), parties.end(),
         [idPartie](Partie* p) { return p && p->getId() == idPartie; });
 
     // Vérifier si la partie existe
     if (it == parties.end()) {
-        throw HiveException("Aucune partie avec l'identifiant donné !");
+        throw HiveException("Aucune partie trouvee !");
     }
 
     // Libérer la mémoire et supprimer du vecteur
@@ -48,14 +42,15 @@ void Hive::supprimerPartie(int idPartie) {
     delete* it;
     parties.erase(it);
 
-    cout << "Partie avec l'identifiant " << idPartie << " supprimée." << endl;
+    EvenementHive evenement("Partie avec l'ID " + to_string(idPartie) + " supprimee\n");
+    notifierObservers(evenement);
 }
 
 
 // Obtenir une partie par index
 Partie* Hive::getPartie(int idPartie) {
     if (idPartie < 0 || idPartie >= nombreParties()) {
-        throw HiveException("Id de la partie invalide !");
+        throw HiveException("Aucune partie trouvee !");
     }
     return parties[idPartie];
 }
@@ -63,7 +58,7 @@ Partie* Hive::getPartie(int idPartie) {
 // Version const
 const Partie* Hive::getPartie(int idPartie) const {
     if (idPartie < 0 || idPartie >= nombreParties()) {
-        throw HiveException("Id de la partie invalide !");
+        throw HiveException("Aucune partie trouvee !");
     }
     return parties[idPartie];
 }
@@ -71,7 +66,7 @@ const Partie* Hive::getPartie(int idPartie) const {
 
 // Nombre de parties
 int Hive::nombreParties() const {
-    return parties.size();
+    return static_cast<int>(parties.size());
 }
 
 
@@ -83,16 +78,23 @@ int Hive::nombreParties() const {
 // Démarrer une partie
 void Hive::demarrerPartie(int idPartie) {
     if (idPartie < 0 || idPartie >= nombreParties()) {
-        throw HiveException("Id de la partie invalide !");
+        throw HiveException("Aucune partie trouvee !");
     }
 
     if (partieEnCours != nullptr) {
-        cout << "Une partie est déjà en cours (ID : " << partieEnCours->getId() << ")." << endl;
+        EvenementHive evenement("Une partie est déjà en cours (ID : " + to_string(partieEnCours->getId()) + ").\n");
+        notifierObservers(evenement);
         return;
     }
 
-    partieEnCours = parties[idPartie];
-    partieEnCours->demarrer();
+    Partie* partie = getPartie(idPartie);
+    if (partie) {
+        partieEnCours = partie;
+        partie->demarrer();
+
+        EvenementHive evenement("Partie avec l'ID " + to_string(idPartie) + " demarree\n");
+        notifierObservers(evenement);
+    }
 }
 
 //Surcharge (si beoin)
@@ -102,7 +104,8 @@ void Hive::demarrerPartie(Partie* partie) {
     }
 
     if (partieEnCours != nullptr) {
-        cout << "Une partie est déjà en cours (ID : " << partieEnCours->getId() << ")." << endl;
+        EvenementHive evenement("Une partie est déjà en cours (ID : " + to_string(partieEnCours->getId()) + ").\n");
+        notifierObservers(evenement);
         return;
     }
 
@@ -113,13 +116,39 @@ void Hive::demarrerPartie(Partie* partie) {
 // Terminer la partie en cours
 void Hive::terminerPartie() {
     if (partieEnCours == nullptr) {
-        cout << "Aucune partie n'est en cours." << endl;
+        EvenementHive evenement("Aucune partie n'est en cours.\n");
+        notifierObservers(evenement);
         return;
     }
 
     partieEnCours->terminer();
+
+    EvenementHive evenement("Partie avec l'ID " + to_string(partieEnCours->getId()) + " terminée\n");
+    notifierObservers(evenement);
+
     partieEnCours = nullptr;
 }
+
+
+
+// Gestion des observateurs
+void Hive::ajouterObserver(Observer* observer) {
+    observers.push_back(observer);
+}
+
+void Hive::retirerObserver(Observer* observer) {
+    observers.erase(std::remove(observers.begin(), observers.end(), observer), observers.end());
+}
+
+// Notification des observateurs
+void Hive::notifierObservers(const Evenement& evenement) {
+    for (Observer* observer : observers) {
+        observer->notifier(evenement);
+    }
+}
+
+
+
 
 // Afficher les informations des parties
 void Hive::afficherParties() const {

@@ -19,6 +19,11 @@ void Partie::demarrer() {
     if (etatPartie == EtatPartie::EN_COURS) {
         throw HiveException("La partie est deja en cours !");
     }
+
+    if (etatPartie == EtatPartie::TERMINEE) {
+        throw HiveException("La partie est terminee !");
+    }
+
     etatPartie = EtatPartie::EN_COURS;
     cout << "La partie " << id << " commence !" << endl;
 }
@@ -28,7 +33,8 @@ void Partie::terminer() {
         throw HiveException("Impossible de terminer une partie qui n'est pas en cours !");
     }
     etatPartie = EtatPartie::TERMINEE;
-    cout << "La partie " << id << " est terminee." << endl;
+    //notifierObservers("Partie terminée : " + std::to_string(id));
+    //cout << "La partie " << id << " est terminee." << endl;
 }
 
 /*
@@ -64,11 +70,30 @@ void Partie::annulerDernierCoup() {
 }
 */
 
+
+
+// Gestion des observateurs
+void Partie::ajouterObserver(Observer* observer) {
+    observers.push_back(observer);
+}
+
+void Partie::retirerObserver(Observer* observer) {
+    observers.erase(std::remove(observers.begin(), observers.end(), observer), observers.end());
+}
+
+// Notification des observateurs
+void Partie::notifierObservers(const Evenement& evenement) {
+    for (Observer* observer : observers) {
+        observer->notifier(evenement);
+    }
+}
+
+
+
 // Methodes utilitaires
 void Partie::afficher(ostream& os) const {
     os << id << " : " << joueur1.getNom() << " / " << joueur2.getNom() << " - ";
 
-    os << "Etat : ";
     switch (etatPartie) {
     case EtatPartie::EN_PAUSE:
         os << "En pause";

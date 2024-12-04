@@ -6,7 +6,7 @@ using namespace std;
 using namespace JeuHive;
 
 int main() {
-    Hive hive;
+    Hive& hive = Hive::getInstance();
     InterfaceUtilisateur ui(hive);
     ui.gererChoixUtilisateur();
 

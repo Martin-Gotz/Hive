@@ -6,6 +6,7 @@
 #include "Regle.h"
 #include "HistoriqueCoup.h"
 #include "Coup.h"
+#include "Event.h"
 
 namespace JeuHive {
 	class Partie
@@ -19,6 +20,8 @@ namespace JeuHive {
 		HistoriqueCoup historique;
 		EtatPartie etatPartie;
 		Joueur joueurActuel;
+		vector<Observer*> observers;
+
 	public:
 		Partie(int id, Joueur& j1, Joueur& j2);
 		~Partie() = default;
@@ -57,8 +60,21 @@ namespace JeuHive {
 		void tourSuivant();
 		void annulerDernierCoup();
 
+
+		// Gestion des observateurs
+		void ajouterObserver(Observer* observer);
+		void retirerObserver(Observer* observer);
+		void notifierObservers(const Evenement& evenement);
+
+
 		// Methode utilitaire pour afficher l'etat de la partie
 		void afficher(ostream& os) const;
 	};
-}
 
+	class PartieFactory {
+	public:
+		static Partie* creerPartie(int id, Joueur& joueur1, Joueur& joueur2) {
+			return new Partie(id, joueur1, joueur2);
+		}
+	};
+}
