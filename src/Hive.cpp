@@ -37,7 +37,7 @@ void Hive::supprimerPartie(int idPartie) {
 
     // Vérifier si la partie existe
     if (it == parties.end()) {
-        throw HiveException("Aucune partie avec l'identifiant donné !");
+        throw HiveException("Aucune partie trouvee !");
     }
 
     // Libérer la mémoire et supprimer du vecteur
@@ -55,7 +55,7 @@ void Hive::supprimerPartie(int idPartie) {
 // Obtenir une partie par index
 Partie* Hive::getPartie(int idPartie) {
     if (idPartie < 0 || idPartie >= nombreParties()) {
-        throw HiveException("Id de la partie invalide !");
+        throw HiveException("Aucune partie trouvee !");
     }
     return parties[idPartie];
 }
@@ -63,7 +63,7 @@ Partie* Hive::getPartie(int idPartie) {
 // Version const
 const Partie* Hive::getPartie(int idPartie) const {
     if (idPartie < 0 || idPartie >= nombreParties()) {
-        throw HiveException("Id de la partie invalide !");
+        throw HiveException("Aucune partie trouvee !");
     }
     return parties[idPartie];
 }
@@ -83,7 +83,7 @@ int Hive::nombreParties() const {
 // Démarrer une partie
 void Hive::demarrerPartie(int idPartie) {
     if (idPartie < 0 || idPartie >= nombreParties()) {
-        throw HiveException("Id de la partie invalide !");
+        throw HiveException("Aucune partie trouvee !");
     }
 
     if (partieEnCours != nullptr) {

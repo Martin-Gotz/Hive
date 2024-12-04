@@ -19,6 +19,11 @@ void Partie::demarrer() {
     if (etatPartie == EtatPartie::EN_COURS) {
         throw HiveException("La partie est deja en cours !");
     }
+
+    if (etatPartie == EtatPartie::TERMINEE) {
+        throw HiveException("La partie est terminee !");
+    }
+
     etatPartie = EtatPartie::EN_COURS;
     cout << "La partie " << id << " commence !" << endl;
 }
@@ -68,7 +73,6 @@ void Partie::annulerDernierCoup() {
 void Partie::afficher(ostream& os) const {
     os << id << " : " << joueur1.getNom() << " / " << joueur2.getNom() << " - ";
 
-    os << "Etat : ";
     switch (etatPartie) {
     case EtatPartie::EN_PAUSE:
         os << "En pause";
