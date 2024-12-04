@@ -14,7 +14,7 @@ namespace JeuHive {
         string nom;
         TypeJoueur type;
         Couleur couleur;
-        //vector<Piece> main;
+        MainPiece main;
 
     public:
         Joueur(string nom) : nom(nom) {} // Constructeur temporaire
@@ -26,10 +26,10 @@ namespace JeuHive {
         void prendrePiece(Piece& piece);
 
         Couleur getCouleur() const { return couleur; }
-        //const vector<Piece>& getMain() const { return main; }
+        const MainPiece& getMain() const { return main; }
 
         // Ajouter une pièce à la main
-        //void ajouterPieceMain(Piece piece);
+        void ajouterPieceMain(Piece piece);
     };
 
 } // namespace JeuHive
