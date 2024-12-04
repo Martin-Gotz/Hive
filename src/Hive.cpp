@@ -15,15 +15,12 @@ Hive::~Hive() {
 
 // Méthodes pour gérer les parties
 
-// Ajouter une partie
 void Hive::ajouterPartie(Joueur& joueur1, Joueur& joueur2) {
-    // Créer une nouvelle partie avec un identifiant unique
-    int idPartie = nombreParties();
-    Partie* nouvellePartie = new Partie(idPartie, joueur1, joueur2);
+    // Créer une nouvelle partie en utilisant la factory
+    int idPartie = parties.size();
+    parties.push_back(PartieFactory::creerPartie(idPartie, joueur1, joueur2));
 
-    parties.push_back(nouvellePartie);
-
-    cout << "Nouvelle partie creee avec l'ID : " << nouvellePartie->getId() << endl;
+    cout << "Nouvelle partie creee avec l'ID : " << idPartie << endl;
 }
 
 // Supprimer une partie

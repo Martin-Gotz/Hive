@@ -19,6 +19,7 @@ namespace JeuHive {
 		HistoriqueCoup historique;
 		EtatPartie etatPartie;
 		Joueur joueurActuel;
+
 	public:
 		Partie(int id, Joueur& j1, Joueur& j2);
 		~Partie() = default;
@@ -59,6 +60,13 @@ namespace JeuHive {
 
 		// Methode utilitaire pour afficher l'etat de la partie
 		void afficher(ostream& os) const;
+	};
+
+	class PartieFactory {
+	public:
+		static Partie* creerPartie(int id, Joueur& joueur1, Joueur& joueur2) {
+			return new Partie(id, joueur1, joueur2);
+		}
 	};
 }
 
