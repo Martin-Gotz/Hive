@@ -33,7 +33,8 @@ void Partie::terminer() {
         throw HiveException("Impossible de terminer une partie qui n'est pas en cours !");
     }
     etatPartie = EtatPartie::TERMINEE;
-    cout << "La partie " << id << " est terminee." << endl;
+    //notifierObservers("Partie terminée : " + std::to_string(id));
+    //cout << "La partie " << id << " est terminee." << endl;
 }
 
 /*
@@ -68,6 +69,26 @@ void Partie::annulerDernierCoup() {
     historique.supprimerDernierCoup();
 }
 */
+
+
+
+// Gestion des observateurs
+void Partie::ajouterObserver(Observer* observer) {
+    observers.push_back(observer);
+}
+
+void Partie::retirerObserver(Observer* observer) {
+    observers.erase(std::remove(observers.begin(), observers.end(), observer), observers.end());
+}
+
+// Notification des observateurs
+void Partie::notifierObservers(const Evenement& evenement) {
+    for (Observer* observer : observers) {
+        observer->notifier(evenement);
+    }
+}
+
+
 
 // Methodes utilitaires
 void Partie::afficher(ostream& os) const {
