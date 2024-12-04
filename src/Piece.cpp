@@ -66,7 +66,9 @@ namespace JeuHive{
 	set<Coordonnee> Sauterelle::ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const
 	{
 		vector<Coordonnee> directions = getDirections();
+		set<Coordonnee> resultat;
 
+		return resultat;
 	}
 
 }

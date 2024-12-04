@@ -16,11 +16,13 @@ void Joueur::jouerCoup(Coup& coup) {
     std::cout << nom << " joue un coup." << std::endl;
 }
 
+
+/*
 void Joueur::placerPiece(Piece& piece, Coordonnee c, Plateau& plateau) {
     // Vérifier si la pièce est dans la main
     auto it = std::find(main.begin(), main.end(), piece);
     if (it != main.end()) {
-        plateau.placerPiece(piece, c);
+        //plateau.placerPiece(piece, c);
         main.erase(it); // Retirer la pièce de la main
         std::cout << nom << " a placé la pièce à (" << c.get_q() << ", " << c.get_r() << ")." << std::endl;
     } else {
@@ -38,5 +40,6 @@ void Joueur::prendrePiece(Piece& piece) {
 void Joueur::ajouterPieceMain(Piece piece) {
     main.push_back(piece);
 }
+*/
 
 } // namespace JeuHive
