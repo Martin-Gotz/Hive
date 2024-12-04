@@ -34,6 +34,10 @@ namespace JeuHive{
 
 	set<Coordonnee> Araignee::ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const
 	{
+		if (!plateau.deplacementPossible(*this, coo)) {
+			return set<Coordonnee>();
+		}
+
 		// l'entier représente le nombre de mouvements d'une case effectués. Agit comme une file
 		vector<pair<int,Coordonnee>> coos_intermediaires = { pair<int, Coordonnee>(0, coo)};
 		set<Coordonnee> resultat;
@@ -65,6 +69,10 @@ namespace JeuHive{
 
 	set<Coordonnee> Sauterelle::ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const
 	{
+		if (!plateau.deplacementPossible(*this, coo)) {
+			return set<Coordonnee>();
+		}
+
 		set<Coordonnee> resultat;
 		vector<Coordonnee> directions = getDirections();
 
@@ -92,6 +100,10 @@ namespace JeuHive{
 
 	set<Coordonnee> Fourmi::ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const
 	{
+		if (!plateau.deplacementPossible(*this, coo)) {
+			return set<Coordonnee>();
+		}
+
 		vector<Coordonnee> coos_intermediaires = { coo };
 		set<Coordonnee> resultat;
 

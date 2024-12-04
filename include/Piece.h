@@ -15,16 +15,14 @@ namespace JeuHive {
 	class Piece
 	{
 	protected:
-		bool estPlacee;
 		Couleur couleur;
 
 	public:
 		// on garde l'opérateur == par défault, qui apparemment ne peut pas être défini avec un =default
 		// il compare l'adresse mémoire des pieces (pas de comparaison d'attributs)
 
-		Piece(Couleur c) : estPlacee(false), couleur(c) {}
+		Piece(Couleur c) : couleur(c) {}
 
-		bool GetestPlacee() const { return estPlacee; }
 		Couleur GetCouleur() const { return couleur; }
 
 		virtual string getSymbole() const = 0;	// une lettre pour afficher dans la console

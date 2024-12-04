@@ -30,7 +30,8 @@ namespace JeuHive {
 
 
 		Case* getCaseDeCoo(const Coordonnee& coo) const;
-		// Case* getCaseDePiece(const Piece&) const;	peu utile je crois
+		Case* getCaseDePiece(const Piece& piece) const;
+		bool estPlacee(const Piece& piece) const;
 
 		vector<Case*> getVoisinsDeCoo(const Coordonnee& coo) const;
 

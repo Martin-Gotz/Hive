@@ -49,6 +49,23 @@ Case* Plateau::getCaseDeCoo(const Coordonnee& coo) const {
 
 }
 
+Case* JeuHive::Plateau::getCaseDePiece(const Piece& piece) const
+{
+	for (pair<Coordonnee, Case*> paire : Cases) {
+		for (const Piece* piece0 : paire.second->getPieces()) {
+			if (piece0 == &piece) {
+				return paire.second;
+			}
+		}
+	}
+	return nullptr;
+}
+
+bool JeuHive::Plateau::estPlacee(const Piece& piece) const
+{
+	return (getCaseDePiece(piece)!=nullptr);
+}
+
 
 /*
 ostream& operator<<(ostream& f, const Plateau& p)
@@ -97,7 +114,7 @@ set<Coordonnee> Plateau::ensemblePlacementsPossibles(const Piece& piece, int tou
 	// voisines d'une pièce de la couleur opposée. Ce résultat s'obtient en prenant la différence des deux ensembles
 	// avec set_difference
 
-	if (piece.GetestPlacee()) {
+	if (estPlacee(piece)) {
 		throw HiveException("La piece est deja placee");
 	}
 
@@ -144,6 +161,9 @@ set<Coordonnee> Plateau::ensemblePlacementsPossibles(const Piece& piece, int tou
 		piece_dessus = case_ptr->getDessus();
 
 		for (auto coo_voisine : coo_voisines) {
+			if (getCaseDeCoo(coo_voisine)!=nullptr) {
+				continue;
+			}
 			if (piece_dessus->GetCouleur() == piece.GetCouleur()) {
 				voisinsBonneCouleur.insert(coo_voisine);
 			}
@@ -178,7 +198,7 @@ bool Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) con
 	// Le paramètre coo n'est pas strictement nécessaire car on peut techniquement chercher une pièce sur toutes
 	// les coordonnees du plateau mais ce serait inutilement coûteux
 
-	if (!piece.GetestPlacee()) {
+	if (!estPlacee(piece)) {
 		throw HiveException("la piece n'est pas encore placee");
 	}
 
@@ -188,9 +208,11 @@ bool Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) con
 		return false;
 	}
 
+
 	if (case_de_piece->getNombrePieces()>=2) {
 		return true;
 	}
+
 
 	vector<Case*> premiers_voisins = getVoisinsDeCoo(case_de_piece->getCoo());
 
@@ -212,13 +234,17 @@ bool Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) con
 		// ajout des cases voisines non déjà visitées dans la file d'attente pour les visiter plus tard
 		// sauf si c'est la case de la pièce qu'on veut tester
 		for (Case* case_voisine : getVoisinsDeCoo(case_actuelle->getCoo())) {	
-			if ((visitees.find(case_voisine) != visitees.end())  && case_voisine!=case_de_piece) {
+			if ((visitees.find(case_voisine) == visitees.end())  && case_voisine!=case_de_piece) {
 				file_attente.push_back(case_voisine);
 			}
 		}
 
 		visitees.insert(case_actuelle);
 		file_attente.erase(file_attente.begin());
+	}
+
+	for (Case* case0 : visitees) {
+		cout << case0->getString() << " " << case0->getCoo() << "\n";
 	}
 
 	return visitees.size() == getNombreCases() - 1;
@@ -329,8 +355,8 @@ ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
 	// et une position x(un certain nombre de caractères)
 	// Pour s'assurer qu'il y ait assez de place, la convertion sera linéaire et se fera de cette manière:
 	// y=2q+r, x=r
-	// les lignes ne s'afficheront bien que si le jeu n'est pas trop étendu sur l'axe gauche-droite, et on ne peut rien y
-	// faire
+	// les lignes ne s'afficheront bien que si le jeu n'est pas trop étendu sur l'axe gauche-droite, 
+	// et on ne peut rien y faire
 
 	if (p.estVide()) {
 		return f;
@@ -359,26 +385,20 @@ ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
 		taille_str = max(taille_str, paire.second->getNombrePieces() * 2);
 
 	}
-	int taille_x = max_x - min_x + 1;
-	int taille_y = max_y - min_y + 1;
-	const string str_espaces = string(taille_str, ' ');
 
-	cout << "taille_x" << taille_x << "   taille_y" <<taille_y<<"\n";
+	int marge = 1;// espace autour
+	int taille_x = max_x - min_x + 1 + 2 * marge;
+	int taille_y = max_y - min_y + 1 + 2 * marge;
+
+	string str_espaces = string(taille_str, ' ');
+
+	string str_point = " .";
+	str_point.append(string(taille_str-2, ' '));
+
 
 	// tableau bidimensionnel rempli de str_espaces
-	vector<vector<string>> tab = vector<vector<string>>(taille_y, vector<string>(taille_x, str_espaces)); 
+	vector<vector<string>> tab = vector<vector<string>>(taille_y, vector<string>(taille_x, ""));
 	
-	/*
-	cout << "tableau vide " << "\n";
-	for (int i = tab.size() - 1; i >= 0; i--) {		// boucle inversée car on print de haut en bas
-		for (int j = 0; j < tab[0].size(); j++) {
-			f << "i:" << i << "j:" << j << " voila ";
-			f << tab.at(i).at(j) << "\n";
-		}
-		f << "\n";
-	}
-	*/
-
 	
 	Case* case0;
 	string str_case;
@@ -389,34 +409,26 @@ ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
 		x_case = coo_case.get_q();
 		y_case = coo_case.get_q() + 2 * coo_case.get_r();
 		str_case = case0->getString(taille_str);
-		/*
-		cout << "str_case" << coo_case << " coo_cases xy " << x_case-min_y << "  " << y_case-min_x 
-			<< " coo_cases xy " << x_case << "  " << y_case
-			<< " " << str_case << "\n";
-		*/
-		tab.at(y_case-min_y).at(x_case-min_x) = str_case;
+
+		tab.at(y_case-min_y + marge).at(x_case-min_x + marge) = str_case;
 
 	}
 	// tableau maintenant rempli
-	
-	// f << "sizey" << tab.size() << "\n";
-	// f << "sizex" << tab.at(0).size() << "\n";
-
-	/*
-	cout << "tableau rempli " << "\n";
-	for (int i = tab.size() - 1; i >= 0; i--) {		// boucle inversée car on print de haut en bas
-		for (int j = 0; j < tab[0].size(); j++) {
-			f << "i:" << i << "j:" << j << " voila ";
-			f << tab.at(i).at(j) << "\n";
-		}
-		f << "\n";
-	}
-	*/
 
 
 	for (int i = taille_y - 1; i >= 0; i--) {		// boucle inversée car on print de haut en bas
 		for (int j = 0; j < taille_x; j++) {
+			if (tab.at(i).at(j) == "") {
+				if ((i + j + min_x + min_y) % 2 == 0) {
+					f << str_point;
+				}
+				else {
+					f << str_espaces;
+				}
+			}
+			else{
 			f << tab.at(i).at(j);
+			}
 		}
 		f << "\n";
 	}
