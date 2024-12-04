@@ -16,8 +16,21 @@ namespace JeuHive {
 		vector<Partie*> parties;
 		Partie* partieEnCours;
 
+		// Constructeur privé
+		Hive() : partieEnCours(nullptr) {}
+
+		// Suppression du constructeur par copie et de l'opérateur d'affectation
+		Hive(const Hive&) = delete;
+		Hive& operator=(const Hive&) = delete;
+
 	public:
-		Hive();
+		// Méthode statique pour accéder à l'instance unique
+		static Hive& getInstance() {
+			static Hive instance;
+			return instance;
+		}
+
+		// Destructeur
 		~Hive();
 
 		// Methodes pour gerer les parties

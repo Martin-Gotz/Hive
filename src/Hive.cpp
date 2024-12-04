@@ -1,9 +1,6 @@
 #include "../include/Hive.h"
 using namespace JeuHive;
 
-// Constructeur
-Hive::Hive() : partieEnCours(nullptr) {}
-
 // Destructeur
 Hive::~Hive() {
     // Libération de toutes les parties stockées
