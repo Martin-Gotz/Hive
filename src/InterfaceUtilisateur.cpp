@@ -22,20 +22,32 @@ void InterfaceUtilisateur::afficherMenu() const {
     cout << "Entrez votre choix : ";
 }
 
+
+// Logique de validation des entrées
+int InterfaceUtilisateur::obtenirEntreeUtilisateur(const string& message) {
+    int valeur;
+    cout << message;
+    cin >> valeur;
+
+    if (cin.fail()) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Veuillez entrer un nombre valide." << endl;
+        return -1;
+    }
+
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    return valeur;
+}
+
 // Gestion des choix de l'utilisateur
 void InterfaceUtilisateur::gererChoixUtilisateur() {
     int choix;
+
     while (true) {
         afficherMenu();
-        cin >> choix;
+        int choix = obtenirEntreeUtilisateur("Veuillez entrer votre choix : ");
         cout << "---------------------" << endl;
-
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Veuillez entrer un nombre valide !" << endl;
-            continue;
-        }
 
         switch (choix) {
         case 1:
@@ -56,6 +68,8 @@ void InterfaceUtilisateur::gererChoixUtilisateur() {
         default:
             cout << "Option invalide, veuillez réessayer." << endl;
         }
+
+        cout << endl << endl;
     }
 }
 
@@ -76,26 +90,40 @@ void InterfaceUtilisateur::ajouterPartie() {
 
 // Partie à démarrer
 void InterfaceUtilisateur::demarrerPartie() {
+    if (hive.nombreParties() == 0) {
+        cout << "Aucune partie à démarrer." << endl;
+        return;
+    }
+
     if (hive.getPartieEnCours() != nullptr) {
         cout << "Une partie est déjà en cours." << endl;
         return;
     }
 
-    int idPartie;
     afficherParties();
-    cout << "Entrez l'ID de la partie à démarrer : ";
-    cin >> idPartie;
+    cout << endl;
+    int idPartie = obtenirEntreeUtilisateur("Entrez l'ID de la partie à démarrer : ");
+
+    // Vérification de la valeur en cas d'entrée invalide
+    if (idPartie == -1) {
+        return;
+    }
 
     try {
+        partieObservee = hive.getPartie(idPartie);
+
+        if (partieObservee) {
+            partieObservee->ajouterObserver(this);
+        }
+
         hive.demarrerPartie(idPartie);
-        partieObservee = hive.getPartieEnCours();
-        partieObservee->ajouterObserver(this);
         gererChoixUtilisateurMenuPartie();
     }
     catch (const HiveException& e) {
         cout << "Erreur : " << e.getInfo() << endl;
     }
 }
+
 
 // Partie à supprimer
 void InterfaceUtilisateur::supprimerPartie() {
@@ -104,10 +132,14 @@ void InterfaceUtilisateur::supprimerPartie() {
         return;
     }
 
-    int idPartie;
     afficherParties();
-    cout << "Entrez l'ID de la partie à supprimer : ";
-    cin >> idPartie;
+    cout << endl;
+    int idPartie = obtenirEntreeUtilisateur("Entrez l'ID de la partie à supprimer : ");
+    
+    // Vérification de la valeur en cas d'entrée invalide
+    if (idPartie == -1) {
+        return;
+    }
 
     try {
         hive.supprimerPartie(idPartie);
@@ -141,31 +173,24 @@ void InterfaceUtilisateur::gererChoixUtilisateurMenuPartie() {
     int choix;
     while (true) {
         afficherMenuPartie();
-        cin >> choix;
+        int choix = obtenirEntreeUtilisateur("Veuillez entrer votre choix : ");
         cout << "---------------------" << endl;
-
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Veuillez entrer un nombre valide !" << endl;
-            continue;
-        }
 
         switch (choix) {
         case 1:
             jouerCoup();
             break;
         case 2:
-            changerJoueurActuel();
-            break;
-        case 3:
             terminerPartieEnCours();
+            return;
+        case 3:
+            retournerMenu();
             return; // Retour au menu principal après la terminaison de la partie
-        case 4:
-            return; // Retour au menu principal sans terminer la partie
         default:
             cout << "Option invalide, veuillez réessayer." << endl;
         }
+
+        cout << endl << endl;
     }
 }
 
@@ -174,27 +199,28 @@ void InterfaceUtilisateur::jouerCoup() {
     cout << "Entrez le coup à jouer : ";
     string coup;
     cin >> coup;
+
     // Jouer le coup dans la partie en cours
     partieObservee->jouerCoup(Coup(coup));
 }
 
-// Changer le joueur actuel
-void InterfaceUtilisateur::changerJoueurActuel() {
-    partieObservee->changerJoueurActuel();
-}
-
 // Terminer la partie en cours
 void InterfaceUtilisateur::terminerPartieEnCours() {
-    partieObservee->terminer();
+    hive.terminerPartie();
+    partieObservee = nullptr;
+}
+
+// Changer le joueur actuel
+void InterfaceUtilisateur::retournerMenu() {
+    hive.mettrePartieEnPause();
     partieObservee = nullptr;
 }
 
 
 
 
-
 void InterfaceUtilisateur::afficherEvenement(const Evenement& evenement) const {
-    cout << "[Evenement] " << evenement.getDescription() << endl;
+    cout << "[Evenement] " << evenement.getDescription();
 }
 
 // Action de l'observateur

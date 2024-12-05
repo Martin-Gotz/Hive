@@ -48,6 +48,7 @@ namespace JeuHive {
 		void demarrerPartie(int idPartie);
 		void demarrerPartie(Partie* partie);
 		void terminerPartie();
+		void mettrePartieEnPause();
 
 		Partie* getPartieEnCours() { return partieEnCours; }
 		const Partie* getPartieEnCours() const { return partieEnCours; }

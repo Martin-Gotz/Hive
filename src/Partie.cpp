@@ -24,8 +24,10 @@ void Partie::demarrer() {
         throw HiveException("La partie est terminée !");
     }
 
-    etatPartie = EtatPartie::EN_COURS; 
-    EvenementPartie evt("La partie " + to_string(id) + " commence !", id, TypeEvenement::DEBUT_PARTIE);
+    etatPartie = EtatPartie::EN_COURS;
+
+
+    EvenementPartie evt("La partie " + to_string(id) + " commence ! C'est au tour de " + joueurActuel.getNom() + ".", id, TypeEvenement::DEBUT_PARTIE);
     notifierObservers(evt);
 }
 
@@ -73,9 +75,10 @@ void Partie::tourSuivant() {
         throw HiveException("Impossible de passer le tour d'une partie qui n'est pas en cours !");
     }
 
-    changerJoueurActuel();
     EvenementPartie evt("Le tour suivant commence.", id, TypeEvenement::TOUR_SUIVANT);
     notifierObservers(evt);
+
+    changerJoueurActuel();
 }
 
 /*

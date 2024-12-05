@@ -91,31 +91,43 @@ void Hive::demarrerPartie(int idPartie) {
 
     // Vérifie s'il y a déjà une partie en cours
     if (partieEnCours != nullptr) {
-        EvenementHive evt("Une partie est déjà en cours (ID : " + to_string(partieEnCours->getId()) + ").\n");
+        EvenementHive evt("Une partie est déjà en cours (ID : " + to_string(partieEnCours->getId()) + ").");
         notifierObservers(evt);
         return;
     }
 
+    // Notifie les observateurs
+    EvenementHive evt("Partie " + to_string(idPartie) + " démarrée");
+    notifierObservers(evt);
+
     // Démarre la partie
     partieEnCours = partie;
     partie->demarrer();
-
-    // Notifie les observateurs
-    EvenementHive evt("Partie " + to_string(idPartie) + " démarrée\n");
-    notifierObservers(evt);
 }
 
 // Terminer la partie en cours
 void Hive::terminerPartie() {
     if (partieEnCours == nullptr) {
-        throw HiveException("Aucune partie n'est en cours.\n");
+        throw HiveException("Aucune partie n'est en cours.");
         return;
     }
 
     partieEnCours->terminer();
 
-    EvenementHive evt("Partie " + to_string(partieEnCours->getId()) + " terminée\n");
+    EvenementHive evt("Partie " + to_string(partieEnCours->getId()) + " terminée");
     notifierObservers(evt);
+
+    partieEnCours = nullptr;
+}
+
+// Mettre en pause la partie en cours
+void Hive::mettrePartieEnPause() {
+    if (partieEnCours == nullptr) {
+        throw HiveException("Aucune partie n'est en cours.");
+        return;
+    }
+
+    partieEnCours->mettreEnPause();
 
     partieEnCours = nullptr;
 }

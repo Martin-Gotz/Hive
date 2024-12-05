@@ -15,10 +15,13 @@ namespace JeuHive {
 
         // Gestion des choix de l'utilisateur
         void gererChoixUtilisateur();
+        Hive& getHive() { return hive; }
 
     private:
         // Menu général
         void afficherMenu() const;
+
+        int obtenirEntreeUtilisateur(const string& message);
 
         void ajouterPartie();
         void supprimerPartie();
@@ -31,8 +34,8 @@ namespace JeuHive {
         void gererChoixUtilisateurMenuPartie();
 
         void jouerCoup();
-        void changerJoueurActuel();
         void terminerPartieEnCours();
+        void retournerMenu();
 
         void afficherEvenement(const Evenement& evenement) const;
         void reagir(const Evenement& evenement);
