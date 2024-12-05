@@ -112,7 +112,7 @@ void Partie::annulerDernierCoup() {
 
 // Methodes utilitaires
 void Partie::afficher(ostream& os) const {
-    os << id << " : " << joueur1.getNom() << " / " << joueur2.getNom() << " - ";
+    os << id << " : " << joueur1.getNom() << " vs " << joueur2.getNom() << " - ";
 
     switch (etatPartie) {
     case EtatPartie::NON_COMMENCEE:

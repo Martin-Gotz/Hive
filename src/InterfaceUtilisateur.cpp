@@ -1,5 +1,7 @@
 #include "../include/InterfaceUtilisateur.h"
 using namespace JeuHive;
+
+// Constructeurs et destructeurs
 InterfaceUtilisateur::InterfaceUtilisateur(Hive& h) : hive(h) {
     hive.ajouterObserver(this);
 }
@@ -11,18 +13,36 @@ InterfaceUtilisateur::~InterfaceUtilisateur() {
     hive.retirerObserver(this);
 }
 
+
+
+// ===== METHODES D'AFFICHAGE =====
+
 // Afficher le menu
 void InterfaceUtilisateur::afficherMenu() const {
-    cout << "\n======== Menu ========" << endl;
-    cout << "1. Ajouter une nouvelle partie" << endl;
-    cout << "2. Démarrer une partie" << endl;
-    cout << "3. Supprimer une partie" << endl;
-    cout << "4. Afficher les parties" << endl;
-    cout << "5. Quitter" << endl;
+    cout << "\n======== Menu ========\n";
+    cout << "1. Ajouter une nouvelle partie\n";
+    cout << "2. Démarrer une partie\n";
+    cout << "3. Supprimer une partie\n";
+    cout << "4. Afficher les parties\n";
+    cout << "5. Quitter\n";
+    cout << "Entrez votre choix : ";
+}
+
+// Afficher le menu de la partie en cours
+void InterfaceUtilisateur::afficherMenuPartie() const {
+    cout << "\n===== PARTIE ===== " << endl;
+    cout << "1. Jouer un coup" << endl;
+    cout << "2. Terminer la partie" << endl;
+    cout << "3. Retour au menu principal" << endl;
     cout << "Entrez votre choix : ";
 }
 
 
+
+
+
+// ===== GESTION DES MENUS =====
+// 
 // Logique de validation des entrées
 int InterfaceUtilisateur::obtenirEntreeUtilisateur(const string& message, bool menu = false) {
     int valeur;
@@ -42,39 +62,52 @@ int InterfaceUtilisateur::obtenirEntreeUtilisateur(const string& message, bool m
     return valeur;
 }
 
-// Gestion des choix de l'utilisateur
+// MENU PRINCIPAL
 void InterfaceUtilisateur::gererChoixUtilisateur() {
-    int choix = -1;
-
     while (true) {
         afficherMenu();
         int choix = obtenirEntreeUtilisateur("Veuillez entrer votre choix : ", true);
+        cout << "---------------------\n";
+
+        switch (choix) {
+        case 1: ajouterPartie(); break;
+        case 2: demarrerPartie(); break;
+        case 3: supprimerPartie(); break;
+        case 4: afficherParties(); break;
+        case 5: cout << "Au revoir !\n"; return;
+        default: cout << "Option invalide, veuillez réessayer.\n";
+        }
+        cout << endl << endl;
+    }
+}
+
+// PARTIE EN COURS
+void InterfaceUtilisateur::gererChoixUtilisateurMenuPartie() {
+    int choix = -1;
+
+    while (true) {
+        afficherMenuPartie();
+        int choix = obtenirEntreeUtilisateur("Veuillez entrer votre choix : ");
         cout << "---------------------" << endl;
 
         switch (choix) {
-        case 1:
-            ajouterPartie();
-            break;
-        case 2:
-            demarrerPartie();
-            break;
-        case 3:
-            supprimerPartie();
-            break;
-        case 4:
-            afficherParties();
-            break;
-        case 5:
-            cout << "Au revoir !" << endl;
-            return;
-        default:
-            cout << "Option invalide, veuillez réessayer." << endl;
+        case 1: jouerCoup(); break;
+        case 2: terminerPartieEnCours(); return;
+        case 3: retournerMenu(); return; // Retour au menu principal après la terminaison de la partie
+        default: cout << "Option invalide, veuillez réessayer." << endl;
         }
 
         cout << endl << endl;
     }
 }
 
+
+
+
+
+
+
+// ===== METHODES RELATIVES A HIVE =====
 
 // Demander à l'utilisateur les informations nécessaires pour ajouter une partie
 void InterfaceUtilisateur::ajouterPartie() {
@@ -155,61 +188,17 @@ void InterfaceUtilisateur::supprimerPartie() {
     }
 }
 
-// Afficher toutes les parties
-void InterfaceUtilisateur::afficherParties() {
-    hive.afficherParties();
-}
 
 
 
 
-
-
-
-// PARTIE EN COURS
-// Afficher le menu de la partie en cours
-void InterfaceUtilisateur::afficherMenuPartie() const {
-    cout << "\n===== PARTIE ===== " << endl;
-    cout << "1. Jouer un coup" << endl;
-    cout << "2. Terminer la partie" << endl;
-    cout << "3. Retour au menu principal" << endl;
-    cout << "Entrez votre choix : ";
-}
-
-// Gestion des choix du menu de la partie en cours
-void InterfaceUtilisateur::gererChoixUtilisateurMenuPartie() {
-    int choix = -1;
-
-    while (true) {
-        afficherMenuPartie();
-        int choix = obtenirEntreeUtilisateur("Veuillez entrer votre choix : ");
-        cout << "---------------------" << endl;
-
-        switch (choix) {
-        case 1:
-            jouerCoup();
-            break;
-        case 2:
-            terminerPartieEnCours();
-            return;
-        case 3:
-            retournerMenu();
-            return; // Retour au menu principal après la terminaison de la partie
-        default:
-            cout << "Option invalide, veuillez réessayer." << endl;
-        }
-
-        cout << endl << endl;
-    }
-}
+// ===== METHODES RELATIVES A PARTIE =====
 
 // Jouer un coup dans la partie en cours
 void InterfaceUtilisateur::jouerCoup() {
     cout << "Entrez le coup à jouer : ";
     string coup;
     cin >> coup;
-
-    // Jouer le coup dans la partie en cours
     partieObservee->jouerCoup(Coup(coup));
 }
 
@@ -226,6 +215,15 @@ void InterfaceUtilisateur::retournerMenu() {
 }
 
 
+
+
+
+// ===== AUTRES METHODES =====
+
+// Afficher toutes les parties
+void InterfaceUtilisateur::afficherParties() {
+    hive.afficherParties();
+}
 
 
 void InterfaceUtilisateur::afficherEvenement(const Evenement& evenement) const {
