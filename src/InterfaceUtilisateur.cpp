@@ -148,11 +148,11 @@ void InterfaceUtilisateur::demarrerPartie() {
         partieObservee = hive.getPartie(idPartie);
 
         if (partieObservee) {
-            // Si la partie est trouvée, on ajoute l'observateur
-            partieObservee->ajouterObserver(this);
-
             // Démarre la partie
             hive.demarrerPartie(idPartie);
+
+            // Si la partie est trouvée, on ajoute l'observateur
+            partieObservee->ajouterObserver(this);
 
             cout << endl << endl;
             cout << "-------------------- Partie " << to_string(partieObservee->getId()) << " --------------------" << endl;

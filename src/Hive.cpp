@@ -101,8 +101,8 @@ void Hive::demarrerPartie(int idPartie) {
     notifierObservers(evt);
 
     // Démarre la partie
-    partieEnCours = partie;
     partie->demarrer();
+    partieEnCours = partie;
 }
 
 // Terminer la partie en cours
