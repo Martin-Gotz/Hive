@@ -8,7 +8,7 @@ using namespace JeuHive;
 void Plateau::ajouterPieceSurCoo(const Piece& piece, const Coordonnee& coo) {
 
 	Case* case_sur_coo = getCaseDeCoo(coo);
-	
+
 	if (case_sur_coo == nullptr) {
 		Case* nouv_case = new Case(coo);
 		Cases.insert(make_pair(coo, nouv_case));
@@ -63,7 +63,7 @@ Case* JeuHive::Plateau::getCaseDePiece(const Piece& piece) const
 
 bool JeuHive::Plateau::estPlacee(const Piece& piece) const
 {
-	return (getCaseDePiece(piece)!=nullptr);
+	return (getCaseDePiece(piece) != nullptr);
 }
 
 
@@ -145,7 +145,7 @@ set<Coordonnee> Plateau::ensemblePlacementsPossibles(const Piece& piece, int tou
 
 	set<Coordonnee> voisinsBonneCouleur;		// voisins des pièces de la même couleur que piece
 	set<Coordonnee> voisinsMauvaiseCouleur;	// voisins des pièces de la couleur opposée piece
-	const Case* case_ptr;	
+	const Case* case_ptr;
 	const Piece* piece_dessus;
 	vector<Coordonnee> coo_voisines;
 	Coordonnee coo_case;
@@ -161,7 +161,7 @@ set<Coordonnee> Plateau::ensemblePlacementsPossibles(const Piece& piece, int tou
 		piece_dessus = case_ptr->getDessus();
 
 		for (auto coo_voisine : coo_voisines) {
-			if (getCaseDeCoo(coo_voisine)!=nullptr) {
+			if (getCaseDeCoo(coo_voisine) != nullptr) {
 				continue;
 			}
 			if (piece_dessus->GetCouleur() == piece.GetCouleur()) {
@@ -209,7 +209,7 @@ bool Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) con
 	}
 
 
-	if (case_de_piece->getNombrePieces()>=2) {
+	if (case_de_piece->getNombrePieces() >= 2) {
 		return true;
 	}
 
@@ -233,8 +233,8 @@ bool Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) con
 
 		// ajout des cases voisines non déjà visitées dans la file d'attente pour les visiter plus tard
 		// sauf si c'est la case de la pièce qu'on veut tester
-		for (Case* case_voisine : getVoisinsDeCoo(case_actuelle->getCoo())) {	
-			if ((visitees.find(case_voisine) == visitees.end())  && case_voisine!=case_de_piece) {
+		for (Case* case_voisine : getVoisinsDeCoo(case_actuelle->getCoo())) {
+			if ((visitees.find(case_voisine) == visitees.end()) && case_voisine != case_de_piece) {
 				file_attente.push_back(case_voisine);
 			}
 		}
@@ -242,10 +242,12 @@ bool Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) con
 		visitees.insert(case_actuelle);
 		file_attente.erase(file_attente.begin());
 	}
-
+	/*
 	for (Case* case0 : visitees) {
 		cout << case0->getString() << " " << case0->getCoo() << "\n";
 	}
+	*/
+
 
 	return visitees.size() == getNombreCases() - 1;
 
@@ -269,10 +271,21 @@ set<Coordonnee> Plateau::getCooVoisinesGlissement(const Coordonnee& coo, const C
 	set<Coordonnee> resultat;
 	vector<Case*> voisins = getVoisinsDeCoo(coo);
 
+
 	// suppression de la case s'il faut l'ignorer
-	for (Case* case0 : voisins) {
-		if (&(case0->getCoo()) == ignorer_coo && case0->getNombrePieces() == 1) {
-			voisins.erase(remove(voisins.begin(), voisins.end(), case0), voisins.end());
+	if (ignorer_coo != nullptr) {
+		Case* case_a_supprimer = nullptr;
+
+		for (Case* case0 : voisins) {
+			if ((case0->getCoo() == *ignorer_coo) && (case0->getNombrePieces() == 1)) {
+				case_a_supprimer = case0;
+				// variable intermédiaire pour ne pas modifier les voisins pendant l'itération
+				break;
+			}
+		}
+
+		if (case_a_supprimer != nullptr) {
+			voisins.erase(remove(voisins.begin(), voisins.end(), case_a_supprimer), voisins.end());
 		}
 	}
 
@@ -318,7 +331,7 @@ vector<Case*> Plateau::getVoisinsDeCoo(const Coordonnee& coo) const
 		case_voisine = getCaseDeCoo(coo_voisine);// Si une case se trouve sur la coordonnee voisine
 		if (case_voisine != nullptr) {
 			voisins.push_back(case_voisine);
-		}	
+		}
 
 	}
 	return voisins;
@@ -333,7 +346,7 @@ bool Plateau::estAbeillePlacee(Couleur couleur) const
 		case0 = paire.second;
 		for (const Piece* piece : case0->getPieces()) {
 
-			if (piece->estAbeille() && piece->GetCouleur()==couleur) {
+			if (piece->estAbeille() && piece->GetCouleur() == couleur) {
 				return true;
 			}
 
@@ -367,8 +380,8 @@ ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
 	//on commence par calculer les x et y min et max pour gacher le moins de place possible
 	int min_y = 10000;  // on suppose qu'aucune case ne sera à de telles coordonnées
 	int max_y = -10000;
-	int min_x = 10000; 
-	int max_x = -10000; 
+	int min_x = 10000;
+	int max_x = -10000;
 
 	Coordonnee coo_case;
 	int x_case;
@@ -377,7 +390,7 @@ ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
 	for (auto paire : p.getCases()) {
 		coo_case = paire.first;
 		x_case = coo_case.get_q();
-		y_case = coo_case.get_q() + 2*coo_case.get_r();
+		y_case = coo_case.get_q() + 2 * coo_case.get_r();
 		min_y = min(min_y, y_case);
 		max_y = max(max_y, y_case);
 		min_x = min(min_x, x_case);
@@ -393,13 +406,13 @@ ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
 	string str_espaces = string(taille_str, ' ');
 
 	string str_point = " .";
-	str_point.append(string(taille_str-2, ' '));
+	str_point.append(string(taille_str - 2, ' '));
 
 
 	// tableau bidimensionnel rempli de str_espaces
 	vector<vector<string>> tab = vector<vector<string>>(taille_y, vector<string>(taille_x, ""));
-	
-	
+
+
 	Case* case0;
 	string str_case;
 	for (auto paire : p.getCases()) {
@@ -410,7 +423,7 @@ ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
 		y_case = coo_case.get_q() + 2 * coo_case.get_r();
 		str_case = case0->getString(taille_str);
 
-		tab.at(y_case-min_y + marge).at(x_case-min_x + marge) = str_case;
+		tab.at(y_case - min_y + marge).at(x_case - min_x + marge) = str_case;
 
 	}
 	// tableau maintenant rempli
@@ -426,8 +439,8 @@ ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
 					f << str_espaces;
 				}
 			}
-			else{
-			f << tab.at(i).at(j);
+			else {
+				f << tab.at(i).at(j);
 			}
 		}
 		f << "\n";

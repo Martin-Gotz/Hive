@@ -1,7 +1,9 @@
 #include "../include/Piece.h"
 #include "../include/Plateau.h"
+#include <tuple>
 
-namespace JeuHive{
+
+namespace JeuHive {
 	set<Coordonnee> Abeille::ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const
 	{
 		if (!plateau.deplacementPossible(*this, coo)) {
@@ -25,7 +27,7 @@ namespace JeuHive{
 
 		// union des glissements et des chevauchements
 		set<Coordonnee> resultat = plateau.getCooVoisinesGlissement(coo);
-		
+
 		for (Case* case_voisine : plateau.getVoisinsDeCoo(coo)) {
 			resultat.insert(case_voisine->getCoo());
 		}
@@ -38,27 +40,58 @@ namespace JeuHive{
 			return set<Coordonnee>();
 		}
 
-		// l'entier représente le nombre de mouvements d'une case effectués. Agit comme une file
-		vector<pair<int,Coordonnee>> coos_intermediaires = { pair<int, Coordonnee>(0, coo)};
+		int nbr_mouvements = 3;
 		set<Coordonnee> resultat;
 
+		// contient des tuplues de la forme:
+		// - nombre de glissements effectués
+		// - coordonnée précedente
+		// - coordonnée actuelle
+		vector<tuple<int, Coordonnee, Coordonnee>> coos_intermediaires = { {0, Coordonnee(10000, 10000), coo} };
+		// nombre improbable(même impossible car la première pièce est placée en (0, 0)) car initialement,
+		// il n'y a pas des coordonnée précédente et à cause de l'absence de NULL
+
 		int generation;
-		Coordonnee coo_intermediaire;
+		Coordonnee coo_actuelle;
+		Coordonnee coo_precedente;
+		set<Coordonnee> nouv_coos_glissement;
 		set<Coordonnee> nouv_coos;
-		while (coos_intermediaires.size()>0){
-			generation = coos_intermediaires.front().first;
-			coo_intermediaire = coos_intermediaires.front().second;
+		while (coos_intermediaires.size() > 0) {
+			// on prend le premier élément qu'on supprimera par la suite
+			generation = get<0>(coos_intermediaires.front());
+			coo_precedente = get<1>(coos_intermediaires.front());
+			coo_actuelle = get<2>(coos_intermediaires.front());
 
-			nouv_coos = plateau.getCooVoisinesGlissement(coo_intermediaire);
+			nouv_coos_glissement = plateau.getCooVoisinesGlissement(coo_actuelle, &coo);
+			nouv_coos = {};
 
-			if (generation == 3-1) {
+			//cout << " coo actuelle: " << coo_actuelle << "  coo precedente " << coo_precedente << "\n";
+
+			// suppression des retours arrière
+			for (Coordonnee nouv_coo_glissement : nouv_coos_glissement) {
+				// Si la coordonnée précedente est celle atteignable par un glissement, on n'y va pas
+				// (l'araignée ne peut pas retourner sur ses pas)
+				if (!(nouv_coo_glissement == coo_precedente)) {
+					nouv_coos.insert(nouv_coo_glissement);
+				}
+			}
+
+			/*
+			cout << coo_actuelle << "coo_actuelle \n";
+			for (Coordonnee debug : nouv_coos) {
+				cout << "     nouv_coo " << debug << "\n";
+			}
+			*/
+
+
+			if (generation == nbr_mouvements - 1) {
 				for (Coordonnee nouv_coo : nouv_coos) {
 					resultat.insert(nouv_coo);
 				}
 			}
 			else {
 				for (Coordonnee nouv_coo : nouv_coos) {
-					coos_intermediaires.push_back(pair<int, Coordonnee>(generation+1, nouv_coo));
+					coos_intermediaires.push_back({ generation + 1, coo_actuelle, nouv_coo });
 				}
 			}
 
@@ -94,7 +127,7 @@ namespace JeuHive{
 
 			resultat.insert(coo_ligne);
 		}
-		
+
 		return resultat;
 	}
 
@@ -111,7 +144,7 @@ namespace JeuHive{
 		set<Coordonnee> nouv_coos;
 		while (coos_intermediaires.size() > 0) {
 			coo_intermediaire = coos_intermediaires.front();
-			
+
 			// si la coo est déjà dans résultat alors on a déjà vu cette coordonnée passer par 
 			// coo_intermediaire
 			if (resultat.find(coo_intermediaire) != resultat.end()) {
@@ -120,7 +153,7 @@ namespace JeuHive{
 
 			nouv_coos = plateau.getCooVoisinesGlissement(coo_intermediaire);
 
-			
+
 			for (Coordonnee nouv_coo : nouv_coos) {
 				// si la nouvelle coo n'est pas déjà dans resultat, on l'ajoute aux coos_intermediaires
 				// On pourrait vérifier que c'est pas non plus dans coos_intermediaires mais c'est pas
@@ -129,7 +162,7 @@ namespace JeuHive{
 				if (resultat.find(nouv_coo) != resultat.end()) {
 					coos_intermediaires.push_back(nouv_coo);
 				}
-				
+
 			}
 
 
@@ -137,7 +170,7 @@ namespace JeuHive{
 		}
 		return resultat;
 
-		
+
 	}
 
 }
