@@ -36,7 +36,7 @@ namespace JeuHive {
 		ANNULER_COUP,
 		SAUVEGARDE_PARTIE,
 		PIECE_PLACEE,
-		ERREUR_PARTIE,
+		ERREUR,
 		AUCUN_TYPE
 	}; 
 }

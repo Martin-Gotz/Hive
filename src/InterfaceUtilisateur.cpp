@@ -91,7 +91,7 @@ void InterfaceUtilisateur::gererChoixUtilisateurMenuPartie() {
         switch (choix) {
         case 1: jouerCoup(); break;
         case 2: terminerPartieEnCours(); return;
-        case 3: retournerMenu(); return; // Retour au menu principal après la terminaison de la partie
+        case 3: retournerMenu(); return;
         default: cout << "Option invalide, veuillez réessayer." << endl;
         }
 
@@ -148,13 +148,21 @@ void InterfaceUtilisateur::demarrerPartie() {
         partieObservee = hive.getPartie(idPartie);
 
         if (partieObservee) {
+            // Si la partie est trouvée, on ajoute l'observateur
             partieObservee->ajouterObserver(this);
-        }
 
-        hive.demarrerPartie(idPartie);
-        cout << endl << endl;
-        cout << "-------------------- Partie " << partieObservee->getId() << " --------------------" << endl;
-        gererChoixUtilisateurMenuPartie();
+            // Démarre la partie
+            hive.demarrerPartie(idPartie);
+
+            cout << endl << endl;
+            cout << "-------------------- Partie " << to_string(partieObservee->getId()) << " --------------------" << endl;
+
+            gererChoixUtilisateurMenuPartie();
+        }
+        else {
+            // Si la partie n'a pas été trouvée
+            throw HiveException("Aucune partie trouvée avec cet ID.");
+        }
     }
     catch (const HiveException& e) {
         cout << "Erreur : " << e.getInfo() << endl;
@@ -198,19 +206,35 @@ void InterfaceUtilisateur::jouerCoup() {
     cout << "Entrez le coup à jouer : ";
     string coup;
     cin >> coup;
-    partieObservee->jouerCoup(Coup(coup));
+
+    try {
+        partieObservee->jouerCoup(Coup(coup));
+    }
+    catch (const HiveException& e) {
+        cout << "Erreur : " << e.getInfo() << endl;
+    }
 }
 
 // Terminer la partie en cours
 void InterfaceUtilisateur::terminerPartieEnCours() {
-    hive.terminerPartie();
-    partieObservee = nullptr;
+    try {
+        hive.terminerPartie();
+        partieObservee = nullptr;
+    }
+    catch (const HiveException& e) {
+        cout << "Erreur : " << e.getInfo() << endl;
+    }
 }
 
 // Changer le joueur actuel
 void InterfaceUtilisateur::retournerMenu() {
-    hive.mettrePartieEnPause();
-    partieObservee = nullptr;
+    try {
+        hive.mettrePartieEnPause();
+        partieObservee = nullptr;
+    }
+    catch (const HiveException& e) {
+        cout << "Erreur : " << e.getInfo() << endl;
+    }
 }
 
 
@@ -242,6 +266,13 @@ void InterfaceUtilisateur::afficherEvenement(const Evenement& e) const {
     if (!e.getDescription().empty()) {
         cout << e.getDescription() << endl;
     }
+
+    /*
+    // Vérifier si l'événement est un EvenementPartie
+    if (const EvenementPartie* evtPartie = dynamic_cast<const EvenementPartie*>(&e)) {
+        
+    }
+    */
 
     // Affichages supplémentaires
     if (e.getType() == TypeEvenement::DEBUT_PARTIE) {

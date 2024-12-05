@@ -59,7 +59,7 @@ namespace JeuHive {
             case TypeEvenement::ANNULER_COUP: return "Annulation de Coup";
             case TypeEvenement::SAUVEGARDE_PARTIE: return "Sauvegarde de la Partie";
             case TypeEvenement::PIECE_PLACEE: return "Pièce Placée";
-            case TypeEvenement::ERREUR_PARTIE: return "Erreur dans la Partie";
+            case TypeEvenement::ERREUR: return "Erreur dans la Partie";
             default: throw HiveException("Type d'événement inconnu");
             }
         };

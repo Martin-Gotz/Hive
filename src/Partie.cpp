@@ -122,22 +122,24 @@ void Partie::afficher(ostream& os) const {
 // Formatage des données pour l'abstraction de l'affichage
 ResumePartie Partie::resumer() const {
     ResumePartie resume;
+
     resume.id = id;
     resume.joueur1 = joueur1.getNom();
     resume.joueur2 = joueur2.getNom();
+
     switch (etatPartie) {
-    case EtatPartie::NON_COMMENCEE:
-        resume.etatPartie = "Non commencee";
-        break;
-    case EtatPartie::EN_COURS:
-        resume.etatPartie = "En cours";
-        break;
-    case EtatPartie::EN_PAUSE:
-        resume.etatPartie = "En pause";
-        break;
-    case EtatPartie::TERMINEE:
-        resume.etatPartie = "Terminée";
-        break;
+        case EtatPartie::NON_COMMENCEE:
+            resume.etatPartie = "Non commencee";
+            break;
+        case EtatPartie::EN_COURS:
+            resume.etatPartie = "En cours";
+            break;
+        case EtatPartie::EN_PAUSE:
+            resume.etatPartie = "En pause";
+            break;
+        case EtatPartie::TERMINEE:
+            resume.etatPartie = "Terminée";
+            break;
     }
     return resume;
 }
