@@ -97,7 +97,7 @@ void Hive::demarrerPartie(int idPartie) {
     }
 
     // Notifie les observateurs
-    EvenementHive evt("Partie " + to_string(idPartie) + " démarrée");
+    EvenementHive evt("Demarrage de la partie " + to_string(idPartie));
     notifierObservers(evt);
 
     // Démarre la partie
@@ -114,7 +114,7 @@ void Hive::terminerPartie() {
 
     partieEnCours->terminer();
 
-    EvenementHive evt("Partie " + to_string(partieEnCours->getId()) + " terminée");
+    EvenementHive evt("Abandon de la partie " + to_string(partieEnCours->getId()));
     notifierObservers(evt);
 
     partieEnCours = nullptr;
@@ -152,7 +152,7 @@ void Hive::afficherParties() const {
 
 
 
-// Abstraction de l'affichage
+// Formatage des données pour l'abstraction de l'affichage
 EtatHive Hive::getEtatHive() const {
     EtatHive etat;
     for (const auto& partie : parties) {

@@ -19,13 +19,12 @@ InterfaceUtilisateur::~InterfaceUtilisateur() {
 
 // Afficher le menu
 void InterfaceUtilisateur::afficherMenu() const {
-    cout << "\n======== Menu ========\n";
+    cout << "\n======== MENU ========\n";
     cout << "1. Ajouter une nouvelle partie\n";
     cout << "2. Démarrer une partie\n";
     cout << "3. Supprimer une partie\n";
     cout << "4. Afficher les parties\n";
     cout << "5. Quitter\n";
-    cout << "Entrez votre choix : ";
 }
 
 // Afficher le menu de la partie en cours
@@ -34,7 +33,6 @@ void InterfaceUtilisateur::afficherMenuPartie() const {
     cout << "1. Jouer un coup" << endl;
     cout << "2. Terminer la partie" << endl;
     cout << "3. Retour au menu principal" << endl;
-    cout << "Entrez votre choix : ";
 }
 
 
@@ -66,7 +64,7 @@ int InterfaceUtilisateur::obtenirEntreeUtilisateur(const string& message, bool m
 void InterfaceUtilisateur::gererChoixUtilisateur() {
     while (true) {
         afficherMenu();
-        int choix = obtenirEntreeUtilisateur("Veuillez entrer votre choix : ", true);
+        int choix = obtenirEntreeUtilisateur("Entrez votre choix : ", true);
         cout << "---------------------\n";
 
         switch (choix) {
@@ -87,7 +85,7 @@ void InterfaceUtilisateur::gererChoixUtilisateurMenuPartie() {
 
     while (true) {
         afficherMenuPartie();
-        int choix = obtenirEntreeUtilisateur("Veuillez entrer votre choix : ");
+        int choix = obtenirEntreeUtilisateur("Entrez votre choix : ");
         cout << "---------------------" << endl;
 
         switch (choix) {
@@ -154,7 +152,8 @@ void InterfaceUtilisateur::demarrerPartie() {
         }
 
         hive.demarrerPartie(idPartie);
-        cout << endl << endl << endl;
+        cout << endl << endl;
+        cout << "-------------------- Partie " << partieObservee->getId() << " --------------------" << endl;
         gererChoixUtilisateurMenuPartie();
     }
     catch (const HiveException& e) {
@@ -238,11 +237,31 @@ void InterfaceUtilisateur::afficherParties() {
 }
 
 
-void InterfaceUtilisateur::afficherEvenement(const Evenement& evenement) const {
-    cout << evenement.getDescription() << endl;
+void InterfaceUtilisateur::afficherEvenement(const Evenement& e) const {
+    // Afficher le message de l'observable si il existe
+    if (!e.getDescription().empty()) {
+        cout << e.getDescription() << endl;
+    }
+
+    // Affichages supplémentaires
+    if (e.getType() == TypeEvenement::DEBUT_PARTIE) {
+        cout << "La partie a commencé !" << endl;
+    }
+    else if (e.getType() == TypeEvenement::FIN_PARTIE) {
+        cout << "La partie est terminée." << endl;
+    }
+    else if (e.getType() == TypeEvenement::PAUSE_PARTIE) {
+        cout << "La partie est en pause." << endl;
+    }
+    else if (e.getType() == TypeEvenement::TOUR_SUIVANT) {
+        cout << "C'est au tour du joueur suivant." << endl;
+    }
+    else if (e.getType() == TypeEvenement::CHANGEMENT_JOUEUR) {
+        cout << "Changement de joueur." << endl;
+    }
 }
 
 // Action de l'observateur
-void InterfaceUtilisateur::reagir(const Evenement& evenement) {
-    afficherEvenement(evenement);
+void InterfaceUtilisateur::reagir(const Evenement& e) {
+    afficherEvenement(e);
 }

@@ -37,12 +37,12 @@ void Partie::demarrer() {
 }
 
 void Partie::initialiser() {
-    EvenementPartie evt("La partie " + to_string(id) + " commence !", id, TypeEvenement::DEBUT_PARTIE);
+    EvenementPartie evt(id, TypeEvenement::DEBUT_PARTIE);
     notifierObservers(evt);
 }
 
 void Partie::reprendre() {
-    EvenementPartie evt("La partie " + to_string(id) + " reprend !", id, TypeEvenement::REPRISE_PARTIE);
+    EvenementPartie evt(id, TypeEvenement::REPRISE_PARTIE);
     notifierObservers(evt);
 }
 
@@ -52,7 +52,7 @@ void Partie::mettreEnPause() {
     }
 
     etatPartie = EtatPartie::EN_PAUSE;
-    EvenementPartie evt("La partie " + to_string(id) + " est mise en pause !", id, TypeEvenement::PAUSE_PARTIE);
+    EvenementPartie evt(id, TypeEvenement::PAUSE_PARTIE);
     notifierObservers(evt);
 }
 
@@ -62,7 +62,7 @@ void Partie::terminer() {
     }
 
     etatPartie = EtatPartie::TERMINEE;
-    EvenementPartie evt("La partie " + to_string(id) + " est terminée.", id, TypeEvenement::FIN_PARTIE);
+    EvenementPartie evt(id, TypeEvenement::FIN_PARTIE);
     notifierObservers(evt);
 }
 
@@ -81,7 +81,7 @@ void Partie::jouerCoup(const Coup& coup) {
 
 void Partie::changerJoueurActuel() {
     joueurActuel = (joueurActuel.getNom() == joueur1.getNom()) ? joueur2 : joueur1; // Le getNom est temporaire en attendant l'opérateur de comparaison
-    EvenementPartie evt("C'est au tour de " + joueurActuel.getNom() + ".", id, TypeEvenement::CHANGEMENT_JOUEUR);
+    EvenementPartie evt(id, TypeEvenement::CHANGEMENT_JOUEUR);
     notifierObservers(evt);
 }
 
@@ -90,7 +90,7 @@ void Partie::tourSuivant() {
         throw HiveException("Impossible de passer le tour d'une partie qui n'est pas en cours !");
     }
 
-    EvenementPartie evt("Le tour suivant commence.", id, TypeEvenement::TOUR_SUIVANT);
+    EvenementPartie evt(id, TypeEvenement::TOUR_SUIVANT);
     notifierObservers(evt);
 
     changerJoueurActuel();
@@ -119,7 +119,7 @@ void Partie::afficher(ostream& os) const {
 
 
 
-// Abstraction de l'affichage
+// Formatage des données pour l'abstraction de l'affichage
 ResumePartie Partie::resumer() const {
     ResumePartie resume;
     resume.id = id;

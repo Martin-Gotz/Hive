@@ -16,6 +16,7 @@ namespace JeuHive {
         virtual ~Evenement() = default;
 
         // Méthode virtuelle pure pour récupérer une description de l'événement
+        virtual TypeEvenement getType() const { return TypeEvenement::AUCUN_TYPE; }
         virtual string getDescription() const = 0;
     };
 
@@ -24,15 +25,13 @@ namespace JeuHive {
     class EvenementHive : public Evenement {
     private:
         string message;
-
     public:
+        EvenementHive() {}
         EvenementHive(const string& msg) : message(msg) {}
 
         string getDescription() const override {
-            return "Hive: " + message;
+            return message;
         }
-
-        string getMessage() const { return message; }
     };
 
 
@@ -40,12 +39,15 @@ namespace JeuHive {
     class EvenementPartie : public EvenementHive {
     private:
         int idPartie;
-        TypeEvenement typeEvenement;
+        TypeEvenement type;
 
     public:
+        EvenementPartie(int id, TypeEvenement type)
+            : idPartie(id), type(type) {}
         EvenementPartie(const string& msg, int id, TypeEvenement type)
-            : EvenementHive(msg), idPartie(id), typeEvenement(type) {}
+            : EvenementHive(msg), idPartie(id), type(type) {}
 
+        /*
         const string typeEvenementToString(TypeEvenement type) const {
             switch (type) {
             case TypeEvenement::DEBUT_PARTIE: return "Début de la Partie";
@@ -61,13 +63,10 @@ namespace JeuHive {
             default: throw HiveException("Type d'événement inconnu");
             }
         };
-
-        string getDescription() const override {
-            return "Partie " + to_string(idPartie) + " : " + typeEvenementToString(typeEvenement) + " - " + getMessage();
-        }
+        */
 
         int getIdPartie() const { return idPartie; }
-        TypeEvenement getTypeEvenement() const { return typeEvenement; }
+        TypeEvenement getType() const { return type; }
     };
 
 
