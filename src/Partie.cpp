@@ -29,6 +29,16 @@ void Partie::demarrer() {
     notifierObservers(evt);
 }
 
+void Partie::mettreEnPause() {
+    if (etatPartie != EtatPartie::EN_COURS) {
+        throw HiveException("La partie n'est pas en cours");
+    }
+
+    etatPartie = EtatPartie::EN_PAUSE;
+    EvenementPartie evt("La partie " + to_string(id) + " est mise en pause !", id, TypeEvenement::PAUSE_PARTIE);
+    notifierObservers(evt);
+}
+
 void Partie::terminer() {
     if (etatPartie != EtatPartie::EN_COURS) {
         throw HiveException("Impossible de terminer une partie qui n'est pas en cours !");
@@ -39,15 +49,18 @@ void Partie::terminer() {
     notifierObservers(evt);
 }
 
-/*
+
+
+
 void Partie::jouerCoup(const Coup& coup) {
+    /*
     if (!estCoupValide(coup)) {
         throw HiveException("Coup invalide !");
     }
     historique.ajouterCoup(coup);
+    */
     tourSuivant();
 }
-*/
 
 void Partie::changerJoueurActuel() {
     joueurActuel = (joueurActuel.getNom() == joueur1.getNom()) ? joueur2 : joueur1; // Le getNom est temporaire en attendant l'opérateur de comparaison
@@ -60,7 +73,7 @@ void Partie::tourSuivant() {
         throw HiveException("Impossible de passer le tour d'une partie qui n'est pas en cours !");
     }
 
-    //cout << "Tour suivant." << endl;
+    changerJoueurActuel();
     EvenementPartie evt("Le tour suivant commence.", id, TypeEvenement::TOUR_SUIVANT);
     notifierObservers(evt);
 }

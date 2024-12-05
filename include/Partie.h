@@ -53,6 +53,7 @@ namespace JeuHive {
 
 		// Methodes principales
 		void demarrer();
+		void mettreEnPause();
 		void terminer();
 		void jouerCoup(const Coup& coup); // L'ajouter aussi a l'historique
 		void changerJoueurActuel();

@@ -17,21 +17,24 @@ namespace JeuHive {
         void gererChoixUtilisateur();
 
     private:
-        // Afficher le menu
+        // Menu général
         void afficherMenu() const;
 
-        // Demander à l'utilisateur les informations nécessaires pour ajouter une partie
         void ajouterPartie();
-
         void supprimerPartie();
-
         void demarrerPartie();
-
-        // Terminer la partie en cours
-        void terminerPartie();
-
         void afficherParties();
 
+
+        // Menu à l'intérieur d'une partie
+        void afficherMenuPartie() const;
+        void gererChoixUtilisateurMenuPartie();
+
+        void jouerCoup();
+        void changerJoueurActuel();
+        void terminerPartieEnCours();
+
+        void afficherEvenement(const Evenement& evenement) const;
         void reagir(const Evenement& evenement);
     };
 }

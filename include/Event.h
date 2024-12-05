@@ -46,22 +46,23 @@ namespace JeuHive {
         EvenementPartie(const string& msg, int id, TypeEvenement type)
             : EvenementHive(msg), idPartie(id), typeEvenement(type) {}
 
-        const string& typeEvenementToString(TypeEvenement type) const {
+        const string typeEvenementToString(TypeEvenement type) const {
             switch (type) {
-                case TypeEvenement::DEBUT_PARTIE: return "Début de la Partie";
-                case TypeEvenement::FIN_PARTIE: return "Fin de la Partie";
-                case TypeEvenement::CHANGEMENT_JOUEUR: return "Changement de Joueur";
-                case TypeEvenement::TOUR_SUIVANT: return "Tour Suivant";
-                case TypeEvenement::ANNULER_COUP: return "Annulation de Coup";
-                case TypeEvenement::SAUVEGARDE_PARTIE: return "Sauvegarde de la Partie";
-                case TypeEvenement::PIECE_PLACEE: return "Pièce Placée";
-                case TypeEvenement::ERREUR_PARTIE: return "Erreur dans la Partie";
-                default: throw HiveException("Type d'événement inconnu");
+            case TypeEvenement::DEBUT_PARTIE: return "Début de la Partie";
+            case TypeEvenement::PAUSE_PARTIE: return "Partie en pause";
+            case TypeEvenement::FIN_PARTIE: return "Fin de la Partie";
+            case TypeEvenement::CHANGEMENT_JOUEUR: return "Changement de Joueur";
+            case TypeEvenement::TOUR_SUIVANT: return "Tour Suivant";
+            case TypeEvenement::ANNULER_COUP: return "Annulation de Coup";
+            case TypeEvenement::SAUVEGARDE_PARTIE: return "Sauvegarde de la Partie";
+            case TypeEvenement::PIECE_PLACEE: return "Pièce Placée";
+            case TypeEvenement::ERREUR_PARTIE: return "Erreur dans la Partie";
+            default: throw HiveException("Type d'événement inconnu");
             }
         };
 
         string getDescription() const override {
-            return "Partie ID " + to_string(idPartie) + " : " + typeEvenementToString(typeEvenement) + " - " + getMessage();
+            return "Partie " + to_string(idPartie) + " : " + typeEvenementToString(typeEvenement) + " - " + getMessage();
         }
 
         int getIdPartie() const { return idPartie; }

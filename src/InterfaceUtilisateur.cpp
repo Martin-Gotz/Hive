@@ -16,10 +16,9 @@ void InterfaceUtilisateur::afficherMenu() const {
     cout << "\n=== Menu ===" << endl;
     cout << "1. Ajouter une nouvelle partie" << endl;
     cout << "2. Démarrer une partie" << endl;
-    cout << "3. Terminer la partie en cours" << endl;
-    cout << "4. Supprimer une partie" << endl;
-    cout << "5. Afficher les parties" << endl;
-    cout << "6. Quitter" << endl;
+    cout << "3. Supprimer une partie" << endl;
+    cout << "4. Afficher les parties" << endl;
+    cout << "5. Quitter" << endl;
     cout << "Entrez votre choix : ";
 }
 
@@ -46,15 +45,12 @@ void InterfaceUtilisateur::gererChoixUtilisateur() {
             demarrerPartie();
             break;
         case 3:
-            terminerPartie();
-            break;
-        case 4:
             supprimerPartie();
             break;
-        case 5:
+        case 4:
             afficherParties();
             break;
-        case 6:
+        case 5:
             cout << "Au revoir !" << endl;
             return;
         default:
@@ -92,16 +88,9 @@ void InterfaceUtilisateur::demarrerPartie() {
 
     try {
         hive.demarrerPartie(idPartie);
-    }
-    catch (const HiveException& e) {
-        cout << "Erreur : " << e.getInfo() << endl;
-    }
-}
-
-// Terminer la partie en cours
-void InterfaceUtilisateur::terminerPartie() {
-    try {
-        hive.terminerPartie();
+        partieObservee = hive.getPartieEnCours();
+        partieObservee->ajouterObserver(this);
+        gererChoixUtilisateurMenuPartie();
     }
     catch (const HiveException& e) {
         cout << "Erreur : " << e.getInfo() << endl;
@@ -135,7 +124,80 @@ void InterfaceUtilisateur::afficherParties() {
 
 
 
+
+
+// PARTIE EN COURS
+// Afficher le menu de la partie en cours
+void InterfaceUtilisateur::afficherMenuPartie() const {
+    cout << "\n=== Menu de la Partie ===" << endl;
+    cout << "1. Jouer un coup" << endl;
+    cout << "2. Terminer la partie" << endl;
+    cout << "3. Retour au menu principal" << endl;
+    cout << "Entrez votre choix : ";
+}
+
+// Gestion des choix du menu de la partie en cours
+void InterfaceUtilisateur::gererChoixUtilisateurMenuPartie() {
+    int choix;
+    while (true) {
+        afficherMenuPartie();
+        cin >> choix;
+        cout << "---------------------" << endl;
+
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Veuillez entrer un nombre valide !" << endl;
+            continue;
+        }
+
+        switch (choix) {
+        case 1:
+            jouerCoup();
+            break;
+        case 2:
+            changerJoueurActuel();
+            break;
+        case 3:
+            terminerPartieEnCours();
+            return; // Retour au menu principal après la terminaison de la partie
+        case 4:
+            return; // Retour au menu principal sans terminer la partie
+        default:
+            cout << "Option invalide, veuillez réessayer." << endl;
+        }
+    }
+}
+
+// Jouer un coup dans la partie en cours
+void InterfaceUtilisateur::jouerCoup() {
+    cout << "Entrez le coup à jouer : ";
+    string coup;
+    cin >> coup;
+    // Jouer le coup dans la partie en cours
+    partieObservee->jouerCoup(Coup(coup));
+}
+
+// Changer le joueur actuel
+void InterfaceUtilisateur::changerJoueurActuel() {
+    partieObservee->changerJoueurActuel();
+}
+
+// Terminer la partie en cours
+void InterfaceUtilisateur::terminerPartieEnCours() {
+    partieObservee->terminer();
+    partieObservee = nullptr;
+}
+
+
+
+
+
+void InterfaceUtilisateur::afficherEvenement(const Evenement& evenement) const {
+    cout << "[Evenement] " << evenement.getDescription() << endl;
+}
+
 // Action de l'observateur
 void InterfaceUtilisateur::reagir(const Evenement& evenement) {
-    cout << evenement.getDescription() << endl;
+    afficherEvenement(evenement);
 }

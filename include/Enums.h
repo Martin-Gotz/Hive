@@ -1,5 +1,6 @@
 #pragma once
-#include <string>
+
+using namespace std;
 
 namespace JeuHive {
 	enum TypeJoueur {
@@ -24,8 +25,9 @@ namespace JeuHive {
 	};
 
 
-	enum TypeEvenement {
+	enum class TypeEvenement {
 		DEBUT_PARTIE,
+		PAUSE_PARTIE,
 		FIN_PARTIE,
 		CHANGEMENT_JOUEUR,
 		TOUR_SUIVANT,
