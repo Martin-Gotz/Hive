@@ -32,17 +32,17 @@ namespace JeuHive {
 			return instance;
 		}
 
-		// Destructeur
 		~Hive();
 
-		// Methodes pour gerer les parties
 
+		// Methodes pour gerer les parties
 		void ajouterPartie(Joueur& joueur1, Joueur& joueur2); // Asignation des couleurs et autres paramètres à voir
 		void supprimerPartie(int idPartie);
 
 		Partie* getPartie(int idPartie);
 		const Partie* getPartie(int idPartie) const;
 		int nombreParties() const;
+
 
 		// Gestion de la partie en cours
 		void demarrerPartie(int idPartie);
@@ -56,6 +56,4 @@ namespace JeuHive {
 		// Methode utilitaires
 		void afficherParties() const;
 	};
-
-	// classe d'exception mise dans un fichier .h séparé pour pour l'utiliser sans créer des boucles d'inclusions.
 }

@@ -143,6 +143,6 @@ void Hive::afficherParties() const {
 
     cout << "Liste des parties :" << endl;
     for (size_t i = 0; i < parties.size(); ++i) {
-        parties[i]->afficher(cout);
+        cout << *parties[i];
     }
 }

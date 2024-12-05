@@ -25,7 +25,7 @@ void Partie::demarrer() {
     }
 
 
-    // Si la partie n'a jamais commencé, il faut la mettre en place. Sinon, on la reprend
+    // Si la partie n'a jamais commencé, il faut la mettre en place. Sinon, on la reprend.
     if (etatPartie == EtatPartie::NON_COMMENCEE) {
         initialiser();
     }
@@ -133,4 +133,10 @@ void Partie::afficher(ostream& os) const {
     }
 
     os << endl;
+}
+
+ostream& JeuHive::operator<<(ostream& os, const Partie& partie)
+{
+    partie.afficher(os);
+    return os;
 }

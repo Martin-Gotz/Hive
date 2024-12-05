@@ -59,6 +59,7 @@ namespace JeuHive {
 
 		// Methode utilitaire pour afficher l'etat de la partie
 		void afficher(ostream& os) const;
+		friend ostream& operator<<(ostream& os, const Partie& partie);
 	};
 
 	class PartieFactory {
