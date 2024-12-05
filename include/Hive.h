@@ -7,6 +7,7 @@
 #include <ostream>
 #include "Partie.h"
 #include "Event.h"
+#include "Affichage.h"
 
 using namespace std;
 
@@ -55,5 +56,6 @@ namespace JeuHive {
 
 		// Methode utilitaires
 		void afficherParties() const;
+		EtatHive getEtatHive() const;
 	};
 }

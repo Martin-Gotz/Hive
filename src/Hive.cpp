@@ -135,6 +135,7 @@ void Hive::mettrePartieEnPause() {
 
 
 // Afficher les informations des parties
+/*
 void Hive::afficherParties() const {
     if (parties.empty()) {
         cout << "Aucune partie n'est enregistree." << endl << endl;
@@ -145,4 +146,22 @@ void Hive::afficherParties() const {
     for (size_t i = 0; i < parties.size(); ++i) {
         cout << *parties[i];
     }
+}
+*/
+
+
+
+
+// Abstraction de l'affichage
+EtatHive Hive::getEtatHive() const {
+    EtatHive etat;
+    for (const auto& partie : parties) {
+        if (partie) {
+            etat.parties.push_back(partie->resumer());
+        }
+    }
+    if (partieEnCours) {
+        etat.idPartieEnCours = partieEnCours->getId();
+    }
+    return etat;
 }

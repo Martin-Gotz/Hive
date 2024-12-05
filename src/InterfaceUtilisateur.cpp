@@ -222,7 +222,19 @@ void InterfaceUtilisateur::retournerMenu() {
 
 // Afficher toutes les parties
 void InterfaceUtilisateur::afficherParties() {
-    hive.afficherParties();
+    EtatHive etat = hive.getEtatHive(); // Récupère l'état des parties
+
+    if (etat.parties.empty()) {
+        cout << "Aucune partie n'est enregistree." << endl << endl;
+        return;
+    }
+
+    cout << "Liste des parties :" << endl;
+    for (const auto& resume : etat.parties) {
+        cout << resume.id
+            << " : " << resume.joueur1 << " vs " << resume.joueur2
+            << " - " << resume.etatPartie << endl;
+    }
 }
 
 

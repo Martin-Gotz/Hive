@@ -112,28 +112,37 @@ void Partie::annulerDernierCoup() {
 
 // Methodes utilitaires
 void Partie::afficher(ostream& os) const {
-    os << id << " : " << joueur1.getNom() << " vs " << joueur2.getNom() << " - ";
+    ResumePartie resume = resumer();  // Récupère un résumé de la partie
+    os << resume.id << " : " << resume.joueur1 << " vs " << resume.joueur2 << " - " << resume.etatPartie << endl;
+}
 
+
+
+
+// Abstraction de l'affichage
+ResumePartie Partie::resumer() const {
+    ResumePartie resume;
+    resume.id = id;
+    resume.joueur1 = joueur1.getNom();
+    resume.joueur2 = joueur2.getNom();
     switch (etatPartie) {
     case EtatPartie::NON_COMMENCEE:
-        os << "Non commencee";
-        break;
-    case EtatPartie::EN_PAUSE:
-        os << "En pause";
+        resume.etatPartie = "Non commencee";
         break;
     case EtatPartie::EN_COURS:
-        os << "En cours";
+        resume.etatPartie = "En cours";
+        break;
+    case EtatPartie::EN_PAUSE:
+        resume.etatPartie = "En pause";
         break;
     case EtatPartie::TERMINEE:
-        os << "Terminee";
-        break;
-    default:
-        os << "Inconnu";
+        resume.etatPartie = "Terminée";
         break;
     }
-
-    os << endl;
+    return resume;
 }
+
+
 
 ostream& JeuHive::operator<<(ostream& os, const Partie& partie)
 {

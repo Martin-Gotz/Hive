@@ -7,6 +7,7 @@
 #include "HistoriqueCoup.h"
 #include "Coup.h"
 #include "Event.h"
+#include "Affichage.h"
 
 namespace JeuHive {
 	class Partie : public Observable
@@ -51,6 +52,8 @@ namespace JeuHive {
 		void mettreEnPause();
 		void terminer();
 
+
+		// Pour ces fonctions, il faudra s'assurer que la partie est en cours
 		void jouerCoup(const Coup& coup); // L'ajouter aussi a l'historique
 		void changerJoueurActuel();
 		void tourSuivant();
@@ -59,6 +62,7 @@ namespace JeuHive {
 
 		// Methode utilitaire pour afficher l'etat de la partie
 		void afficher(ostream& os) const;
+		ResumePartie resumer() const;
 		friend ostream& operator<<(ostream& os, const Partie& partie);
 	};
 
