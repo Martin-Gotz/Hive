@@ -9,7 +9,7 @@ Partie::Partie(int id, Joueur& j1, Joueur& j2) :
     plateau(),
     regles(),
     historique(),
-    etatPartie(EtatPartie::EN_PAUSE),
+    etatPartie(EtatPartie::NON_COMMENCEE),
     joueurActuel(j1)
 {}
 
@@ -24,10 +24,25 @@ void Partie::demarrer() {
         throw HiveException("La partie est terminée !");
     }
 
+
+    // Si la partie n'a jamais commencé, il faut la mettre en place. Sinon, on la reprend
+    if (etatPartie == EtatPartie::NON_COMMENCEE) {
+        initialiser();
+    }
+    else {
+        reprendre();
+    }
+
     etatPartie = EtatPartie::EN_COURS;
+}
 
+void Partie::initialiser() {
+    EvenementPartie evt("La partie " + to_string(id) + " commence !", id, TypeEvenement::DEBUT_PARTIE);
+    notifierObservers(evt);
+}
 
-    EvenementPartie evt("La partie " + to_string(id) + " commence ! C'est au tour de " + joueurActuel.getNom() + ".", id, TypeEvenement::DEBUT_PARTIE);
+void Partie::reprendre() {
+    EvenementPartie evt("La partie " + to_string(id) + " reprend !", id, TypeEvenement::REPRISE_PARTIE);
     notifierObservers(evt);
 }
 
@@ -100,6 +115,9 @@ void Partie::afficher(ostream& os) const {
     os << id << " : " << joueur1.getNom() << " / " << joueur2.getNom() << " - ";
 
     switch (etatPartie) {
+    case EtatPartie::NON_COMMENCEE:
+        os << "Non commencee";
+        break;
     case EtatPartie::EN_PAUSE:
         os << "En pause";
         break;

@@ -13,7 +13,7 @@ InterfaceUtilisateur::~InterfaceUtilisateur() {
 
 // Afficher le menu
 void InterfaceUtilisateur::afficherMenu() const {
-    cout << "\n=== Menu ===" << endl;
+    cout << "\n======== Menu ========" << endl;
     cout << "1. Ajouter une nouvelle partie" << endl;
     cout << "2. Démarrer une partie" << endl;
     cout << "3. Supprimer une partie" << endl;
@@ -24,7 +24,7 @@ void InterfaceUtilisateur::afficherMenu() const {
 
 
 // Logique de validation des entrées
-int InterfaceUtilisateur::obtenirEntreeUtilisateur(const string& message) {
+int InterfaceUtilisateur::obtenirEntreeUtilisateur(const string& message, bool menu = false) {
     int valeur;
     cout << message;
     cin >> valeur;
@@ -32,7 +32,9 @@ int InterfaceUtilisateur::obtenirEntreeUtilisateur(const string& message) {
     if (cin.fail()) {
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "Veuillez entrer un nombre valide." << endl;
+        if (!menu) {
+            cout << endl << "Erreur : Veuillez entrer un nombre valide." << endl;
+        }
         return -1;
     }
 
@@ -42,11 +44,11 @@ int InterfaceUtilisateur::obtenirEntreeUtilisateur(const string& message) {
 
 // Gestion des choix de l'utilisateur
 void InterfaceUtilisateur::gererChoixUtilisateur() {
-    int choix;
+    int choix = -1;
 
     while (true) {
         afficherMenu();
-        int choix = obtenirEntreeUtilisateur("Veuillez entrer votre choix : ");
+        int choix = obtenirEntreeUtilisateur("Veuillez entrer votre choix : ", true);
         cout << "---------------------" << endl;
 
         switch (choix) {
@@ -81,6 +83,7 @@ void InterfaceUtilisateur::ajouterPartie() {
     cin >> nomJoueur1;
     cout << "Entrez le nom du joueur 2 : ";
     cin >> nomJoueur2;
+    cout << endl;
 
     Joueur joueur1(nomJoueur1);
     Joueur joueur2(nomJoueur2);
@@ -103,6 +106,7 @@ void InterfaceUtilisateur::demarrerPartie() {
     afficherParties();
     cout << endl;
     int idPartie = obtenirEntreeUtilisateur("Entrez l'ID de la partie à démarrer : ");
+    cout << endl;
 
     // Vérification de la valeur en cas d'entrée invalide
     if (idPartie == -1) {
@@ -117,6 +121,7 @@ void InterfaceUtilisateur::demarrerPartie() {
         }
 
         hive.demarrerPartie(idPartie);
+        cout << endl << endl << endl;
         gererChoixUtilisateurMenuPartie();
     }
     catch (const HiveException& e) {
@@ -135,6 +140,7 @@ void InterfaceUtilisateur::supprimerPartie() {
     afficherParties();
     cout << endl;
     int idPartie = obtenirEntreeUtilisateur("Entrez l'ID de la partie à supprimer : ");
+    cout << endl;
     
     // Vérification de la valeur en cas d'entrée invalide
     if (idPartie == -1) {
@@ -158,10 +164,12 @@ void InterfaceUtilisateur::afficherParties() {
 
 
 
+
+
 // PARTIE EN COURS
 // Afficher le menu de la partie en cours
 void InterfaceUtilisateur::afficherMenuPartie() const {
-    cout << "\n=== Menu de la Partie ===" << endl;
+    cout << "\n===== PARTIE ===== " << endl;
     cout << "1. Jouer un coup" << endl;
     cout << "2. Terminer la partie" << endl;
     cout << "3. Retour au menu principal" << endl;
@@ -170,7 +178,8 @@ void InterfaceUtilisateur::afficherMenuPartie() const {
 
 // Gestion des choix du menu de la partie en cours
 void InterfaceUtilisateur::gererChoixUtilisateurMenuPartie() {
-    int choix;
+    int choix = -1;
+
     while (true) {
         afficherMenuPartie();
         int choix = obtenirEntreeUtilisateur("Veuillez entrer votre choix : ");
@@ -220,7 +229,7 @@ void InterfaceUtilisateur::retournerMenu() {
 
 
 void InterfaceUtilisateur::afficherEvenement(const Evenement& evenement) const {
-    cout << "[Evenement] " << evenement.getDescription();
+    cout << evenement.getDescription() << endl;
 }
 
 // Action de l'observateur

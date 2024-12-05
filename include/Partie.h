@@ -35,10 +35,8 @@ namespace JeuHive {
 		Joueur& getJoueur2() { return joueur2; }
 
 		const Plateau& getPlateau() const { return plateau; }
-		Plateau& getPlateau() { return plateau; } // Version non const pour modifier le plateau si besoin
 
 		const HistoriqueCoup& getHistorique() const { return historique; }
-		HistoriqueCoup& getHistorique() { return historique; } // Version non const pour modifier l'historique si besoin
 		
 		const EtatPartie& getEtatPartie() const { return etatPartie; }
 
@@ -46,15 +44,13 @@ namespace JeuHive {
 		Joueur& getJoueurActuel() { return joueurActuel;}
 
 
-		// Mutateurs
-		void setEtatPartie(EtatPartie nouvelEtat) {
-			etatPartie = nouvelEtat;
-		}
-
 		// Methodes principales
 		void demarrer();
+		void initialiser();
+		void reprendre();
 		void mettreEnPause();
 		void terminer();
+
 		void jouerCoup(const Coup& coup); // L'ajouter aussi a l'historique
 		void changerJoueurActuel();
 		void tourSuivant();

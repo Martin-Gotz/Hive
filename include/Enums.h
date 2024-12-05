@@ -19,6 +19,7 @@ namespace JeuHive {
 	};
 
 	enum EtatPartie {
+		NON_COMMENCEE,
 		EN_PAUSE,
 		EN_COURS,
 		TERMINEE
@@ -27,6 +28,7 @@ namespace JeuHive {
 
 	enum class TypeEvenement {
 		DEBUT_PARTIE,
+		REPRISE_PARTIE,
 		PAUSE_PARTIE,
 		FIN_PARTIE,
 		CHANGEMENT_JOUEUR,

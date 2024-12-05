@@ -21,7 +21,7 @@ namespace JeuHive {
         // Menu général
         void afficherMenu() const;
 
-        int obtenirEntreeUtilisateur(const string& message);
+        int obtenirEntreeUtilisateur(const string& message, bool menu);
 
         void ajouterPartie();
         void supprimerPartie();

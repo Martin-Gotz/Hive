@@ -49,6 +49,7 @@ namespace JeuHive {
         const string typeEvenementToString(TypeEvenement type) const {
             switch (type) {
             case TypeEvenement::DEBUT_PARTIE: return "Début de la Partie";
+            case TypeEvenement::REPRISE_PARTIE: return "Reprise de la Partie";
             case TypeEvenement::PAUSE_PARTIE: return "Partie en pause";
             case TypeEvenement::FIN_PARTIE: return "Fin de la Partie";
             case TypeEvenement::CHANGEMENT_JOUEUR: return "Changement de Joueur";

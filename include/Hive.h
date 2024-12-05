@@ -46,7 +46,6 @@ namespace JeuHive {
 
 		// Gestion de la partie en cours
 		void demarrerPartie(int idPartie);
-		void demarrerPartie(Partie* partie);
 		void terminerPartie();
 		void mettrePartieEnPause();
 
