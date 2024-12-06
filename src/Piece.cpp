@@ -49,7 +49,7 @@ namespace JeuHive {
 		// - coordonnée actuelle
 		vector<tuple<int, Coordonnee, Coordonnee>> coos_intermediaires = { {0, Coordonnee(10000, 10000), coo} };
 		// nombre improbable(même impossible car la première pièce est placée en (0, 0)) car initialement,
-		// il n'y a pas des coordonnée précédente et à cause de l'absence de NULL
+		// il n'y a pas des coordonnée précédente et à cause de l'absence de NULL en C++
 
 		int generation;
 		Coordonnee coo_actuelle;
@@ -140,18 +140,19 @@ namespace JeuHive {
 		vector<Coordonnee> coos_intermediaires = { coo };
 		set<Coordonnee> resultat;
 
-		Coordonnee coo_intermediaire;
+		Coordonnee coo_actuelle;
 		set<Coordonnee> nouv_coos;
 		while (coos_intermediaires.size() > 0) {
-			coo_intermediaire = coos_intermediaires.front();
+			coo_actuelle = coos_intermediaires.front();
 
 			// si la coo est déjà dans résultat alors on a déjà vu cette coordonnée passer par 
-			// coo_intermediaire
-			if (resultat.find(coo_intermediaire) != resultat.end()) {
+			// coo_actuelle
+			if (resultat.find(coo_actuelle) != resultat.end()) {
+				coos_intermediaires.erase(coos_intermediaires.begin());
 				continue;
 			}
 
-			nouv_coos = plateau.getCooVoisinesGlissement(coo_intermediaire);
+			nouv_coos = plateau.getCooVoisinesGlissement(coo_actuelle, &coo);
 
 
 			for (Coordonnee nouv_coo : nouv_coos) {
@@ -159,18 +160,17 @@ namespace JeuHive {
 				// On pourrait vérifier que c'est pas non plus dans coos_intermediaires mais c'est pas
 				// nécessaire et c'est coûteux car trouver un élément dans un vector ne se fait pas aussi
 				// rapidement que dans un set.
-				if (resultat.find(nouv_coo) != resultat.end()) {
+				if (resultat.find(nouv_coo) == resultat.end()) {
 					coos_intermediaires.push_back(nouv_coo);
 				}
 
 			}
 
-
+			resultat.insert(coo_actuelle);
 			coos_intermediaires.erase(coos_intermediaires.begin());
 		}
+		resultat.erase(coo);
 		return resultat;
-
-
 	}
 
 }

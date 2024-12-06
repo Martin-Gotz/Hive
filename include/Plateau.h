@@ -6,6 +6,7 @@
 #include "Enums.h"
 #include "Exceptions.h"
 #include <set>
+//#include <sstream>
 
 using namespace std;
 namespace JeuHive {
@@ -51,6 +52,11 @@ namespace JeuHive {
 
 		// vector<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const 
 		// se trouve dans la classe Piece pour utiliser le polymorphisme
+
+
+		// paramètres en plus, personnalisable
+		ostream& afficher(ostream& f, vector<Coordonnee> coos_surligner) const;
+
 
 	};
 	ostream& operator<<(ostream& f, const Plateau& p);

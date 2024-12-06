@@ -40,7 +40,7 @@ namespace JeuHive {
 	public:
 		Abeille(Couleur c) : Piece(c) {}
 
-		string getSymbole() const override { return "A"; }
+		string getSymbole() const override { return "r"; }
 		virtual ~Abeille() = default;
 
 		bool estAbeille() const override { return true; }
@@ -54,7 +54,7 @@ namespace JeuHive {
 	public:
 		Scarabee(Couleur c) : Piece(c) {}
 		virtual ~Scarabee() = default;
-		string getSymbole() const override { return "S"; }
+		string getSymbole() const override { return "s"; }
 
 		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
@@ -81,7 +81,7 @@ namespace JeuHive {
 	public:
 		Fourmi(Couleur c) : Piece(c) {}
 		virtual ~Fourmi() = default;
-		string getSymbole() const override { return "F"; }
+		string getSymbole() const override { return "f"; }
 		
 		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
@@ -90,7 +90,7 @@ namespace JeuHive {
 	public:
 		Moustique(Couleur c) : Piece(c) {}
 		virtual ~Moustique() = default;
-		string getSymbole() const override { return "M"; }
+		string getSymbole() const override { return "m"; }
 		
 		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
@@ -100,7 +100,7 @@ namespace JeuHive {
 	public:
 		Coccinelle(Couleur c) : Piece(c) {}
 		virtual ~Coccinelle() = default;
-		string getSymbole() const override { return "C"; }
+		string getSymbole() const override { return "b"; }
 		
 		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};

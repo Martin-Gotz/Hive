@@ -2,8 +2,7 @@
 
 using namespace JeuHive;
 #include <algorithm>	// pour le set_difference de EnsemblePlacementPossibles
-#include <array>
-
+#include <cctype>	// pour les majuscules
 
 void Plateau::ajouterPieceSurCoo(const Piece& piece, const Coordonnee& coo) {
 
@@ -317,6 +316,124 @@ set<Coordonnee> Plateau::getCooVoisinesGlissement(const Coordonnee& coo, const C
 		}
 	}
 	return resultat;
+}
+
+ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligner) const
+{
+	// résultat de l'affichage:
+	// Pour chaque hexagone, la pile de pièce est affichée: un pièce est représentée par un entier(0 pour BLANC, 1 pour
+	// NOIR) et d'un caractère pour le type d'insecte:
+	// A:abeille, a:araignée, S:scarabée, s:sauterelle, f:fourmi, m: moustique, c:coccinelle
+
+
+	// pour afficher dans la console le plateau, peut convertir les coos hexagonales en une hauteur y(1 pour chaque ligne)
+	// et une position x(un certain nombre de caractères)
+	// Pour s'assurer qu'il y ait assez de place, la convertion sera linéaire et se fera de cette manière:
+	// y=2q+r, x=r
+	// les lignes ne s'afficheront bien que si le jeu n'est pas trop étendu sur l'axe gauche-droite, 
+	// et on ne peut rien y faire
+
+	if (estVide()) {
+		return f;
+	}
+
+	int taille_str = 4;	// la taille que prendra chaque hexagone à afficher, adaptative
+
+	//on commence par calculer les x et y min et max pour gacher le moins de place possible
+	int min_y = 10000;  // on suppose qu'aucune case ne sera à de telles coordonnées
+	int max_y = -10000;
+	int min_x = 10000;
+	int max_x = -10000;
+
+	Coordonnee coo_case;
+	int x_case;
+	int y_case;
+
+	for (auto paire : getCases()) {
+		coo_case = paire.first;
+		x_case = coo_case.get_q();
+		y_case = coo_case.get_q() + 2 * coo_case.get_r();
+		min_y = min(min_y, y_case);
+		max_y = max(max_y, y_case);
+		min_x = min(min_x, x_case);
+		max_x = max(max_x, x_case);
+		taille_str = max(taille_str, paire.second->getNombrePieces() * 2);
+
+	}
+
+	int marge = 1;// espace autour
+	int taille_x = max_x - min_x + 1 + 2 * marge;
+	int taille_y = max_y - min_y + 1 + 2 * marge;
+
+	string str_espaces = string(taille_str, ' ');
+
+	string str_point = " .";
+	str_point.append(string(taille_str - 2, ' '));
+
+	char c177 = 177;
+
+	string str_surligne(2, c177);
+	str_surligne.append(string(taille_str - 2, ' '));
+
+	// tableau bidimensionnel rempli de str_espaces
+	vector<vector<string>> tab = vector<vector<string>>(taille_y, vector<string>(taille_x, ""));
+
+
+	Case* case0;
+	string str_case;
+	for (auto paire : getCases()) {
+		coo_case = paire.first;
+		case0 = paire.second;
+
+		x_case = coo_case.get_q();
+		y_case = coo_case.get_q() + 2 * coo_case.get_r();
+		str_case = case0->getString(taille_str);
+
+		tab.at(y_case - min_y + marge).at(x_case - min_x + marge) = str_case;
+
+	}
+	// tableau maintenant rempli
+
+	// surlignage
+	int i_surligner;
+	int j_surligner;
+	for (const Coordonnee& coo_surligner : coos_surligner) {
+				
+		i_surligner = coo_surligner.get_q() + 2 * coo_surligner.get_r() - min_y + marge;
+		j_surligner = coo_surligner.get_q() - min_x + marge;
+
+
+		if (0 <= i_surligner && i_surligner < taille_y && 0 <= j_surligner && j_surligner < taille_x) {
+			if (tab.at(i_surligner).at(j_surligner) == "") {
+				tab.at(i_surligner).at(j_surligner) = str_surligne;
+			}
+			else {
+				for (char& c : tab.at(i_surligner).at(j_surligner)) {
+					c = std::toupper(static_cast<unsigned char>(c));	// a->A
+				}
+			}
+		}
+	}
+
+
+	for (int i = taille_y - 1; i >= 0; i--) {		// boucle inversée car on print de haut en bas
+		for (int j = 0; j < taille_x; j++) {
+			if (tab.at(i).at(j) == "") {
+				if ((i + j + min_x + min_y) % 2 == 0) {
+					f << str_point;
+				}
+				else {
+					f << str_espaces;
+				}
+			}
+			else {
+				f << tab.at(i).at(j);
+			}
+		}
+		f << "\n";
+	}
+
+	return f;
 }
 
 
