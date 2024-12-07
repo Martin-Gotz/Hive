@@ -3,7 +3,7 @@
 using namespace JeuHive;
 using namespace std;
 
-string JeuHive::Case::getString(int taille_str) const
+string JeuHive::Case::getString() const
 {
 	string str_case = "";
 	for (const Piece* piece : pieces) {
@@ -15,6 +15,5 @@ string JeuHive::Case::getString(int taille_str) const
 		}
 		str_case.append(piece->getSymbole());
 	}
-	str_case.append(string(taille_str - str_case.size(), ' '));
 	return str_case;
 }

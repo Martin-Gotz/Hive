@@ -27,7 +27,7 @@ namespace JeuHive {
 		int getNombrePieces() const { return static_cast<int>(pieces.size()); }
 		Case(const Coordonnee& coo) : coo(coo) {}
 
-		string getString(int taille_str=8) const;
+		string getString() const;
 	};
 }
 

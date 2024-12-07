@@ -72,7 +72,7 @@ namespace JeuHive {
 	public:
 		Sauterelle(Couleur c) : Piece(c) {}
 		virtual ~Sauterelle() = default;
-		string getSymbole() const override { return "s"; }
+		string getSymbole() const override { return "c"; }
 
 		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};

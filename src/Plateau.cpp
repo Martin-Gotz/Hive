@@ -318,13 +318,15 @@ set<Coordonnee> Plateau::getCooVoisinesGlissement(const Coordonnee& coo, const C
 	return resultat;
 }
 
-ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligner) const
+ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligner, 
+	vector<Coordonnee> coos_selectionner) const
 {
 	// résultat de l'affichage:
 	// Pour chaque hexagone, la pile de pièce est affichée: un pièce est représentée par un entier(0 pour BLANC, 1 pour
 	// NOIR) et d'un caractère pour le type d'insecte:
-	// A:abeille, a:araignée, S:scarabée, s:sauterelle, f:fourmi, m: moustique, c:coccinelle
-
+	// r:reine abeille, a:araignée, s:scarabée, c:sauterelle(criquet), f:fourmi, m: moustique, b:coccinelle
+	// surligne aussi des coos
+	// met en majuscule les coos selectionnes
 
 	// pour afficher dans la console le plateau, peut convertir les coos hexagonales en une hauteur y(1 pour chaque ligne)
 	// et une position x(un certain nombre de caractères)
@@ -349,6 +351,8 @@ ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligne
 	int x_case;
 	int y_case;
 
+	bool case_surlignee;
+
 	for (auto paire : getCases()) {
 		coo_case = paire.first;
 		x_case = coo_case.get_q();
@@ -357,28 +361,45 @@ ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligne
 		max_y = max(max_y, y_case);
 		min_x = min(min_x, x_case);
 		max_x = max(max_x, x_case);
-		taille_str = max(taille_str, paire.second->getNombrePieces() * 2);
 
+		case_surlignee = find(coos_surligner.begin(), coos_surligner.end(), coo_case)!=coos_surligner.end();
+		if (case_surlignee) {
+			taille_str = max(taille_str, paire.second->getNombrePieces() * 2 + 2);
+		}
+		else {
+			taille_str = max(taille_str, paire.second->getNombrePieces() * 2);
+		}
 	}
+
+
+	// extension de l'affichage du plateau pour les ccordonnees à surligner
+	for (auto coo_case : coos_surligner) {
+		x_case = coo_case.get_q();
+		y_case = coo_case.get_q() + 2 * coo_case.get_r();
+		min_y = min(min_y, y_case);
+		max_y = max(max_y, y_case);
+		min_x = min(min_x, x_case);
+		max_x = max(max_x, x_case);
+	}
+
 
 	int marge = 1;// espace autour
 	int taille_x = max_x - min_x + 1 + 2 * marge;
 	int taille_y = max_y - min_y + 1 + 2 * marge;
 
-	string str_espaces = string(taille_str, ' ');
+	string str_espaces = string(taille_str, ' ');	// prend toute la place horizontale
 
 	string str_point = " .";
-	str_point.append(string(taille_str - 2, ' '));
+	str_point.append(string(taille_str - 2, ' '));	// prend toute la place horizontale
 
-	char c177 = 177;
+	char c177 = 177;	// caractère de surlignage
 
-	string str_surligne(2, c177);
-	str_surligne.append(string(taille_str - 2, ' '));
+	string str_surligne(2, c177);					// seulement 2 caractères
 
-	// tableau bidimensionnel rempli de str_espaces
+	// tableau bidimensionnel rempli de strings vides
 	vector<vector<string>> tab = vector<vector<string>>(taille_y, vector<string>(taille_x, ""));
 
-
+	bool case_selectionnee;
 	Case* case0;
 	string str_case;
 	for (auto paire : getCases()) {
@@ -387,35 +408,49 @@ ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligne
 
 		x_case = coo_case.get_q();
 		y_case = coo_case.get_q() + 2 * coo_case.get_r();
-		str_case = case0->getString(taille_str);
+		str_case = case0->getString();
+
+		case_selectionnee = find(coos_selectionner.begin(), coos_selectionner.end(), coo_case) 
+			!= coos_selectionner.end();
+		if (case_selectionnee) {
+			// mise en majuscule des deux derniers caractères
+			for (int i = str_case.size()-2; i < str_case.size(); i++) {
+				str_case[i] = std::toupper(static_cast<unsigned char>(str_case[i]));
+			}
+		}
+
+		case_surlignee = find(coos_surligner.begin(), coos_surligner.end(), coo_case) != coos_surligner.end();
+		if (case_surlignee) {
+			str_case.append(str_surligne);
+		}
+		str_case.append(string(taille_str - str_case.size(), ' '));		// prend toute la place horizontale
 
 		tab.at(y_case - min_y + marge).at(x_case - min_x + marge) = str_case;
-
 	}
-	// tableau maintenant rempli
+	// tableau maintenant rempli pas les cases
 
 	// surlignage
 	int i_surligner;
 	int j_surligner;
+	string str_surligne_vide;
 	for (const Coordonnee& coo_surligner : coos_surligner) {
 				
 		i_surligner = coo_surligner.get_q() + 2 * coo_surligner.get_r() - min_y + marge;
 		j_surligner = coo_surligner.get_q() - min_x + marge;
 
-
 		if (0 <= i_surligner && i_surligner < taille_y && 0 <= j_surligner && j_surligner < taille_x) {
 			if (tab.at(i_surligner).at(j_surligner) == "") {
-				tab.at(i_surligner).at(j_surligner) = str_surligne;
+				str_surligne_vide = str_surligne;
+				str_surligne_vide.append(string(taille_str - str_surligne_vide.size(), ' '));
+				tab.at(i_surligner).at(j_surligner) = str_surligne_vide;
 			}
-			else {
-				for (char& c : tab.at(i_surligner).at(j_surligner)) {
-					c = std::toupper(static_cast<unsigned char>(c));	// a->A
-				}
-			}
+			// le cas où la case n'est pas vide est gérée au dessus
 		}
 	}
 
+	// ici, tab contient soit des string vides, soit des strings de taille_str
 
+	// affichage
 	for (int i = taille_y - 1; i >= 0; i--) {		// boucle inversée car on print de haut en bas
 		for (int j = 0; j < taille_x; j++) {
 			if (tab.at(i).at(j) == "") {
@@ -538,7 +573,8 @@ ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
 
 		x_case = coo_case.get_q();
 		y_case = coo_case.get_q() + 2 * coo_case.get_r();
-		str_case = case0->getString(taille_str);
+		str_case = case0->getString();
+		str_case.append(string(taille_str - str_case.size(), ' '));
 
 		tab.at(y_case - min_y + marge).at(x_case - min_x + marge) = str_case;
 

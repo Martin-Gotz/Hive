@@ -55,7 +55,7 @@ namespace JeuHive {
 
 
 		// paramètres en plus, personnalisable
-		ostream& afficher(ostream& f, vector<Coordonnee> coos_surligner) const;
+		ostream& afficher(ostream& f, vector<Coordonnee> coos_surligner, vector<Coordonnee> coos_selectionnees) const;
 
 
 	};
