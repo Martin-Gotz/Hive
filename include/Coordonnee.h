@@ -2,6 +2,7 @@
 #ifndef COORDONNE_H
 #define COORDONNE_H
 
+#include "Affichage.h"
 #include <vector>
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,11 +34,16 @@ namespace JeuHive {
 		bool operator==(const Coordonnee& c) const { return q == c.q && r == c.r; }
 		bool operator<(const Coordonnee& c) const { return (q < c.q) || (q == c.q && r < c.r); }	//inutile je crois
 		Coordonnee operator+(const Coordonnee& c) const;
+
+		// Methode utilitaire pour afficher l'etat de la partie
+		void afficher(ostream& f) const;
+		ResumeCoordonnee resumer() const;
 	};
 
 	ostream& operator<<(ostream& f, const Coordonnee& c);
 
 	vector<Coordonnee> getDirections();
+
 }
 
 namespace std {

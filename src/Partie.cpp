@@ -113,7 +113,7 @@ void Partie::annulerDernierCoup() {
 // Methodes utilitaires
 void Partie::afficher(ostream& os) const {
     ResumePartie resume = resumer();  // Récupère un résumé de la partie
-    os << resume.id << " : " << resume.joueur1 << " vs " << resume.joueur2 << " - " << resume.etatPartie << endl;
+    os << resume.id << " : " << resume.joueur1.nom << " vs " << resume.joueur2.nom << " - " << resume.etatPartie << endl;
 }
 
 
@@ -124,8 +124,14 @@ ResumePartie Partie::resumer() const {
     ResumePartie resume;
 
     resume.id = id;
-    resume.joueur1 = joueur1.getNom();
-    resume.joueur2 = joueur2.getNom();
+    resume.joueur1.nom = joueur1.getNom();
+    resume.joueur2.nom = joueur2.getNom();
+    resume.joueur1.couleur = joueur1.getCouleur();
+    resume.joueur2.couleur = joueur2.getCouleur();
+    resume.joueur1.main = joueur1.getMain().resumer();
+    resume.joueur2.main = joueur2.getMain().resumer();
+    //resume.joueur1.typej = joueur1.getType();
+    //resume.joueur2.typej = joueur2.getType();
 
     switch (etatPartie) {
         case EtatPartie::NON_COMMENCEE:

@@ -173,4 +173,25 @@ namespace JeuHive {
 		return resultat;
 	}
 
+	void Piece::afficher(ostream& f) const
+	{
+		ResumePiece resume = resumer();
+		f << resume.Couleur + resume.symbole;
+	}
+
+	ResumePiece Piece::resumer() const
+	{
+		ResumePiece resume;
+		resume.symbole = getSymbole();
+		resume.Couleur = couleur;
+		return resume;
+	}
+
+	ostream& JeuHive::operator<<(ostream& os, const Piece& piece)
+	{
+		piece.afficher(os);
+		return os;
+	}
+
+
 }

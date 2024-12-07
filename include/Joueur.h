@@ -27,7 +27,7 @@ namespace JeuHive {
 
         Couleur getCouleur() const { return couleur; }
         const MainPiece& getMain() const { return main; }
-
+        TypeJoueur getType() const { return type; }
         // Ajouter une pièce à la main
         void ajouterPieceMain(Piece piece);
     };

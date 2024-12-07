@@ -30,5 +30,10 @@ namespace JeuHive {
 
         vector<Piece*>::const_iterator begin() const { return Pieces.begin(); }
         vector<Piece*>::const_iterator end() const { return Pieces.end(); }
+
+        // Affichage
+        void afficher(ostream& os) const;
+        ResumeMain resumer() const;
+        friend ostream& operator<<(ostream& os, const MainPiece& partie);
     };
 }
