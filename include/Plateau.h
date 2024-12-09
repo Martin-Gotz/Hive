@@ -16,6 +16,10 @@ namespace JeuHive {
 	{
 	private:
 		unordered_map<Coordonnee, Case*> Cases;
+
+		void ajouterPieceSurCoo(const Piece& piece, const Coordonnee& coo);
+		void retirerPieceDeCoo(const Coordonnee& coo);
+		// dans la partie privée car l'utilisation de ces méthodes nécessites des vérifications du respect des règles
 	public:
 		const unordered_map<Coordonnee, Case*> getCases() const { return Cases; }
 		Plateau() {}
@@ -28,9 +32,6 @@ namespace JeuHive {
 		Case* getCaseDeCoo(const Coordonnee& coo) const;
 		Case* getCaseDePiece(const Piece& piece) const;
 		bool estPlacee(const Piece& piece) const;
-
-		void ajouterPieceSurCoo(const Piece& piece, const Coordonnee& coo);
-		void retirerPieceDeCoo(const Coordonnee& coo);
 
 		vector<Case*> getVoisinsDeCoo(const Coordonnee& coo) const;
 
@@ -63,6 +64,10 @@ namespace JeuHive {
 		void jouerCoup(Coup* coup);
 		void jouerPlacement(CoupPlacement* coup);
 		void jouerDeplacement(CoupDeplacement* coup);
+
+		void inverserCoup(Coup* coup);
+		void inverserPlacement(CoupPlacement* coup);
+		void inverserDeplacement(CoupDeplacement* coup);
 
 
 	};
