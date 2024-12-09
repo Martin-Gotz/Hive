@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include "Enums.h"
 #include "Exceptions.h"
+#include "Coup.h"
 #include <set>
 //#include <sstream>
 
@@ -24,19 +25,23 @@ namespace JeuHive {
 		size_t getNombrePieces() const;
 		bool estVide() const { return Cases.empty();}
 		
-		
-
-		void ajouterPieceSurCoo(const Piece& piece, const Coordonnee& coo);
-		void retirerPieceDeCoo(const Coordonnee& coo);
-
-
 		Case* getCaseDeCoo(const Coordonnee& coo) const;
 		Case* getCaseDePiece(const Piece& piece) const;
 		bool estPlacee(const Piece& piece) const;
 
+		void ajouterPieceSurCoo(const Piece& piece, const Coordonnee& coo);
+		void retirerPieceDeCoo(const Coordonnee& coo);
+
 		vector<Case*> getVoisinsDeCoo(const Coordonnee& coo) const;
 
 		bool estAbeillePlacee(Couleur couleur) const;
+
+		bool estAbeilleEntouree(Couleur couleur) const;
+
+		bool estPartieFinie() const {
+			return (estAbeillePlacee(BLANC) && estAbeilleEntouree(BLANC))
+				&& (estAbeillePlacee(NOIR) && estAbeilleEntouree(NOIR));
+		}
 
 		// ------------------ méthodes liées au mouvements et aux placements-------------------
 
@@ -50,12 +55,14 @@ namespace JeuHive {
 		// ça rajoute une contrainte en plus que getVoisinsDeCoo car des pièces voisines peuvent bloquer un glissement
 		// (voir règles du jeu)
 
-		// vector<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const 
-		// se trouve dans la classe Piece pour utiliser le polymorphisme
+		ostream& afficher(ostream& f, vector<Coordonnee> coos_surligner, vector<Coordonnee> coos_selectionnees, 
+			int marge=1) const;
 
+		// modification du plateau
 
-		// paramètres en plus, personnalisable
-		ostream& afficher(ostream& f, vector<Coordonnee> coos_surligner, vector<Coordonnee> coos_selectionnees) const;
+		void jouerCoup(Coup* coup);
+		void jouerPlacement(CoupPlacement* coup);
+		void jouerDeplacement(CoupDeplacement* coup);
 
 
 	};

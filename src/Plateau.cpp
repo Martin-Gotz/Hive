@@ -318,8 +318,9 @@ set<Coordonnee> Plateau::getCooVoisinesGlissement(const Coordonnee& coo, const C
 	return resultat;
 }
 
+
 ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligner, 
-	vector<Coordonnee> coos_selectionner) const
+	vector<Coordonnee> coos_selectionner, int marge) const
 {
 	// résultat de l'affichage:
 	// Pour chaque hexagone, la pile de pièce est affichée: un pièce est représentée par un entier(0 pour BLANC, 1 pour
@@ -383,7 +384,6 @@ ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligne
 	}
 
 
-	int marge = 1;// espace autour
 	int taille_x = max_x - min_x + 1 + 2 * marge;
 	int taille_y = max_y - min_y + 1 + 2 * marge;
 
@@ -471,6 +471,39 @@ ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligne
 	return f;
 }
 
+void JeuHive::Plateau::jouerCoup(Coup* coup)
+{
+	CoupDeplacement* coup_dep = static_cast<CoupDeplacement*>(coup);
+
+	if (coup_dep != nullptr) {
+		jouerDeplacement(coup_dep);
+		return;
+	}
+
+	CoupPlacement* coup_pla = static_cast<CoupPlacement*>(coup);
+
+	if (coup_pla != nullptr) {
+		jouerPlacement(coup_pla);
+		return;
+	}
+
+	throw HiveException("Le coup n'est ni un placement ni un déplacement");
+}
+
+void JeuHive::Plateau::jouerPlacement(CoupPlacement* coup)
+// cette fonction ne produit aucune vérification que le coup est valide
+{
+	ajouterPieceSurCoo(*(coup->getPiece()), coup->getCooDestination());
+}
+
+void JeuHive::Plateau::jouerDeplacement(CoupDeplacement* coup)
+// cette fonction ne produit aucune vérification que le coup est valide
+{
+	retirerPieceDeCoo(coup->getCooOrigine());
+	ajouterPieceSurCoo(*(coup->getPiece()), coup->getCooDestination());
+}
+
+
 
 vector<Case*> Plateau::getVoisinsDeCoo(const Coordonnee& coo) const
 // on ne peut pas écrire case car c'est un mot clé
@@ -508,6 +541,26 @@ bool Plateau::estAbeillePlacee(Couleur couleur) const
 	return false;
 }
 
+bool JeuHive::Plateau::estAbeilleEntouree(Couleur couleur) const
+{
+	// on test juste chaque pièce de chaque case
+	Case* case0;
+	for (pair<Coordonnee, Case*> paire : Cases) {
+		case0 = paire.second;
+		for (const Piece* piece : case0->getPieces()) {
+
+			if (piece->estAbeille() && piece->GetCouleur() == couleur && getVoisinsDeCoo(case0->getCoo()).size()==6) {
+				return true;
+				// pas de break si on veut mettre plusieurs abeilles, on sait jamais
+			}
+
+		}
+
+	}
+	throw HiveException("La reine abeille de la couleur specifiee n'est pas encore placee");
+}
+
+/*
 ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
 {
 	// résultat de l'affichage:
@@ -601,4 +654,10 @@ ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
 
 	return f;
 
+}
+
+*/
+
+ostream& JeuHive::operator<<(ostream& f, const Plateau& p){
+	return p.afficher(f, {}, {}, 1);
 }

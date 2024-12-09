@@ -45,8 +45,6 @@ namespace JeuHive {
 
 		bool estAbeille() const override { return true; }
 		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
-		//bool isSurrounded(Plateau& plateau, Coordonnee& coo) const;
-
 		// destructeur virtuel pour permettre le polymorphisme
 	};
 
@@ -94,7 +92,6 @@ namespace JeuHive {
 		
 		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
-
 
 	class Coccinelle : public Piece {
 	public:
