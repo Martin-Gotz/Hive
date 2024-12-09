@@ -30,10 +30,15 @@ namespace JeuHive {
 		virtual bool estAbeille() const { return false; }
 		// redéfinie uniquement dans la classe Abeille
 
-
-
 		virtual set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const = 0;
-	};
+
+		// faire la concaténation entre symbole et couleur
+		// Methode utilitaire pour afficher l'etat de la partie
+		void afficher(ostream& os) const;
+		ResumePiece resumer() const;
+	};		
+	ostream& operator<<(ostream& os, const Piece& piece);
+
 
 	class Abeille : public Piece
 	{

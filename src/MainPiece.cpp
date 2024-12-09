@@ -32,3 +32,40 @@ void MainPiece::RetirerPiece(Piece& piece)
 	}
 
 }
+
+void MainPiece::afficher(ostream& f) const
+{
+	ResumeMain resume = resumer();
+	f << "Etat de la main : " << resume.estVide << ", nombre de pièces dans la main : " << resume.nombre_pieces_restantes;
+	int i = 0;
+	for (auto c : resume.pieces)
+	{
+		f << "Pièce numéro " << i++ << " : " << c.Couleur + c.symbole << "\n";
+	}
+}
+
+ResumeMain MainPiece::resumer() const
+{
+	ResumeMain resume;
+	switch (estVide)
+	{
+	case(true):
+		resume.estVide = "Vide";
+		break;
+	case(false):
+		resume.estVide = "Non-Vide";
+		break;
+	}
+	for (auto& p : Pieces)
+	{
+		resume.pieces.push_back(p->resumer());
+	}; 
+	resume.nombre_pieces_restantes = Pieces.size();
+	return resume;
+}
+
+ostream& operator<<(ostream& os, const MainPiece& partie)
+{
+	partie.afficher(os);
+	return os;
+}

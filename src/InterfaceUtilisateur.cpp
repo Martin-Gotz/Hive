@@ -255,7 +255,7 @@ void InterfaceUtilisateur::afficherParties() {
     cout << "Liste des parties :" << endl;
     for (const auto& resume : etat.parties) {
         cout << resume.id
-            << " : " << resume.joueur1 << " vs " << resume.joueur2
+            << " : " << resume.joueur1.nom << " vs " << resume.joueur2.nom
             << " - " << resume.etatPartie << endl;
     }
 }
