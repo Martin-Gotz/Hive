@@ -121,6 +121,7 @@ void Partie::afficher(ostream& os) const {
 
 // Formatage des données pour l'abstraction de l'affichage
 ResumePartie Partie::resumer() const {
+
     ResumePartie resume;
 
     resume.id = id;
@@ -130,8 +131,10 @@ ResumePartie Partie::resumer() const {
     resume.joueur2.couleur = joueur2.getCouleur();
     resume.joueur1.main = joueur1.getMain().resumer();
     resume.joueur2.main = joueur2.getMain().resumer();
-    //resume.joueur1.typej = joueur1.getType();
-    //resume.joueur2.typej = joueur2.getType();
+    if (joueur1.getType() == HUMAIN) resume.joueur1.type = "HUMAIN";
+    else resume.joueur1.type = "IA";
+    if (joueur2.getType() == HUMAIN) resume.joueur2.type = "HUMAIN";
+    else resume.joueur2.type = "IA";
 
     switch (etatPartie) {
         case EtatPartie::NON_COMMENCEE:

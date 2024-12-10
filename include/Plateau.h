@@ -69,7 +69,6 @@ namespace JeuHive {
 		void inverserPlacement(CoupPlacement* coup);
 		void inverserDeplacement(CoupDeplacement* coup);
 
-
 	};
 	ostream& operator<<(ostream& f, const Plateau& p);
 

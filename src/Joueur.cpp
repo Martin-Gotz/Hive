@@ -29,6 +29,22 @@ void Joueur::placerPiece(Piece& piece, Coordonnee c, Plateau& plateau) {
     }
 }
 
+void Joueur::afficher(ostream& f) const
+{
+    ResumeJoueur resumejoueur = resumer();
+    f << "Nom du joueur : " << resumejoueur.nom << " , couleur : " << resumejoueur.couleur << " , type : " << resumejoueur.type;
+    main.afficher(f);
+}
+
+ResumeJoueur Joueur::resumer() const
+{
+    ResumeJoueur joueur_resume;
+    joueur_resume.couleur = couleur;
+    joueur_resume.nom = nom;
+    joueur_resume.type = type;
+    joueur_resume.main = main.resumer();
+    return joueur_resume;
+}
 /*
 // Prendre une pièce (par exemple, au début de la partie ou en cas de récupération)
 void Joueur::prendrePiece(Piece& piece) {

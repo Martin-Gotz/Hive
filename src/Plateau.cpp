@@ -595,6 +595,7 @@ bool JeuHive::Plateau::estAbeilleEntouree(Couleur couleur) const
 	throw HiveException("La reine abeille de la couleur specifiee n'est pas encore placee");
 }
 
+
 /*
 ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
 {

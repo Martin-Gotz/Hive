@@ -30,6 +30,11 @@ namespace JeuHive {
         TypeJoueur getType() const { return type; }
         // Ajouter une pièce à la main
         void ajouterPieceMain(Piece piece);
+
+        void afficher(ostream& f) const;
+        ResumeJoueur resumer() const;
     };
+    ostream& operator<<(ostream& f, const Joueur& j);
+
 
 } // namespace JeuHive

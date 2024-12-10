@@ -29,7 +29,7 @@ struct ResumeMain {
 };
 
 
-// Structure pour afficher un joueur 
+// Structure pour afficher un joueur (check)
 
 struct ResumeJoueur {
     string nom;
@@ -38,16 +38,12 @@ struct ResumeJoueur {
     ResumeMain main;
 };
 
-// Structure pour résumer une partie
+// Structure pour résumer une partie (check)
 struct ResumePartie {
     int id;
     ResumeJoueur joueur1;
     ResumeJoueur joueur2;
     string etatPartie;
-};
-
-struct ResumePlateau {
-
 };
 
 // Structure pour l'état global de Hive
