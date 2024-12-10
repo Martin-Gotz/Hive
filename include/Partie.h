@@ -21,9 +21,10 @@ namespace JeuHive {
 		HistoriqueCoup historique;
 		EtatPartie etatPartie;
 		Joueur joueurActuel;
+		static int prochain_id;
 
 	public:
-		Partie(int id, Joueur& j1, Joueur& j2);
+		Partie(Joueur& j1, Joueur& j2);
 		~Partie() = default;
 
 		// Accesseurs
@@ -68,8 +69,8 @@ namespace JeuHive {
 
 	class PartieFactory {
 	public:
-		static Partie* creerPartie(int id, Joueur& joueur1, Joueur& joueur2) {
-			return new Partie(id, joueur1, joueur2);
+		static Partie* creerPartie(Joueur& joueur1, Joueur& joueur2) {
+			return new Partie(joueur1, joueur2);
 		}
 	};
 }

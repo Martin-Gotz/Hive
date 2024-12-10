@@ -16,10 +16,9 @@ Hive::~Hive() {
 
 void Hive::ajouterPartie(Joueur& joueur1, Joueur& joueur2) {
     // Créer une nouvelle partie en utilisant la factory
-    parties.push_back(PartieFactory::creerPartie(prochainIdPartie, joueur1, joueur2));
+    parties.push_back(PartieFactory::creerPartie(joueur1, joueur2));
 
-    EvenementHive evt("Nouvelle partie creee avec l'ID " + to_string(prochainIdPartie) +"\n");
-    prochainIdPartie++;
+    EvenementHive evt("Nouvelle partie creee \n");
     notifierObservers(evt);
 }
 

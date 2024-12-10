@@ -1,9 +1,14 @@
 ﻿#include "../include/Partie.h"
 using namespace JeuHive;
 
+
+// Initialisation du compteur statique
+int Partie::prochain_id = 1;
+
+
 //Constructeurs
-Partie::Partie(int id, Joueur& j1, Joueur& j2) :
-    id(id),
+Partie::Partie(Joueur& j1, Joueur& j2) :
+    id(prochain_id),
     joueur1(j1),
     joueur2(j2),
     plateau(),
@@ -11,7 +16,9 @@ Partie::Partie(int id, Joueur& j1, Joueur& j2) :
     historique(),
     etatPartie(EtatPartie::NON_COMMENCEE),
     joueurActuel(j1)
-{}
+{
+    prochain_id++; // Incrémentation du compteur statique pour suivre le nombre de parties créé
+}
 
 
 // Methodes principales

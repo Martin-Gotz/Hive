@@ -37,6 +37,9 @@ namespace JeuHive {
         void terminerPartieEnCours();
         void retournerMenu();
 
+
+
+        // Reaction aux observable
         void afficherEvenement(const Evenement& evenement) const;
         void reagir(const Evenement& evenement);
     };

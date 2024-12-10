@@ -17,10 +17,9 @@ namespace JeuHive {
 	private:
 		vector<Partie*> parties;
 		Partie* partieEnCours;
-		int prochainIdPartie;
 
 		// Constructeur privé
-		Hive() : partieEnCours(nullptr), prochainIdPartie(1) {}
+		Hive() : partieEnCours(nullptr) {}
 
 		// Suppression du constructeur par copie et de l'opérateur d'affectation
 		Hive(const Hive&) = delete;
