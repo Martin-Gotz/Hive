@@ -34,7 +34,7 @@ namespace JeuHive {
         void afficher(ostream& f) const;
         ResumeJoueur resumer() const;
     };
-    ostream& operator<<(ostream& f, const Joueur& j);
+    //ostream& operator<<(ostream& f, const Joueur& j);
 
 
 } // namespace JeuHive

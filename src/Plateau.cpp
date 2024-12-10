@@ -392,7 +392,7 @@ ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligne
 	string str_point = " .";
 	str_point.append(string(taille_str - 2, ' '));	// prend toute la place horizontale
 
-	char c177 = 177;	// caractère de surlignage
+	char c177 = (char)177;	// caractère de surlignage
 
 	string str_surligne(2, c177);					// seulement 2 caractères
 
@@ -414,7 +414,7 @@ ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligne
 			!= coos_selectionner.end();
 		if (case_selectionnee) {
 			// mise en majuscule des deux derniers caractères
-			for (int i = str_case.size()-2; i < str_case.size(); i++) {
+			for (int i = static_cast<int>(str_case.size()-2); i < str_case.size(); i++) {
 				str_case[i] = std::toupper(static_cast<unsigned char>(str_case[i]));
 			}
 		}
@@ -471,6 +471,8 @@ ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligne
 	return f;
 }
 
+
+/*
 void JeuHive::Plateau::jouerCoup(Coup* coup)
 {
 	// cette fonction ne produit aucune vérification que le coup est valide
@@ -537,7 +539,7 @@ void JeuHive::Plateau::inverserDeplacement(CoupDeplacement* coup)
 	ajouterPieceSurCoo(*(coup->getPiece()), coup->getCooOrigine());
 
 }
-
+*/
 
 
 vector<Case*> Plateau::getVoisinsDeCoo(const Coordonnee& coo) const

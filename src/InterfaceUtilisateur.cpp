@@ -208,7 +208,7 @@ void InterfaceUtilisateur::jouerCoup() {
     cin >> coup;
 
     try {
-        partieObservee->jouerCoup(Coup(coup));
+        //partieObservee->jouerCoup(Coup(coup));
     }
     catch (const HiveException& e) {
         cout << "Erreur : " << e.getInfo() << endl;

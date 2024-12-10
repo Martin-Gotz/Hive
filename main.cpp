@@ -6,7 +6,7 @@ using namespace std;
 using namespace JeuHive;
 
 int main() {
-
+    /*
     Plateau pla;
     Abeille A_b(BLANC);
     Abeille A_n(NOIR);
@@ -98,14 +98,12 @@ int main() {
         cases_surlignees = vector<Coordonnee>(coos_possibles.begin(), coos_possibles.end());
         pla.afficher(cout, cases_surlignees, { paire.first });
     }
-
+    */
     
 
-    /*
     Hive& hive = Hive::getInstance();
     InterfaceUtilisateur ui(hive);
     ui.gererChoixUtilisateur();
-    */
 
 
 

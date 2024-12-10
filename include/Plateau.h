@@ -61,6 +61,7 @@ namespace JeuHive {
 
 		// modification du plateau
 
+		/*
 		void jouerCoup(Coup* coup);
 		void jouerPlacement(CoupPlacement* coup);
 		void jouerDeplacement(CoupDeplacement* coup);
@@ -68,6 +69,7 @@ namespace JeuHive {
 		void inverserCoup(Coup* coup);
 		void inverserPlacement(CoupPlacement* coup);
 		void inverserDeplacement(CoupDeplacement* coup);
+		*/
 
 	};
 	ostream& operator<<(ostream& f, const Plateau& p);
