@@ -26,7 +26,7 @@ namespace JeuHive {
         void ajouterPartie();
         void supprimerPartie();
         void demarrerPartie();
-        void afficherParties();
+        void afficherParties() const;
 
 
         // Menu à l'intérieur d'une partie
@@ -36,6 +36,9 @@ namespace JeuHive {
         void jouerCoup();
         void terminerPartieEnCours();
         void retournerMenu();
+
+        void afficherInformationsPartie() const;
+        void afficherInformationsJoueurs() const;
 
 
 

@@ -132,7 +132,7 @@ set<Coordonnee> Plateau::ensemblePlacementsPossibles(const Piece& piece, int tou
 		return resultat;
 	}
 
-	if (tour == 4 && !estAbeillePlacee(piece.GetCouleur())) {
+	if (tour == 4 && !estAbeillePlacee(piece.getCouleur())) {
 		// commentaire au cas où l'autre méthode ne marche pas
 		//const Abeille* ab = dynamic_cast<const Abeille*>(&piece);  // bricolage
 		//bool estAbeille = (ab != nullptr);
@@ -163,7 +163,7 @@ set<Coordonnee> Plateau::ensemblePlacementsPossibles(const Piece& piece, int tou
 			if (getCaseDeCoo(coo_voisine) != nullptr) {
 				continue;
 			}
-			if (piece_dessus->GetCouleur() == piece.GetCouleur()) {
+			if (piece_dessus->getCouleur() == piece.getCouleur()) {
 				voisinsBonneCouleur.insert(coo_voisine);
 			}
 			else {
@@ -568,7 +568,7 @@ bool Plateau::estAbeillePlacee(Couleur couleur) const
 		case0 = paire.second;
 		for (const Piece* piece : case0->getPieces()) {
 
-			if (piece->estAbeille() && piece->GetCouleur() == couleur) {
+			if (piece->estAbeille() && piece->getCouleur() == couleur) {
 				return true;
 			}
 
@@ -586,7 +586,7 @@ bool JeuHive::Plateau::estAbeilleEntouree(Couleur couleur) const
 		case0 = paire.second;
 		for (const Piece* piece : case0->getPieces()) {
 
-			if (piece->estAbeille() && piece->GetCouleur() == couleur && getVoisinsDeCoo(case0->getCoo()).size()==6) {
+			if (piece->estAbeille() && piece->getCouleur() == couleur && getVoisinsDeCoo(case0->getCoo()).size()==6) {
 				return true;
 				// pas de break si on veut mettre plusieurs abeilles, on sait jamais
 			}

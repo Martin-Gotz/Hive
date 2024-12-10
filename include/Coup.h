@@ -12,11 +12,12 @@ namespace JeuHive {
 	class Coup
 	{
 	private:
-
+		string test;
 		//Piece* piece;
 		//Coordonnee cooDestination;
 		//Joueur joueur;
 	public:
+		Coup(string coup) : test(coup) {} // Constructeur temporaire
 		/*
 		Coup(Piece* piece, Coordonnee& cooDestination, Joueur& joueur) : piece(piece),
 			cooDestination(cooDestination), joueur(joueur) {}

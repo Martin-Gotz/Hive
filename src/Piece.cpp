@@ -183,7 +183,7 @@ namespace JeuHive {
 	{
 		ResumePiece resume;
 		resume.symbole = getSymbole();
-		resume.Couleur = couleur;
+		resume.Couleur = (getCouleur() == Couleur::BLANC ? "Blanc" : "Noir");
 		return resume;
 	}
 

@@ -20,7 +20,10 @@ namespace JeuHive {
 		Regle regles;
 		HistoriqueCoup historique;
 		EtatPartie etatPartie;
-		Joueur joueurActuel;
+		Joueur* joueurActuel;
+		bool premierJoueurJoue;
+		int compteurTour;
+
 		static int prochain_id;
 
 	public:
@@ -42,8 +45,9 @@ namespace JeuHive {
 		
 		const EtatPartie& getEtatPartie() const { return etatPartie; }
 
-		const Joueur& getJoueurActuel() const { return joueurActuel; }
-		Joueur& getJoueurActuel() { return joueurActuel;}
+		const Joueur* getJoueurActuel() const { return joueurActuel; }
+
+		const int getCompteurTour() const { return compteurTour; }
 
 
 		// Methodes principales
@@ -56,8 +60,7 @@ namespace JeuHive {
 
 		// Pour ces fonctions, il faudra s'assurer que la partie est en cours
 		void jouerCoup(const Coup& coup); // L'ajouter aussi a l'historique
-		void changerJoueurActuel();
-		void tourSuivant();
+		void joueurSuivant();
 		void annulerDernierCoup();
 
 

@@ -23,7 +23,7 @@ namespace JeuHive {
 
 		Piece(Couleur c) : couleur(c) {}
 
-		Couleur GetCouleur() const { return couleur; }
+		Couleur getCouleur() const { return couleur; }
 
 		virtual string getSymbole() const = 0;	// une lettre pour afficher dans la console
 

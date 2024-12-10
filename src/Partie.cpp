@@ -15,7 +15,8 @@ Partie::Partie(Joueur& j1, Joueur& j2) :
     regles(),
     historique(),
     etatPartie(EtatPartie::NON_COMMENCEE),
-    joueurActuel(j1)
+    joueurActuel(&j1),
+    compteurTour(0)
 {
     prochain_id++; // Incrémentation du compteur statique pour suivre le nombre de parties créé
 }
@@ -44,6 +45,21 @@ void Partie::demarrer() {
 }
 
 void Partie::initialiser() {
+    // 1 : Initialisation des joueurs (et pièces)
+    joueur1.setCouleur(Couleur::BLANC);
+    joueur2.setCouleur(Couleur::NOIR);
+    joueur1.remplirMain();
+    joueur2.remplirMain();
+    joueurActuel = &joueur1; // Définit le joueur qui commence
+
+
+    // 2 : Initialisation du plateau
+    //plateau.vider(); // Assure que le plateau est vide au démarrage
+
+
+    // 3 : Règles spécifiques de début de partie
+    compteurTour = 1;
+
     EvenementPartie evt(id, TypeEvenement::DEBUT_PARTIE);
     notifierObservers(evt);
 }
@@ -83,24 +99,24 @@ void Partie::jouerCoup(const Coup& coup) {
     }
     historique.ajouterCoup(coup);
     */
-    tourSuivant();
+    joueurSuivant();
 }
 
-void Partie::changerJoueurActuel() {
-    joueurActuel = (joueurActuel.getNom() == joueur1.getNom()) ? joueur2 : joueur1; // Le getNom est temporaire en attendant l'opérateur de comparaison
-    EvenementPartie evt(id, TypeEvenement::CHANGEMENT_JOUEUR);
-    notifierObservers(evt);
-}
-
-void Partie::tourSuivant() {
+void Partie::joueurSuivant() {
     if (etatPartie != EtatPartie::EN_COURS) {
         throw HiveException("Impossible de passer le tour d'une partie qui n'est pas en cours !");
     }
 
-    EvenementPartie evt(id, TypeEvenement::TOUR_SUIVANT);
-    notifierObservers(evt);
+    if (joueurActuel->getCouleur() == Couleur::NOIR) {
+        compteurTour++;
+        EvenementPartie evt(id, TypeEvenement::TOUR_SUIVANT);
+        notifierObservers(evt);
+    }
 
-    changerJoueurActuel();
+    joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1; // Le getNom est temporaire en attendant l'opérateur de comparaison
+
+    EvenementPartie evt(id, TypeEvenement::CHANGEMENT_JOUEUR);
+    notifierObservers(evt);
 }
 
 /*

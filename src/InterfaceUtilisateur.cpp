@@ -29,7 +29,7 @@ void InterfaceUtilisateur::afficherMenu() const {
 
 // Afficher le menu de la partie en cours
 void InterfaceUtilisateur::afficherMenuPartie() const {
-    cout << "\n===== PARTIE ===== " << endl;
+    afficherInformationsPartie();
     cout << "1. Jouer un coup" << endl;
     cout << "2. Terminer la partie" << endl;
     cout << "3. Retour au menu principal" << endl;
@@ -206,9 +206,10 @@ void InterfaceUtilisateur::jouerCoup() {
     cout << "Entrez le coup à jouer : ";
     string coup;
     cin >> coup;
+    cout << endl;
 
     try {
-        //partieObservee->jouerCoup(Coup(coup));
+        partieObservee->jouerCoup(Coup(coup));
     }
     catch (const HiveException& e) {
         cout << "Erreur : " << e.getInfo() << endl;
@@ -241,10 +242,12 @@ void InterfaceUtilisateur::retournerMenu() {
 
 
 
+
+
 // ===== AUTRES METHODES =====
 
 // Afficher toutes les parties
-void InterfaceUtilisateur::afficherParties() {
+void InterfaceUtilisateur::afficherParties() const {
     EtatHive etat = hive.getEtatHive(); // Récupère l'état des parties
 
     if (etat.parties.empty()) {
@@ -258,6 +261,45 @@ void InterfaceUtilisateur::afficherParties() {
             << " : " << resume.joueur1.nom << " vs " << resume.joueur2.nom
             << " - " << resume.etatPartie << endl;
     }
+}
+
+
+void JeuHive::InterfaceUtilisateur::afficherInformationsPartie() const
+{
+    if (!hive.getPartieEnCours()) {
+        return;
+    }
+
+    cout << "\n=== Tour n°" << hive.getPartieEnCours()->getCompteurTour() << "===\n" << endl;
+    afficherInformationsJoueurs();
+}
+
+// Afficher les joueurs et leurs mains (dans une partie en cours)
+void JeuHive::InterfaceUtilisateur::afficherInformationsJoueurs() const
+{
+    const auto partieEnCours = hive.getPartieEnCours();
+    cout << "\nC'est à " << partieEnCours->getJoueurActuel()->getNom() << " de jouer\n" << endl;
+
+    auto afficherJoueur = [](const string& titre, const ResumeJoueur& joueur) {
+        cout << "[ " << titre << " ]" << endl;
+        cout << "Nom : " << joueur.nom << " (" << joueur.type << ")\n";
+        cout << "Couleur : " << joueur.couleur << "\n";
+        cout << "Main : " << joueur.main.nombre_pieces_restantes << " pièce(s) restante(s)\n";
+        if (joueur.main.pieces.empty()) {
+            cout << "   Aucune pièce dans la main.\n";
+        }
+        else {
+            cout << "   Pièces : ";
+            for (const auto& piece : joueur.main.pieces) {
+                cout << piece.symbole << " (" << piece.Couleur << ") ";
+            }
+            cout << '\n';
+        }
+        cout << "\n--------------------------------\n" << endl;
+        };
+
+    afficherJoueur("Joueur 1", partieEnCours->getJoueur1().resumer());
+    afficherJoueur("Joueur 2", partieEnCours->getJoueur2().resumer());
 }
 
 
@@ -278,6 +320,9 @@ void InterfaceUtilisateur::afficherEvenement(const Evenement& e) const {
     if (e.getType() == TypeEvenement::DEBUT_PARTIE) {
         cout << "La partie a commencé !" << endl;
     }
+    else if (e.getType() == TypeEvenement::REPRISE_PARTIE) {
+        cout << "La partie a repris." << endl;
+    }
     else if (e.getType() == TypeEvenement::FIN_PARTIE) {
         cout << "La partie est terminée." << endl;
     }
@@ -285,10 +330,10 @@ void InterfaceUtilisateur::afficherEvenement(const Evenement& e) const {
         cout << "La partie est en pause." << endl;
     }
     else if (e.getType() == TypeEvenement::TOUR_SUIVANT) {
-        cout << "C'est au tour du joueur suivant." << endl;
+        cout << "Tour suivant" << endl;
     }
     else if (e.getType() == TypeEvenement::CHANGEMENT_JOUEUR) {
-        cout << "Changement de joueur." << endl;
+        cout << "Changement de joueur" << endl;
     }
 }
 

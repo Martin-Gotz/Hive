@@ -19,8 +19,8 @@ namespace JeuHive {
         // Constructeur
         MainPiece() : estVide(true) {}
 
-        void AjouterPiece(Piece& piece);
-        void RetirerPiece(Piece& piece);
+        void ajouterPiece(Piece* piece);
+        void retirerPiece(Piece* piece);
         bool getEstVide() const { return estVide; }
         vector<Piece*> getPieces() const { return Pieces; }
 

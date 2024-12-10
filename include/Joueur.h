@@ -19,17 +19,24 @@ namespace JeuHive {
     public:
         Joueur(string nom) : nom(nom) {} // Constructeur temporaire
         Joueur(string nom, TypeJoueur type, Couleur couleur);
+
+        // Accesseurs
         string getNom() const { return nom; }
+        Couleur getCouleur() const { return couleur; }
+        const MainPiece& getMain() const { return main; }
+        TypeJoueur getType() const { return type; }
+
+        // Mutateurs
+        void setCouleur(Couleur nouvelleCouleur) { couleur = nouvelleCouleur; }
+
         // Méthodes principales
+        void remplirMain();
         void jouerCoup(Coup& coup);
         void placerPiece(Piece& piece, Coordonnee c, Plateau& plateau);
         void prendrePiece(Piece& piece);
 
-        Couleur getCouleur() const { return couleur; }
-        const MainPiece& getMain() const { return main; }
-        TypeJoueur getType() const { return type; }
         // Ajouter une pièce à la main
-        void ajouterPieceMain(Piece piece);
+        void ajouterPieceMain(Piece* piece);
 
         void afficher(ostream& f) const;
         ResumeJoueur resumer() const;

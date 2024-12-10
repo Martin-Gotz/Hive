@@ -7,7 +7,7 @@ string JeuHive::Case::getString() const
 {
 	string str_case = "";
 	for (const Piece* piece : pieces) {
-		if (piece->GetCouleur() == BLANC) {
+		if (piece->getCouleur() == BLANC) {
 			str_case.append("b");
 		}
 		else {
@@ -24,7 +24,7 @@ string JeuHive::Case::getString() const
 	string str_case = "";
 	for (const Piece* piece : pieces) {
 		if (piece == getDessus()) {
-			if (piece->GetCouleur() == BLANC) {
+			if (piece->getCouleur() == BLANC) {
 				couleur = "[36m";	// cyan
 			}
 			else {
@@ -32,7 +32,7 @@ string JeuHive::Case::getString() const
 			}
 		}
 		else{
-			if (piece->GetCouleur() == BLANC) {
+			if (piece->getCouleur() == BLANC) {
 				couleur = "[34m";	// bleu
 			}
 			else {
