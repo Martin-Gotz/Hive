@@ -30,8 +30,9 @@ void InterfaceUtilisateur::afficherMenu() const {
 // Afficher le menu de la partie en cours
 void InterfaceUtilisateur::afficherMenuPartie() const {
     afficherInformationsPartie();
+    cout << "Que shouhaitez vous faire ?\n";
     cout << "1. Jouer un coup" << endl;
-    cout << "2. Terminer la partie" << endl;
+    cout << "2. Abandonner la partie" << endl;
     cout << "3. Retour au menu principal" << endl;
 }
 
@@ -112,15 +113,49 @@ void InterfaceUtilisateur::ajouterPartie() {
     string nomJoueur1, nomJoueur2;
     cout << "Entrez le nom du joueur 1 : ";
     cin >> nomJoueur1;
+
+    //TypeJoueur typeJoueur1 = demanderTypeJoueur(nomJoueur1);
+
     cout << "Entrez le nom du joueur 2 : ";
     cin >> nomJoueur2;
+
+    //TypeJoueur typeJoueur2 = demanderTypeJoueur(nomJoueur2);
+
     cout << endl;
 
-    Joueur joueur1(nomJoueur1);
-    Joueur joueur2(nomJoueur2);
-
-    hive.ajouterPartie(joueur1, joueur2);
+    //hive.ajouterPartie(nomJoueur1, typeJoueur1, nomJoueur2, typeJoueur2);
+    hive.ajouterPartie(nomJoueur1, TypeJoueur::HUMAIN, nomJoueur2, TypeJoueur::IA);
 }
+
+
+// Permet de gérer l'entrée utilisateur correspondant aux types des joueurs
+TypeJoueur InterfaceUtilisateur::demanderTypeJoueur(const string& nomJoueur) {
+    string entree;
+    int choix;
+
+    do {
+        cout << "Quel est le type de " << nomJoueur << " ? (0 pour HUMAIN, 1 pour IA) : ";
+        cin >> entree;
+
+        // Vérifie si l'entrée est un entier valide
+        try {
+            choix = stoi(entree);
+        }
+        catch (const invalid_argument&) {
+            choix = -1; // Valeur hors intervalle pour forcer la boucle à continuer
+        }
+        catch (const out_of_range&) {
+            choix = -1;
+        }
+
+        if (choix != 0 && choix != 1) {
+            cout << "Entrée invalide. Veuillez entrer 0 pour HUMAIN ou 1 pour IA." << endl;
+        }
+    } while (choix != 0 && choix != 1);
+
+    return static_cast<TypeJoueur>(choix);
+}
+
 
 // Partie à démarrer
 void InterfaceUtilisateur::demarrerPartie() {
@@ -244,7 +279,7 @@ void InterfaceUtilisateur::retournerMenu() {
 
 
 
-// ===== AUTRES METHODES =====
+// ===== METHODES D'AFFICHAGE =====
 
 // Afficher toutes les parties
 void InterfaceUtilisateur::afficherParties() const {
@@ -271,18 +306,23 @@ void JeuHive::InterfaceUtilisateur::afficherInformationsPartie() const
     }
 
     cout << "\n=== Tour n°" << hive.getPartieEnCours()->getCompteurTour() << "===\n" << endl;
+
+    cout << "C'est à " << hive.getPartieEnCours()->getJoueurActuel()->getNom() << " de jouer" << endl;
+
+    cout << "\n--------------------------------\n" << endl;
     afficherInformationsJoueurs();
+    cout << "\n--------------------------------\n" << endl;
+    afficherPlateau();
 }
 
 // Afficher les joueurs et leurs mains (dans une partie en cours)
 void JeuHive::InterfaceUtilisateur::afficherInformationsJoueurs() const
 {
+
     const auto partieEnCours = hive.getPartieEnCours();
-    cout << "\nC'est à " << partieEnCours->getJoueurActuel()->getNom() << " de jouer\n" << endl;
 
     auto afficherJoueur = [](const string& titre, const ResumeJoueur& joueur) {
-        cout << "[ " << titre << " ]" << endl;
-        cout << "Nom : " << joueur.nom << " (" << joueur.type << ")\n";
+        cout << "[ " << titre << " : " << joueur.nom << " (" << joueur.type << ")" << " ]" << endl;
         cout << "Couleur : " << joueur.couleur << "\n";
         cout << "Main : " << joueur.main.nombre_pieces_restantes << " pièce(s) restante(s)\n";
         if (joueur.main.pieces.empty()) {
@@ -295,12 +335,19 @@ void JeuHive::InterfaceUtilisateur::afficherInformationsJoueurs() const
             }
             cout << '\n';
         }
-        cout << "\n--------------------------------\n" << endl;
-        };
+        cout << endl;
+    };
 
     afficherJoueur("Joueur 1", partieEnCours->getJoueur1().resumer());
     afficherJoueur("Joueur 2", partieEnCours->getJoueur2().resumer());
 }
+
+void JeuHive::InterfaceUtilisateur::afficherPlateau() const
+{
+    cout << "--- Plateau ---\n" << endl;
+}
+
+
 
 
 void InterfaceUtilisateur::afficherEvenement(const Evenement& e) const {

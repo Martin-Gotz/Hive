@@ -10,6 +10,9 @@ using namespace std;
 namespace JeuHive {
 
 
+Joueur::Joueur(string nom, TypeJoueur type)
+    : nom(nom), type(type), couleur(Couleur::BLANC) {}
+
 Joueur::Joueur(string nom, TypeJoueur type, Couleur couleur)
     : nom(nom), type(type), couleur(couleur) {}
 
@@ -79,9 +82,9 @@ void Joueur::afficher(ostream& f) const
 ResumeJoueur Joueur::resumer() const
 {
     ResumeJoueur joueur_resume;
-    joueur_resume.couleur = (getCouleur() == Couleur::BLANC ? "Blanc" : "Noir");
+    joueur_resume.couleur = (couleur == Couleur::BLANC ? "Blanc" : "Noir");
     joueur_resume.nom = nom;
-    joueur_resume.type = type;
+    joueur_resume.type = (type == TypeJoueur::HUMAIN ? "Humain" : "Ordinateur");
     joueur_resume.main = main.resumer();
     return joueur_resume;
 }

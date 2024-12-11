@@ -24,6 +24,7 @@ namespace JeuHive {
         int obtenirEntreeUtilisateur(const string& message, bool menu);
 
         void ajouterPartie();
+        TypeJoueur demanderTypeJoueur(const string& nomJoueur);
         void supprimerPartie();
         void demarrerPartie();
         void afficherParties() const;
@@ -39,6 +40,7 @@ namespace JeuHive {
 
         void afficherInformationsPartie() const;
         void afficherInformationsJoueurs() const;
+        void afficherPlateau() const;
 
 
 

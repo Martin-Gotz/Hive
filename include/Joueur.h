@@ -17,7 +17,7 @@ namespace JeuHive {
         MainPiece main;
 
     public:
-        Joueur(string nom) : nom(nom) {} // Constructeur temporaire
+        Joueur(string nom, TypeJoueur type);
         Joueur(string nom, TypeJoueur type, Couleur couleur);
 
         // Accesseurs

@@ -1,5 +1,7 @@
 ﻿#include "../include/Partie.h"
+#include <random>
 using namespace JeuHive;
+using namespace std;
 
 
 // Initialisation du compteur statique
@@ -15,7 +17,7 @@ Partie::Partie(Joueur& j1, Joueur& j2) :
     regles(),
     historique(),
     etatPartie(EtatPartie::NON_COMMENCEE),
-    joueurActuel(&j1),
+    joueurActuel(nullptr),
     compteurTour(0)
 {
     prochain_id++; // Incrémentation du compteur statique pour suivre le nombre de parties créé
@@ -44,17 +46,32 @@ void Partie::demarrer() {
     etatPartie = EtatPartie::EN_COURS;
 }
 
+
+// Mise en place des éléments la première fois que la partie est lancée
 void Partie::initialiser() {
     // 1 : Initialisation des joueurs (et pièces)
-    joueur1.setCouleur(Couleur::BLANC);
-    joueur2.setCouleur(Couleur::NOIR);
+
+    // Génération aléatoire de la couleur
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> distrib(0, 1);
+
+    if (distrib(gen) == 0) {
+        joueur1.setCouleur(Couleur::BLANC);
+        joueur2.setCouleur(Couleur::NOIR);
+        joueurActuel = &joueur1; // Le joueur blanc commence
+    }
+    else {
+        joueur1.setCouleur(Couleur::NOIR);
+        joueur2.setCouleur(Couleur::BLANC);
+        joueurActuel = &joueur2; // Le joueur blanc commence
+    }
+
     joueur1.remplirMain();
     joueur2.remplirMain();
-    joueurActuel = &joueur1; // Définit le joueur qui commence
 
 
     // 2 : Initialisation du plateau
-    //plateau.vider(); // Assure que le plateau est vide au démarrage
 
 
     // 3 : Règles spécifiques de début de partie
