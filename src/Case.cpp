@@ -3,17 +3,25 @@
 using namespace JeuHive;
 using namespace std;
 
-string JeuHive::Case::getString() const
+string Case::getString() const
 {
 	string str_case = "";
 	for (const Piece* piece : pieces) {
-		if (piece->getCouleur() == BLANC) {
-			str_case.append("b");
+		if (piece != nullptr) {
+			try {
+				ResumePiece resumePiece = piece->resumer();
+				str_case.append(resumePiece.symbole);
+				//str_case.append(resumePiece.couleur);
+				//str_case.append(piece->getSymbole());
+				//str_case.append(piece->getCouleur() == BLANC ? "b" : "n");
+			}
+			catch (const std::exception& e) {
+				std::cerr << "Erreur dans getSymbole(): " << e.what() << std::endl;
+			}
 		}
 		else {
-			str_case.append("n");
+			std::cerr << "Pointeur nullptr dans pieces" << std::endl;
 		}
-		str_case.append(piece->getSymbole());
 	}
 	return str_case;
 

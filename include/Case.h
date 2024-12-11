@@ -18,7 +18,7 @@ namespace JeuHive {
 		vector<const Piece*> pieces;
 	public:
 		const Coordonnee& getCoo() const { return coo; }
-		void ajouterPiece(const Piece& piece) { pieces.push_back(&piece); }
+		void ajouterPiece(const Piece* piece) { pieces.push_back(piece); }
 		void retirerPiece() { pieces.pop_back(); }
 		const Piece* getDessus() const { return pieces.back(); }
 		const vector<const Piece*>& getPieces() const { return pieces; }

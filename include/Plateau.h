@@ -14,10 +14,10 @@ namespace JeuHive {
 
 	class Plateau	// responsable des cases
 	{
-	private:
+	public:
 		unordered_map<Coordonnee, Case*> Cases;
 
-		void ajouterPieceSurCoo(const Piece& piece, const Coordonnee& coo);
+		void ajouterPieceSurCoo(const Piece* piece, const Coordonnee& coo);
 		void retirerPieceDeCoo(const Coordonnee& coo);
 		// dans la partie privée car l'utilisation de ces méthodes nécessites des vérifications du respect des règles
 	public:

@@ -4,7 +4,7 @@ using namespace JeuHive;
 #include <algorithm>	// pour le set_difference de EnsemblePlacementPossibles
 #include <cctype>	// pour les majuscules
 
-void Plateau::ajouterPieceSurCoo(const Piece& piece, const Coordonnee& coo) {
+void Plateau::ajouterPieceSurCoo(const Piece* piece, const Coordonnee& coo) {
 
 	Case* case_sur_coo = getCaseDeCoo(coo);
 

@@ -26,6 +26,7 @@ namespace JeuHive {
 		Couleur getCouleur() const { return couleur; }
 
 		virtual string getSymbole() const = 0;	// une lettre pour afficher dans la console
+		virtual string getTest() const { return "t"; }
 
 		virtual bool estAbeille() const { return false; }
 		// redéfinie uniquement dans la classe Abeille
