@@ -54,7 +54,7 @@
     <ClCompile Include="src\InterfaceUtilisateur.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\Event.cpp">
+    <ClCompile Include="src\Evenement.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -101,10 +101,10 @@
     <ClInclude Include="include\InterfaceUtilisateur.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="include\Event.h">
+    <ClInclude Include="include\Evenement.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="include\Affichage.h">
+    <ClInclude Include="include\ResumeClasse.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,8 +6,8 @@
 #include "Regle.h"
 #include "HistoriqueCoup.h"
 #include "Coup.h"
-#include "Event.h"
-#include "Affichage.h"
+#include "Evenement.h"
+#include "ResumeClasse.h"
 
 namespace JeuHive {
 	class Partie : public Observable

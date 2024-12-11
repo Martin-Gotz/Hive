@@ -6,8 +6,8 @@
 #include <vector>
 #include <ostream>
 #include "Partie.h"
-#include "Event.h"
-#include "Affichage.h"
+#include "Evenement.h"
+#include "ResumeClasse.h"
 
 using namespace std;
 

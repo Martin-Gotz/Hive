@@ -127,7 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Event.cpp" />
+    <ClCompile Include="src\Evenement.cpp" />
     <ClCompile Include="src\InterfaceUtilisateur.cpp" />
     <ClCompile Include="src\Case.cpp" />
     <ClCompile Include="src\Coordonnee.cpp" />
@@ -143,12 +143,12 @@
     <ClCompile Include="src\Regle.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Affichage.h" />
+    <ClInclude Include="include\ResumeClasse.h" />
     <ClInclude Include="include\Case.h" />
     <ClInclude Include="include\Coordonnee.h" />
     <ClInclude Include="include\Coup.h" />
     <ClInclude Include="include\Enums.h" />
-    <ClInclude Include="include\Event.h" />
+    <ClInclude Include="include\Evenement.h" />
     <ClInclude Include="include\Exceptions.h" />
     <ClInclude Include="include\HistoriqueCoup.h" />
     <ClInclude Include="include\Hive.h" />

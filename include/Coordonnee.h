@@ -2,7 +2,7 @@
 #ifndef COORDONNE_H
 #define COORDONNE_H
 
-#include "Affichage.h"
+#include "ResumeClasse.h"
 #include <vector>
 #include <stdio.h>
 #include <stdlib.h>
