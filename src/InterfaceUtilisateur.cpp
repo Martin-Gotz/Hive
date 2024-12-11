@@ -41,7 +41,7 @@ void InterfaceUtilisateur::afficherMenuPartie() const {
 
 
 // ===== GESTION DES MENUS =====
-// 
+
 // Logique de validation des entrées
 int InterfaceUtilisateur::obtenirEntreeUtilisateur(const string& message, bool menu = false) {
     int valeur;
@@ -299,6 +299,7 @@ void InterfaceUtilisateur::afficherParties() const {
 }
 
 
+// Afficher l'état de la partie au tour en question
 void JeuHive::InterfaceUtilisateur::afficherInformationsPartie() const
 {
     if (!hive.getPartieEnCours()) {
@@ -309,20 +310,19 @@ void JeuHive::InterfaceUtilisateur::afficherInformationsPartie() const
 
     cout << "-> C'est à " << hive.getPartieEnCours()->getJoueurActuel()->getNom() << " de jouer" << endl;
 
-    cout << "\n--------------------------------\n" << endl;
     afficherInformationsJoueurs();
-    cout << "\n--------------------------------\n" << endl;
     afficherPlateau();
 }
 
 
 
-// Afficher les joueurs et leurs mains (dans une partie en cours)
+// Méthodes pour afficher les joueurs et leurs mains (dans une partie en cours)
 
 void JeuHive::InterfaceUtilisateur::afficherInformationsJoueurs() const
 {
     const auto partieEnCours = hive.getPartieEnCours();
 
+    cout << "\n----------- Joueurs -----------\n" << endl;
     afficherJoueur("Joueur 1", partieEnCours->getJoueur1().resumer());
     afficherJoueur("Joueur 2", partieEnCours->getJoueur2().resumer());
 }
@@ -355,7 +355,8 @@ void JeuHive::InterfaceUtilisateur::afficherMain(const ResumeMain& main) const
 // Affichage du plateau
 void JeuHive::InterfaceUtilisateur::afficherPlateau() const
 {
-    cout << "--- Plateau ---\n" << endl;
+    cout << "\n----------- Plateau -----------\n" << endl;
+    cout << hive.getPartieEnCours()->getPlateau() << endl;
 }
 
 
