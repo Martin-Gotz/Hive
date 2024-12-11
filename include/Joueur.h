@@ -1,6 +1,5 @@
 #pragma once
 #include "MainPiece.h"
-#include "Coup.h"
 #include "Piece.h"
 #include "Coordonnee.h"
 #include "Plateau.h"
@@ -31,8 +30,8 @@ namespace JeuHive {
 
         // Méthodes principales
         void remplirMain();
-        void jouerCoup(Coup& coup);
-        void placerPiece(Piece& piece, Coordonnee c, Plateau& plateau);
+        //void jouerCoup(Coup& coup);
+        //void placerPiece(Piece& piece, Coordonnee c, Plateau& plateau);
         void prendrePiece(Piece& piece);
 
         // Ajouter une pièce à la main

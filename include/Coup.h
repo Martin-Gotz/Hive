@@ -1,8 +1,7 @@
 #pragma once
 #include "Enums.h"
-//#include "Piece.h"
-//#include "Coordonnee.h"
-//#include "Joueur.h"
+#include "Piece.h"
+#include "Coordonnee.h"
 #include <string>
 
 using namespace std;
@@ -13,33 +12,34 @@ namespace JeuHive {
 	{
 	private:
 		string test;
-		//Piece* piece;
-		//Coordonnee cooDestination;
+		Piece* piece;
+		Coordonnee cooDestination;
 		//Joueur joueur;
 	public:
-		Coup(string coup) : test(coup) {} // Constructeur temporaire
+		Coup(string test) : test() {};
+		Coup(Piece* piece, Coordonnee& cooDestination) : piece(piece),
+			cooDestination(cooDestination){}
+		
 		/*
 		Coup(Piece* piece, Coordonnee& cooDestination, Joueur& joueur) : piece(piece),
 			cooDestination(cooDestination), joueur(joueur) {}
+		*/
 
 		virtual bool estPlacement() const { return false; }
 		virtual bool estDeplacement() const { return false; }
 
 		Piece* getPiece() const { return piece; }
 		Coordonnee getCooDestination() const { return cooDestination; }
-		const Joueur& getJoueur() const { return joueur; }
-		*/
+		//const Joueur& getJoueur() const { return joueur; }
 
 		// classe idéalement abstraite mais aucune méthode à abstraire :(
 	};
 
-	/*
 	class CoupPlacement : public Coup {
 	public:
 		bool estPlacement() const override { return true; }
 
-		CoupPlacement(Piece* piece, Coordonnee& cooDestination,
-			Joueur& joueur) : Coup(piece, cooDestination, joueur) {}
+		CoupPlacement(Piece* piece, Coordonnee& cooDestination) : Coup(piece, cooDestination) {}
 	};
 
 
@@ -49,10 +49,9 @@ namespace JeuHive {
 	public:
 		bool estDeplacement() const override { return true; }
 
-		CoupDeplacement(Piece* piece, Coordonnee& cooOrigine, Coordonnee& cooDestination, 
-			Joueur& joueur) : Coup(piece, cooDestination, joueur), cooOrigine(cooOrigine) {}
+		CoupDeplacement(Piece* piece, Coordonnee& cooOrigine, Coordonnee& cooDestination) 
+			: Coup(piece, cooDestination), cooOrigine(cooOrigine) {}
 
 		Coordonnee getCooOrigine() const { return cooOrigine; }
 	};
-	*/
 }

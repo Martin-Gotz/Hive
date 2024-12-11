@@ -28,6 +28,7 @@ void Joueur::remplirMain()
     main.ajouterPiece(new Scarabee(couleur));
 }
 
+/*
 void Joueur::jouerCoup(Coup& coup) {
     cout << nom << " joue un coup." << endl;
 }
@@ -44,6 +45,8 @@ void Joueur::placerPiece(Piece& piece, Coordonnee c, Plateau& plateau) {
         cout << "Erreur : la pièce n'est pas dans la main de " << nom << "." << endl;
     }
 }
+*/
+
 
 /*
 // Prendre une pièce (par exemple, au début de la partie ou en cas de récupération)

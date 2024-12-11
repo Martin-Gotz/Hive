@@ -356,7 +356,13 @@ void JeuHive::InterfaceUtilisateur::afficherMain(const ResumeMain& main) const
 void JeuHive::InterfaceUtilisateur::afficherPlateau() const
 {
     cout << "\n----------- Plateau -----------\n" << endl;
-    cout << hive.getPartieEnCours()->getPlateau() << endl;
+
+    if (hive.getPartieEnCours()->getPlateau().estVide()) {
+        cout << "Plateau vide.\n" << endl;
+    }
+    else {
+        cout << hive.getPartieEnCours()->getPlateau() << endl;
+    }
 }
 
 
