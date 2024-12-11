@@ -40,7 +40,7 @@ void MainPiece::afficher(ostream& f) const
 	int i = 0;
 	for (auto c : resume.pieces)
 	{
-		f << "Pièce numéro " << i++ << " : " << c.Couleur + c.symbole << "\n";
+		f << "Pièce numéro " << i++ << " : " << c.couleur + c.symbole << "\n";
 	}
 }
 

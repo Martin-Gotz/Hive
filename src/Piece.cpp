@@ -176,14 +176,14 @@ namespace JeuHive {
 	void Piece::afficher(ostream& f) const
 	{
 		ResumePiece resume = resumer();
-		f << resume.Couleur + resume.symbole;
+		f << resume.couleur + resume.symbole;
 	}
 
 	ResumePiece Piece::resumer() const
 	{
 		ResumePiece resume;
 		resume.symbole = getSymbole();
-		resume.Couleur = (getCouleur() == Couleur::BLANC ? "Blanc" : "Noir");
+		resume.couleur = (getCouleur() == Couleur::BLANC ? "Blanc" : "Noir");
 		return resume;
 	}
 

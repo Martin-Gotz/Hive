@@ -81,12 +81,12 @@ void Joueur::afficher(ostream& f) const
 
 ResumeJoueur Joueur::resumer() const
 {
-    ResumeJoueur joueur_resume;
-    joueur_resume.couleur = (couleur == Couleur::BLANC ? "Blanc" : "Noir");
-    joueur_resume.nom = nom;
-    joueur_resume.type = (type == TypeJoueur::HUMAIN ? "Humain" : "Ordinateur");
-    joueur_resume.main = main.resumer();
-    return joueur_resume;
+    ResumeJoueur resumeJoueur;
+    resumeJoueur.couleur = (couleur == Couleur::BLANC ? "Blanc" : "Noir");
+    resumeJoueur.nom = nom;
+    resumeJoueur.type = (type == TypeJoueur::HUMAIN ? "Humain" : "Ordinateur");
+    resumeJoueur.main = main.resumer();
+    return resumeJoueur;
 }
 
 

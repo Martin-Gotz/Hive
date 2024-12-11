@@ -16,7 +16,7 @@ struct ResumeCoordonnee {
 // faire une concaténation 
 
 struct ResumePiece {
-    string Couleur;
+    string couleur;
     string symbole;
 };
 

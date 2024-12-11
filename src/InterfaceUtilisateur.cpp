@@ -305,9 +305,9 @@ void JeuHive::InterfaceUtilisateur::afficherInformationsPartie() const
         return;
     }
 
-    cout << "\n=== Tour n°" << hive.getPartieEnCours()->getCompteurTour() << "===\n" << endl;
+    cout << "\n============ Tour n°" << hive.getPartieEnCours()->getCompteurTour() << "============\n" << endl;
 
-    cout << "C'est à " << hive.getPartieEnCours()->getJoueurActuel()->getNom() << " de jouer" << endl;
+    cout << "-> C'est à " << hive.getPartieEnCours()->getJoueurActuel()->getNom() << " de jouer" << endl;
 
     cout << "\n--------------------------------\n" << endl;
     afficherInformationsJoueurs();
@@ -315,33 +315,44 @@ void JeuHive::InterfaceUtilisateur::afficherInformationsPartie() const
     afficherPlateau();
 }
 
+
+
 // Afficher les joueurs et leurs mains (dans une partie en cours)
+
 void JeuHive::InterfaceUtilisateur::afficherInformationsJoueurs() const
 {
-
     const auto partieEnCours = hive.getPartieEnCours();
-
-    auto afficherJoueur = [](const string& titre, const ResumeJoueur& joueur) {
-        cout << "[ " << titre << " : " << joueur.nom << " (" << joueur.type << ")" << " ]" << endl;
-        cout << "Couleur : " << joueur.couleur << "\n";
-        cout << "Main : " << joueur.main.nombre_pieces_restantes << " pièce(s) restante(s)\n";
-        if (joueur.main.pieces.empty()) {
-            cout << "   Aucune pièce dans la main.\n";
-        }
-        else {
-            cout << "   Pièces : ";
-            for (const auto& piece : joueur.main.pieces) {
-                cout << piece.symbole << " (" << piece.Couleur << ") ";
-            }
-            cout << '\n';
-        }
-        cout << endl;
-    };
 
     afficherJoueur("Joueur 1", partieEnCours->getJoueur1().resumer());
     afficherJoueur("Joueur 2", partieEnCours->getJoueur2().resumer());
 }
 
+void JeuHive::InterfaceUtilisateur::afficherJoueur(const string& titre, const ResumeJoueur& joueur) const
+{
+    cout << "[ " << titre << " : " << joueur.nom << " (" << joueur.type << ")" << " ]" << endl;
+    cout << "Couleur : " << joueur.couleur << "\n";
+    afficherMain(joueur.main);
+    cout << endl;
+}
+
+void JeuHive::InterfaceUtilisateur::afficherMain(const ResumeMain& main) const
+{
+    cout << "Main : " << main.nombre_pieces_restantes << " pièce(s) restante(s)\n";
+    if (main.pieces.empty()) {
+        cout << "   Aucune pièce dans la main.\n";
+    }
+    else {
+        cout << "   Pièces : ";
+        for (const auto& piece : main.pieces) {
+            cout << piece.symbole << " (" << piece.couleur << ") ";
+        }
+        cout << '\n';
+    }
+}
+
+
+
+// Affichage du plateau
 void JeuHive::InterfaceUtilisateur::afficherPlateau() const
 {
     cout << "--- Plateau ---\n" << endl;
@@ -350,6 +361,7 @@ void JeuHive::InterfaceUtilisateur::afficherPlateau() const
 
 
 
+// Reaction aux observable
 void InterfaceUtilisateur::afficherEvenement(const Evenement& e) const {
     // Afficher le message de l'observable si il existe
     if (!e.getDescription().empty()) {
