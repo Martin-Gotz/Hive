@@ -10,8 +10,12 @@ namespace JeuHive {
 	private:
 		vector<Coup*> listeCoups;
 		int IndiceCourant;
+		bool estVide;
+		int NombreCoups;
 	public:
-		HistoriqueCoup() : IndiceCourant(0) {}
+		bool getEstVide() const { return estVide; }
+		int getNombreCoups() const { return NombreCoups; }
+		HistoriqueCoup() : IndiceCourant(0), NombreCoups(0), estVide(true) {}
 		void ajouterCoup(Coup& c);
 		void annulerDernierCoup();
 	};
