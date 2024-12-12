@@ -40,8 +40,8 @@ namespace JeuHive {
 		bool estAbeilleEntouree(Couleur couleur) const;
 
 		bool estPartieFinie() const {
-			return (estAbeillePlacee(BLANC) && estAbeilleEntouree(BLANC))
-				&& (estAbeillePlacee(NOIR) && estAbeilleEntouree(NOIR));
+			return ((estAbeillePlacee(BLANC) && estAbeilleEntouree(BLANC)))
+				|| ((estAbeillePlacee(NOIR) && estAbeilleEntouree(NOIR)));
 		}
 
 		// ------------------ méthodes liées au mouvements et aux placements-------------------
@@ -61,7 +61,6 @@ namespace JeuHive {
 
 		// modification du plateau
 
-		/*
 		void jouerCoup(Coup* coup);
 		void jouerPlacement(CoupPlacement* coup);
 		void jouerDeplacement(CoupDeplacement* coup);
@@ -69,7 +68,6 @@ namespace JeuHive {
 		void inverserCoup(Coup* coup);
 		void inverserPlacement(CoupPlacement* coup);
 		void inverserDeplacement(CoupDeplacement* coup);
-		*/
 
 	};
 	ostream& operator<<(ostream& f, const Plateau& p);

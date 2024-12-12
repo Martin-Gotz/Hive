@@ -73,7 +73,6 @@ void Partie::initialiser() {
 
     // 2 : Initialisation du plateau
 
-    /*
     Abeille* A_b = new Abeille(Couleur::BLANC);
     Abeille* A_n = new Abeille(Couleur::NOIR);
     Araignee* a_b = new Araignee(Couleur::BLANC);
@@ -89,7 +88,7 @@ void Partie::initialiser() {
     plateau.ajouterPieceSurCoo(s_n, Coordonnee(-1, 1));
     plateau.ajouterPieceSurCoo(S_b, Coordonnee(1, -1));
     plateau.ajouterPieceSurCoo(F_n, Coordonnee(-1, 0));
-    */
+
     // 3 : Règles spécifiques de début de partie
     compteurTour = 1;
 

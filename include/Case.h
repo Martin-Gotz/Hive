@@ -14,7 +14,6 @@ namespace JeuHive {
 	{
 	private:
 		Coordonnee coo;
-		// en fait il faut pouvoir accéder aux pièces d'en dessous pour afficher le plateau, d'où la suppression du stack
 		vector<const Piece*> pieces;
 	public:
 		const Coordonnee& getCoo() const { return coo; }
