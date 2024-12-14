@@ -8,38 +8,28 @@ using namespace std;
 
 namespace JeuHive {
 
-	class Coup
-	{
+	class Coup {
 	private:
-		string test;
-		Piece* piece;
 		Coordonnee cooDestination;
-		//Joueur joueur;
 	public:
-		Coup(string test) : test() {};
-		Coup(Piece* piece, Coordonnee& cooDestination) : piece(piece),
-			cooDestination(cooDestination){}
-		
-		/*
-		Coup(Piece* piece, Coordonnee& cooDestination, Joueur& joueur) : piece(piece),
-			cooDestination(cooDestination), joueur(joueur) {}
-		*/
+		Coup(Coordonnee& cooDestination) : cooDestination(cooDestination) {}
 
 		virtual bool estPlacement() const { return false; }
 		virtual bool estDeplacement() const { return false; }
 
-		Piece* getPiece() const { return piece; }
 		Coordonnee getCooDestination() const { return cooDestination; }
-		//const Joueur& getJoueur() const { return joueur; }
-
-		// classe idéalement abstraite mais aucune méthode à abstraire :(
 	};
 
+
 	class CoupPlacement : public Coup {
+	private:
+		Piece* piece;
 	public:
+		CoupPlacement(Piece* piece, Coordonnee& cooDestination) : piece(piece), Coup(cooDestination) {}
+
 		bool estPlacement() const override { return true; }
 
-		CoupPlacement(Piece* piece, Coordonnee& cooDestination) : Coup(piece, cooDestination) {}
+		Piece* getPiece() const { return piece; }
 	};
 
 
@@ -49,8 +39,8 @@ namespace JeuHive {
 	public:
 		bool estDeplacement() const override { return true; }
 
-		CoupDeplacement(Piece* piece, Coordonnee& cooOrigine, Coordonnee& cooDestination) 
-			: Coup(piece, cooDestination), cooOrigine(cooOrigine) {}
+		CoupDeplacement(Coordonnee& cooOrigine, Coordonnee& cooDestination) 
+			: Coup(cooDestination), cooOrigine(cooOrigine) {}
 
 		Coordonnee getCooOrigine() const { return cooOrigine; }
 	};

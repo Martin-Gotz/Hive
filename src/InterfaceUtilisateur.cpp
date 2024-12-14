@@ -31,9 +31,10 @@ void InterfaceUtilisateur::afficherMenu() const {
 void InterfaceUtilisateur::afficherMenuPartie() const {
     afficherInformationsPartie();
     cout << "Que shouhaitez vous faire ?\n";
-    cout << "1. Jouer un coup" << endl;
-    cout << "2. Abandonner la partie" << endl;
+    cout << "1. Poser une piece" << endl;
+    cout << "2. Deplacer une piece" << endl;
     cout << "3. Retour au menu principal" << endl;
+    cout << "4. Abandonner la partie" << endl;
 }
 
 
@@ -69,12 +70,12 @@ void InterfaceUtilisateur::gererChoixUtilisateur() {
         cout << "---------------------\n";
 
         switch (choix) {
-        case 1: ajouterPartie(); break;
-        case 2: demarrerPartie(); break;
-        case 3: supprimerPartie(); break;
-        case 4: afficherParties(); break;
-        case 5: cout << "Au revoir !\n"; return;
-        default: cout << "Option invalide, veuillez réessayer.\n";
+            case 1: ajouterPartie(); break;
+            case 2: demarrerPartie(); break;
+            case 3: supprimerPartie(); break;
+            case 4: afficherParties(); break;
+            case 5: cout << "Au revoir !\n"; return;
+            default: cout << "Option invalide, veuillez réessayer.\n";
         }
         cout << endl << endl;
     }
@@ -90,10 +91,11 @@ void InterfaceUtilisateur::gererChoixUtilisateurMenuPartie() {
         cout << "---------------------" << endl;
 
         switch (choix) {
-        case 1: jouerCoup(); break;
-        case 2: terminerPartieEnCours(); return;
-        case 3: retournerMenu(); return;
-        default: cout << "Option invalide, veuillez réessayer." << endl;
+            case 1: placerPiece(); break;
+            case 2: deplacerPiece(); break;
+            case 3: retournerMenu(); return;
+            case 4: terminerPartieEnCours(); return;
+            default: cout << "Option invalide, veuillez réessayer." << endl;
         }
 
         cout << endl << endl;
@@ -110,16 +112,29 @@ void InterfaceUtilisateur::gererChoixUtilisateurMenuPartie() {
 
 // Demander à l'utilisateur les informations nécessaires pour ajouter une partie
 void InterfaceUtilisateur::ajouterPartie() {
+
+    TypeJoueur typeJoueur1 = demanderTypeJoueur("joueur 1");
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
     string nomJoueur1, nomJoueur2;
-    cout << "Entrez le nom du joueur 1 : ";
-    cin >> nomJoueur1;
+    do {
+        cout << "Entrez le nom du joueur 1 : ";
+        getline(cin, nomJoueur1);
+        if (nomJoueur1.empty()) {
+            cout << "Le nom du joueur 1 ne peut pas être vide. Essayez encore." << endl;
+        }
+    } while (nomJoueur1.empty());
 
-    //TypeJoueur typeJoueur1 = demanderTypeJoueur(nomJoueur1);
+    TypeJoueur typeJoueur2 = demanderTypeJoueur("joueur 2");
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-    cout << "Entrez le nom du joueur 2 : ";
-    cin >> nomJoueur2;
-
-    //TypeJoueur typeJoueur2 = demanderTypeJoueur(nomJoueur2);
+    do {
+        cout << "Entrez le nom du joueur 2 : ";
+        getline(cin, nomJoueur2);
+        if (nomJoueur2.empty()) {
+            cout << "Le nom du joueur 2 ne peut pas etre vide. Essayez encore." << endl;
+        }
+    } while (nomJoueur2.empty());
 
     cout << endl;
 
@@ -236,20 +251,60 @@ void InterfaceUtilisateur::supprimerPartie() {
 
 // ===== METHODES RELATIVES A PARTIE =====
 
-// Jouer un coup dans la partie en cours
-void InterfaceUtilisateur::jouerCoup() {
-    cout << "Entrez le coup à jouer : ";
-    string coup;
-    cin >> coup;
-    cout << endl;
+void JeuHive::InterfaceUtilisateur::placerPiece() {
+    string typePiece;
+    int x, y;
+
+    cout << "Entrez le type de la pièce A placer (ex: Abeille, Scarabee, etc.) : ";
+    cin >> typePiece;
+
+    cout << "Entrez les coordonnées de la case (x y) : ";
+    cin >> x >> y;
+
+    if (cin.fail()) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Entrée invalide. Veuillez réessayer.\n";
+        return;
+    }
 
     try {
-        partieObservee->jouerCoup(Coup(coup));
+        //hive.getPartieEnCours()->placerPiece(typePiece, { x, y });
+        cout << "Pièce " << typePiece << " placée en (" << x << ", " << y << ").\n";
     }
-    catch (const HiveException& e) {
-        cout << "Erreur : " << e.getInfo() << endl;
+    catch (const exception& e) {
+        cout << "Erreur : " << e.what() << '\n';
     }
 }
+
+void JeuHive::InterfaceUtilisateur::deplacerPiece() {
+    int x1, y1, x2, y2;
+
+    cout << "Entrez les coordonnées de la pièce a déplacer (x1 y1) : ";
+    cin >> x1 >> y1;
+
+    cout << "Entrez les coordonnées de destination (x2 y2) : ";
+    cin >> x2 >> y2;
+
+    if (cin.fail()) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Entrée invalide. Veuillez réessayer.\n";
+        return;
+    }
+
+    try {
+        //hive.getPartieEnCours()->deplacerPiece({ x1, y1 }, { x2, y2 });
+        cout << "Piece déplacée de (" << x1 << ", " << y1 << ") a (" << x2 << ", " << y2 << ").\n";
+    }
+    catch (const HiveException& e) {
+        cout << "Erreur : " << e.getInfo() << '\n';
+    }
+}
+
+
+
+
 
 // Terminer la partie en cours
 void InterfaceUtilisateur::terminerPartieEnCours() {

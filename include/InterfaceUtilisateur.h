@@ -34,9 +34,11 @@ namespace JeuHive {
         void afficherMenuPartie() const;
         void gererChoixUtilisateurMenuPartie();
 
-        void jouerCoup();
+        void placerPiece();
+        void deplacerPiece();
         void terminerPartieEnCours();
         void retournerMenu();
+
 
         void afficherInformationsPartie() const;
         void afficherInformationsJoueurs() const;
