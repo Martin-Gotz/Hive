@@ -472,38 +472,36 @@ ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligne
 }
 
 
-/*
-void JeuHive::Plateau::jouerCoup(Coup* coup)
+void JeuHive::Plateau::jouerCoup(Coup& coup)
 {
-	// cette fonction ne produit aucune vérification que le coup est valide
-	CoupDeplacement* coup_dep = static_cast<CoupDeplacement*>(coup);
-
-	if (coup_dep != nullptr) {
+	// Vérifie si le coup est un déplacement
+	if (auto* coup_dep = dynamic_cast<CoupDeplacement*>(&coup)) {
 		jouerDeplacement(coup_dep);
 		return;
 	}
 
-	CoupPlacement* coup_pla = static_cast<CoupPlacement*>(coup);
-
-	if (coup_pla != nullptr) {
+	// Vérifie si le coup est un placement
+	if (auto* coup_pla = dynamic_cast<CoupPlacement*>(&coup)) {
 		jouerPlacement(coup_pla);
 		return;
 	}
 
+	// Si le coup n'est ni un placement ni un déplacement
 	throw HiveException("Le coup n'est ni un placement ni un déplacement");
 }
+
 
 void JeuHive::Plateau::jouerPlacement(CoupPlacement* coup)
 // cette fonction ne produit aucune vérification que le coup est valide
 {
-	ajouterPieceSurCoo(*(coup->getPiece()), coup->getCooDestination());
+	ajouterPieceSurCoo((coup->getPiece()), coup->getCooDestination());
 }
 
 void JeuHive::Plateau::jouerDeplacement(CoupDeplacement* coup)
 // cette fonction ne produit aucune vérification que le coup est valide
 {
 	retirerPieceDeCoo(coup->getCooOrigine());
-	ajouterPieceSurCoo(*(coup->getPiece()), coup->getCooDestination());
+	ajouterPieceSurCoo((coup->getPiece()), coup->getCooDestination());
 }
 
 void JeuHive::Plateau::inverserCoup(Coup* coup)
@@ -536,10 +534,9 @@ void JeuHive::Plateau::inverserDeplacement(CoupDeplacement* coup)
 {
 	// cette fonction ne produit aucune vérification que le coup est valide
 	retirerPieceDeCoo(coup->getCooDestination());
-	ajouterPieceSurCoo(*(coup->getPiece()), coup->getCooOrigine());
+	ajouterPieceSurCoo((coup->getPiece()), coup->getCooOrigine());
 
 }
-*/
 
 
 vector<Case*> Plateau::getVoisinsDeCoo(const Coordonnee& coo) const

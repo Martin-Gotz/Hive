@@ -90,12 +90,17 @@ void InterfaceUtilisateur::gererChoixUtilisateurMenuPartie() {
         int choix = obtenirEntreeUtilisateur("Entrez votre choix : ");
         cout << "---------------------" << endl;
 
-        switch (choix) {
-            case 1: placerPiece(); break;
-            case 2: deplacerPiece(); break;
-            case 3: retournerMenu(); return;
-            case 4: terminerPartieEnCours(); return;
-            default: cout << "Option invalide, veuillez réessayer." << endl;
+        try {
+            switch (choix) {
+                case 1: placerPiece(); break;
+                case 2: deplacerPiece(); break;
+                case 3: retournerMenu(); return;
+                case 4: terminerPartieEnCours(); return;
+                default: cout << "Option invalide, veuillez réessayer." << endl;
+            }
+        }
+        catch (const HiveException& e) {
+            cout << "Erreur : " << e.getInfo() << '\n';
         }
 
         cout << endl << endl;
@@ -113,8 +118,8 @@ void InterfaceUtilisateur::gererChoixUtilisateurMenuPartie() {
 // Demander à l'utilisateur les informations nécessaires pour ajouter une partie
 void InterfaceUtilisateur::ajouterPartie() {
 
-    TypeJoueur typeJoueur1 = demanderTypeJoueur("joueur 1");
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    //TypeJoueur typeJoueur1 = demanderTypeJoueur("joueur 1");
+    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     string nomJoueur1, nomJoueur2;
     do {
@@ -125,8 +130,8 @@ void InterfaceUtilisateur::ajouterPartie() {
         }
     } while (nomJoueur1.empty());
 
-    TypeJoueur typeJoueur2 = demanderTypeJoueur("joueur 2");
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    //TypeJoueur typeJoueur2 = demanderTypeJoueur("joueur 2");
+    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     do {
         cout << "Entrez le nom du joueur 2 : ";
@@ -252,14 +257,21 @@ void InterfaceUtilisateur::supprimerPartie() {
 // ===== METHODES RELATIVES A PARTIE =====
 
 void JeuHive::InterfaceUtilisateur::placerPiece() {
-    string typePiece;
+    int idTypePiece;
     int x, y;
 
-    cout << "Entrez le type de la pièce A placer (ex: Abeille, Scarabee, etc.) : ";
-    cin >> typePiece;
+    cout << "Entrez l'id dans la main de la pièce a placer : ";
+    cin >> idTypePiece;
 
-    cout << "Entrez les coordonnées de la case (x y) : ";
-    cin >> x >> y;
+    if (!hive.getPartieEnCours()->getPlateau().estVide()) {
+        cout << "Entrez les coordonnées de la case (x y) : ";
+        cin >> x >> y;
+    }
+    else {
+        x = 0;
+        y = 0;
+    }
+
 
     if (cin.fail()) {
         cin.clear();
@@ -268,17 +280,18 @@ void JeuHive::InterfaceUtilisateur::placerPiece() {
         return;
     }
 
-    try {
-        //hive.getPartieEnCours()->placerPiece(typePiece, { x, y });
-        cout << "Pièce " << typePiece << " placée en (" << x << ", " << y << ").\n";
-    }
-    catch (const exception& e) {
-        cout << "Erreur : " << e.what() << '\n';
-    }
+    hive.getPartieEnCours()->placerPiece(idTypePiece, { x, y });
+    cout << "Pièce " << idTypePiece << " placée en (" << x << ", " << y << ").\n";
 }
 
 void JeuHive::InterfaceUtilisateur::deplacerPiece() {
     int x1, y1, x2, y2;
+
+
+    if (hive.getPartieEnCours()->getPlateau().estVide()) {
+        cout << "Erreur : le plateau est vide\n";
+        return;
+    }
 
     cout << "Entrez les coordonnées de la pièce a déplacer (x1 y1) : ";
     cin >> x1 >> y1;
@@ -293,13 +306,8 @@ void JeuHive::InterfaceUtilisateur::deplacerPiece() {
         return;
     }
 
-    try {
-        //hive.getPartieEnCours()->deplacerPiece({ x1, y1 }, { x2, y2 });
-        cout << "Piece déplacée de (" << x1 << ", " << y1 << ") a (" << x2 << ", " << y2 << ").\n";
-    }
-    catch (const HiveException& e) {
-        cout << "Erreur : " << e.getInfo() << '\n';
-    }
+    hive.getPartieEnCours()->deplacerPiece({ x1, y1 }, { x2, y2 });
+    cout << "Piece déplacée de (" << x1 << ", " << y1 << ") a (" << x2 << ", " << y2 << ").\n";
 }
 
 
@@ -308,24 +316,14 @@ void JeuHive::InterfaceUtilisateur::deplacerPiece() {
 
 // Terminer la partie en cours
 void InterfaceUtilisateur::terminerPartieEnCours() {
-    try {
-        hive.terminerPartie();
-        partieObservee = nullptr;
-    }
-    catch (const HiveException& e) {
-        cout << "Erreur : " << e.getInfo() << endl;
-    }
+    hive.terminerPartie();
+    partieObservee = nullptr;
 }
 
 // Changer le joueur actuel
 void InterfaceUtilisateur::retournerMenu() {
-    try {
-        hive.mettrePartieEnPause();
-        partieObservee = nullptr;
-    }
-    catch (const HiveException& e) {
-        cout << "Erreur : " << e.getInfo() << endl;
-    }
+    hive.mettrePartieEnPause();
+    partieObservee = nullptr;
 }
 
 
@@ -361,9 +359,9 @@ void JeuHive::InterfaceUtilisateur::afficherInformationsPartie() const
         return;
     }
 
-    cout << "\n============ Tour n°" << hive.getPartieEnCours()->getCompteurTour() << "============\n" << endl;
+    cout << "\n============ Tour n°" << hive.getPartieEnCours()->getCompteurTour() << " ============\n" << endl;
 
-    cout << "-> C'est à " << hive.getPartieEnCours()->getJoueurActuel()->getNom() << " de jouer" << endl;
+    cout << "-> C'est a " << hive.getPartieEnCours()->getJoueurActuel()->getNom() << " de jouer" << endl;
 
     afficherInformationsJoueurs();
     afficherPlateau();
@@ -376,19 +374,25 @@ void JeuHive::InterfaceUtilisateur::afficherInformationsPartie() const
 void JeuHive::InterfaceUtilisateur::afficherInformationsJoueurs() const
 {
     const auto partieEnCours = hive.getPartieEnCours();
+    const auto joueurActuel = partieEnCours->getJoueurActuel();
 
     cout << "\n----------- Joueurs -----------\n" << endl;
-    afficherJoueur("Joueur 1", partieEnCours->getJoueur1().resumer());
-    afficherJoueur("Joueur 2", partieEnCours->getJoueur2().resumer());
+
+    bool estJoueurActuel = (joueurActuel == &(partieEnCours->getJoueur1()));
+
+    // Mettre en évidence le joueur actuel
+    afficherJoueur("Joueur 1", partieEnCours->getJoueur1().resumer(), estJoueurActuel);
+    afficherJoueur("Joueur 2", partieEnCours->getJoueur2().resumer(), !estJoueurActuel);
 }
 
-void JeuHive::InterfaceUtilisateur::afficherJoueur(const string& titre, const ResumeJoueur& joueur) const
+void JeuHive::InterfaceUtilisateur::afficherJoueur(const string& titre, const ResumeJoueur& joueur, bool estJoueurActuel) const
 {
-    cout << "[ " << titre << " : " << joueur.nom << " (" << joueur.type << ")" << " ]" << endl;
+    cout << "[ " << titre << " : " << joueur.nom << " (" << joueur.type << ")" << " ]" << (estJoueurActuel ? " *JOUEUR ACTUEL*" : "") << endl;
     cout << "Couleur : " << joueur.couleur << "\n";
     afficherMain(joueur.main);
     cout << endl;
 }
+
 
 void JeuHive::InterfaceUtilisateur::afficherMain(const ResumeMain& main) const
 {
@@ -398,12 +402,15 @@ void JeuHive::InterfaceUtilisateur::afficherMain(const ResumeMain& main) const
     }
     else {
         cout << "   Pièces : ";
+        int numero = 1;
         for (const auto& piece : main.pieces) {
-            cout << piece.symbole << " (" << piece.couleur << ") ";
+            cout << numero << ". " << piece.nom << " ";
+            ++numero;
         }
         cout << '\n';
     }
 }
+
 
 
 

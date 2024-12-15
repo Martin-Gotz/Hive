@@ -42,7 +42,7 @@ namespace JeuHive {
 
         void afficherInformationsPartie() const;
         void afficherInformationsJoueurs() const;
-        void afficherJoueur(const string& titre, const ResumeJoueur& joueur) const;
+        void afficherJoueur(const string& titre, const ResumeJoueur& joueur, bool estJoueurActuel) const;
         void afficherMain(const ResumeMain& main) const;
         void afficherPlateau() const;
 

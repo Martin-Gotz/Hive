@@ -14,7 +14,7 @@ namespace JeuHive {
 
 	class Plateau	// responsable des cases
 	{
-	public:
+	private:
 		unordered_map<Coordonnee, Case*> Cases;
 
 		void ajouterPieceSurCoo(const Piece* piece, const Coordonnee& coo);
@@ -61,7 +61,7 @@ namespace JeuHive {
 
 		// modification du plateau
 
-		void jouerCoup(Coup* coup);
+		void jouerCoup(Coup& coup);
 		void jouerPlacement(CoupPlacement* coup);
 		void jouerDeplacement(CoupDeplacement* coup);
 

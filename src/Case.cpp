@@ -1,4 +1,5 @@
 #include "../include/Case.h"
+#include "../Exceptions.h"
 
 using namespace JeuHive;
 using namespace std;
@@ -15,8 +16,8 @@ string Case::getString() const
 				//str_case.append(piece->getSymbole());
 				//str_case.append(piece->getCouleur() == BLANC ? "b" : "n");
 			}
-			catch (const std::exception& e) {
-				std::cerr << "Erreur dans getSymbole(): " << e.what() << std::endl;
+			catch (const HiveException& e) {
+				std::cerr << "Erreur dans getSymbole(): " << e.getInfo() << std::endl;
 			}
 		}
 		else {

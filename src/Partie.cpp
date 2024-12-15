@@ -72,7 +72,7 @@ void Partie::initialiser() {
 
 
     // 2 : Initialisation du plateau
-
+    /*
     Abeille* A_b = new Abeille(Couleur::BLANC);
     Abeille* A_n = new Abeille(Couleur::NOIR);
     Araignee* a_b = new Araignee(Couleur::BLANC);
@@ -88,7 +88,7 @@ void Partie::initialiser() {
     plateau.ajouterPieceSurCoo(s_n, Coordonnee(-1, 1));
     plateau.ajouterPieceSurCoo(S_b, Coordonnee(1, -1));
     plateau.ajouterPieceSurCoo(F_n, Coordonnee(-1, 0));
-
+    */
     // 3 : Règles spécifiques de début de partie
     compteurTour = 1;
 
@@ -124,6 +124,9 @@ void Partie::terminer() {
 
 
 
+
+
+
 void Partie::jouerCoup(const Coup& coup) {
     /*
     if (!estCoupValide(coup)) {
@@ -131,6 +134,43 @@ void Partie::jouerCoup(const Coup& coup) {
     }
     historique.ajouterCoup(coup);
     */
+    joueurSuivant();
+}
+
+void Partie::placerPiece(int idPiece, const Coordonnee& cooDestination) {
+    if (idPiece <= 0 || idPiece > joueurActuel->getMain().getPieces().size()) {
+        throw HiveException("ID de pièce invalide !");
+    }
+
+    Piece* piece = joueurActuel->getMain().getPieces()[idPiece - 1];
+
+    CoupPlacement coup(piece, cooDestination);
+
+    // Appliquer le coup
+    plateau.jouerCoup(coup);
+    joueurActuel->retirerPiece(piece);
+
+    // Ajouter à l'historique
+    historique.ajouterCoup(coup);
+
+    joueurSuivant();
+}
+
+void Partie::deplacerPiece(const Coordonnee& cooOrigine, const Coordonnee& cooDestination) {
+    const Piece* piece = plateau.getCaseDeCoo(cooOrigine)->getDessus();
+
+    if (piece->getCouleur() != joueurActuel->getCouleur()) {
+        throw HiveException("Vous ne pouvez déplacer que vos propres pièces !");
+    }
+
+    CoupDeplacement coup(piece, cooOrigine, cooDestination);
+
+    // Appliquer le coup
+    plateau.jouerCoup(coup);
+
+    // Ajouter à l'historique
+    historique.ajouterCoup(coup);
+
     joueurSuivant();
 }
 

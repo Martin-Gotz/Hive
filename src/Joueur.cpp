@@ -66,6 +66,11 @@ void Joueur::ajouterPieceMain(Piece piece) {
 
 
 
+void Joueur::retirerPiece(Piece* piece)
+{
+    main.retirerPiece(piece);
+}
+
 void Joueur::ajouterPieceMain(Piece* piece)
 {
     if (piece->getCouleur() != this->getCouleur()) { // Vérifie la couleur du joueur

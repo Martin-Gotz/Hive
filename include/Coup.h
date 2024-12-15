@@ -11,25 +11,25 @@ namespace JeuHive {
 	class Coup {
 	private:
 		Coordonnee cooDestination;
+		const Piece* piece;
 	public:
-		Coup(Coordonnee& cooDestination) : cooDestination(cooDestination) {}
+		Coup(const Piece* piece, const Coordonnee& cooDestination) : piece(piece), cooDestination(cooDestination) {}
 
 		virtual bool estPlacement() const { return false; }
 		virtual bool estDeplacement() const { return false; }
+
+		const Piece* getPiece() const { return piece; }
 
 		Coordonnee getCooDestination() const { return cooDestination; }
 	};
 
 
 	class CoupPlacement : public Coup {
-	private:
-		Piece* piece;
 	public:
-		CoupPlacement(Piece* piece, Coordonnee& cooDestination) : piece(piece), Coup(cooDestination) {}
+		CoupPlacement(const Piece* piece, const Coordonnee& cooDestination) : Coup(piece, cooDestination) {}
 
 		bool estPlacement() const override { return true; }
 
-		Piece* getPiece() const { return piece; }
 	};
 
 
@@ -39,8 +39,8 @@ namespace JeuHive {
 	public:
 		bool estDeplacement() const override { return true; }
 
-		CoupDeplacement(Coordonnee& cooOrigine, Coordonnee& cooDestination) 
-			: Coup(cooDestination), cooOrigine(cooOrigine) {}
+		CoupDeplacement(const Piece* piece, const Coordonnee& cooOrigine, const Coordonnee& cooDestination)
+			: Coup(piece, cooDestination), cooOrigine(cooOrigine) {}
 
 		Coordonnee getCooOrigine() const { return cooOrigine; }
 	};

@@ -32,7 +32,8 @@ namespace JeuHive {
         void remplirMain();
         //void jouerCoup(Coup& coup);
         //void placerPiece(Piece& piece, Coordonnee c, Plateau& plateau);
-        void prendrePiece(Piece& piece);
+        //void prendrePiece(const Piece& piece);
+        void retirerPiece(Piece* piece);
 
         // Ajouter une pièce à la main
         void ajouterPieceMain(Piece* piece);

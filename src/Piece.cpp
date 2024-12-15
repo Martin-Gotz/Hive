@@ -182,6 +182,7 @@ namespace JeuHive {
 	ResumePiece Piece::resumer() const
 	{
 		ResumePiece resume;
+		resume.nom = getNom();
 		resume.symbole = getSymbole();
 		resume.couleur = (getCouleur() == Couleur::BLANC ? "Blanc" : "Noir");
 		return resume;

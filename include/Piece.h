@@ -16,17 +16,19 @@ namespace JeuHive {
 	{
 	protected:
 		Couleur couleur;
+		string nom;
+		string symbole;
 
 	public:
 		// on garde l'opérateur == par défault, qui apparemment ne peut pas être défini avec un =default
 		// il compare l'adresse mémoire des pieces (pas de comparaison d'attributs)
 
-		Piece(Couleur c) : couleur(c) {}
+		Piece(Couleur c, string n, string s) : couleur(c), nom(n), symbole(s) {}
 
 		Couleur getCouleur() const { return couleur; }
 
-		virtual string getSymbole() const = 0;	// une lettre pour afficher dans la console
-		virtual string getTest() const { return "t"; }
+		string getNom() const { return nom; };
+		string getSymbole() const { return symbole; };	// une lettre pour afficher dans la console
 
 		virtual bool estAbeille() const { return false; }
 		// redéfinie uniquement dans la classe Abeille
@@ -44,9 +46,8 @@ namespace JeuHive {
 	class Abeille : public Piece
 	{
 	public:
-		Abeille(Couleur c) : Piece(c) {}
+		Abeille(Couleur c) : Piece(c, "Abeille", "r") {}
 
-		string getSymbole() const override { return "r"; }
 		virtual ~Abeille() = default;
 
 		bool estAbeille() const override { return true; }
@@ -56,54 +57,48 @@ namespace JeuHive {
 
 	class Scarabee : public Piece {
 	public:
-		Scarabee(Couleur c) : Piece(c) {}
+		Scarabee(Couleur c) : Piece(c, "Scarabee", "s") {}
 		virtual ~Scarabee() = default;
-		string getSymbole() const override { return "s"; }
 
 		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
 
 	class Araignee : public Piece {
 	public:
-		Araignee(Couleur c) : Piece(c) {}
+		Araignee(Couleur c) : Piece(c, "Araignee", "a") {}
 		virtual ~Araignee() = default;
-		string getSymbole() const override { return "a"; }
 		
 		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
 
 	class Sauterelle : public Piece {
 	public:
-		Sauterelle(Couleur c) : Piece(c) {}
+		Sauterelle(Couleur c) : Piece(c, "Sauterelle", "c") {}
 		virtual ~Sauterelle() = default;
-		string getSymbole() const override { return "c"; }
 
 		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
 
 	class Fourmi : public Piece {
 	public:
-		Fourmi(Couleur c) : Piece(c) {}
+		Fourmi(Couleur c) : Piece(c, "Fourmi", "f") {}
 		virtual ~Fourmi() = default;
-		string getSymbole() const override { return "f"; }
 		
 		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
 
 	class Moustique : public Piece {
 	public:
-		Moustique(Couleur c) : Piece(c) {}
+		Moustique(Couleur c) : Piece(c, "Moustique", "m") {}
 		virtual ~Moustique() = default;
-		string getSymbole() const override { return "m"; }
 		
 		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};
 
 	class Coccinelle : public Piece {
 	public:
-		Coccinelle(Couleur c) : Piece(c) {}
+		Coccinelle(Couleur c) : Piece(c, "Coccinelle", "b") {}
 		virtual ~Coccinelle() = default;
-		string getSymbole() const override { return "b"; }
 		
 		set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const override;
 	};

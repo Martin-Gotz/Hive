@@ -60,6 +60,8 @@ namespace JeuHive {
 
 		// Pour ces fonctions, il faudra s'assurer que la partie est en cours
 		void jouerCoup(const Coup& coup); // L'ajouter aussi a l'historique
+		void placerPiece(int idPiece, const Coordonnee& cooDestination);
+		void deplacerPiece(const Coordonnee& cooOrigine, const Coordonnee& cooDestination);
 		void joueurSuivant();
 		void annulerDernierCoup();
 
