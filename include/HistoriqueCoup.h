@@ -9,14 +9,15 @@ namespace JeuHive {
 	{
 	private:
 		vector<Coup*> listeCoups;
-		int IndiceCourant;
-		bool estVide;
-		int NombreCoups;
+		int IndiceCourant; // à quoi correspond ?
+		//bool estVide; de même?
+		//int NombreCoups; // sert à rien?
 	public:
-		bool getEstVide() const { return estVide; }
-		int getNombreCoups() const { return NombreCoups; }
-		HistoriqueCoup() : IndiceCourant(0), NombreCoups(0), estVide(true) {}
-		void ajouterCoup(const Coup& c);
+		bool getEstVide() const { return listeCoups.empty(); }
+		size_t getNombreCoups() const { return listeCoups.size(); }
+		HistoriqueCoup() : IndiceCourant(0) {}
+		void ajouterCoup(Coup& c);
+		vector<Coup*> getlisteCoups() const { return listeCoups; }
 		void annulerDernierCoup();
 	};
 }

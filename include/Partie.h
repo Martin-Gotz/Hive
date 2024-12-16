@@ -21,7 +21,10 @@ namespace JeuHive {
 		HistoriqueCoup historique;
 		EtatPartie etatPartie;
 		Joueur* joueurActuel;
+		Joueur* Victorieux;
 		int compteurTour;
+
+		int CompteurRegles; // permet de vérifier que le seuil de nombre de retours maximum n'est pas dépassé
 
 		static int prochain_id;
 
@@ -48,6 +51,7 @@ namespace JeuHive {
 
 		const int getCompteurTour() const { return compteurTour; }
 
+		bool verifier_partie();
 
 		// Methodes principales
 		void demarrer();
@@ -63,7 +67,9 @@ namespace JeuHive {
 		void deplacerPiece(const Coordonnee& cooOrigine, const Coordonnee& cooDestination);
 		void jouerCoup(Coup* coup);
 		void joueurSuivant();
-		void annulerDernierCoup();
+		bool annulerDernierCoup();
+
+		void verifierAnnulation(); 
 
 
 		// Autres méthodes

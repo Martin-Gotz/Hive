@@ -608,7 +608,7 @@ ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
 	// et une position x(un certain nombre de caractères)
 	// Pour s'assurer qu'il y ait assez de place, la convertion sera linéaire et se fera de cette manière:
 	// y=2q+r, x=r
-	// les lignes ne s'afficheront bien que si le jeu n'est pas trop étendu sur l'axe gauche-droite, 
+	// les lignes ne s'afficheront bien que si le jeu n'est pas trop étendu sur l'axe gauche-droite,
 	// et on ne peut rien y faire
 
 	if (p.estVide()) {
@@ -693,6 +693,19 @@ ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
 
 */
 
-ostream& JeuHive::operator<<(ostream& f, const Plateau& p){
+ostream& JeuHive::operator<<(ostream& f, const Plateau& p) {
 	return p.afficher(f, {}, {}, 1);
+}
+
+Couleur JeuHive::Plateau::Gagnant()
+{
+	if ((estAbeillePlacee(BLANC) && estAbeilleEntouree(BLANC)))
+	{
+		return BLANC;
+	}
+	else if ((estAbeillePlacee(NOIR) && estAbeilleEntouree(NOIR)))
+	{
+		return NOIR;
+	}
+	else throw HiveException("Problème lors de la détermination du gagnant\n");
 }
