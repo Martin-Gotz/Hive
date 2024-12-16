@@ -21,6 +21,7 @@ namespace JeuHive {
 		HistoriqueCoup historique;
 		EtatPartie etatPartie;
 		Joueur* joueurActuel;
+		Joueur* Victorieux;
 		bool premierJoueurJoue;
 		int compteurTour;
 
@@ -49,6 +50,7 @@ namespace JeuHive {
 
 		const int getCompteurTour() const { return compteurTour; }
 
+		bool verifier_partie();
 
 		// Methodes principales
 		void demarrer();

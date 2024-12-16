@@ -69,6 +69,8 @@ namespace JeuHive {
 		void inverserPlacement(CoupPlacement* coup);
 		void inverserDeplacement(CoupDeplacement* coup);
 
+		Couleur Gagnant();
+
 	};
 	ostream& operator<<(ostream& f, const Plateau& p);
 

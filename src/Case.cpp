@@ -1,5 +1,5 @@
 #include "../include/Case.h"
-#include "../Exceptions.h"
+#include "../include/Exceptions.h"
 
 using namespace JeuHive;
 using namespace std;

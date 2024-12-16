@@ -18,7 +18,8 @@ Partie::Partie(Joueur& j1, Joueur& j2) :
     historique(),
     etatPartie(EtatPartie::NON_COMMENCEE),
     joueurActuel(nullptr),
-    compteurTour(0)
+    compteurTour(0),
+    Victorieux(nullptr)
 {
     prochain_id++; // Incrémentation du compteur statique pour suivre le nombre de parties créé
 }
@@ -123,10 +124,6 @@ void Partie::terminer() {
 
 
 
-
-
-
-
 void Partie::jouerCoup(const Coup& coup) {
     /*
     if (!estCoupValide(coup)) {
@@ -179,16 +176,19 @@ void Partie::joueurSuivant() {
         throw HiveException("Impossible de passer le tour d'une partie qui n'est pas en cours !");
     }
 
-    if (joueurActuel->getCouleur() == Couleur::NOIR) {
-        compteurTour++;
-        EvenementPartie evt(id, TypeEvenement::TOUR_SUIVANT);
+    if(verifier_partie())
+    { 
+        if (joueurActuel->getCouleur() == Couleur::NOIR) {
+            compteurTour++;
+            EvenementPartie evt(id, TypeEvenement::TOUR_SUIVANT);
+            notifierObservers(evt);
+        }
+
+        joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1; // Le getNom est temporaire en attendant l'opérateur de comparaison
+
+        EvenementPartie evt(id, TypeEvenement::CHANGEMENT_JOUEUR);
         notifierObservers(evt);
     }
-
-    joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1; // Le getNom est temporaire en attendant l'opérateur de comparaison
-
-    EvenementPartie evt(id, TypeEvenement::CHANGEMENT_JOUEUR);
-    notifierObservers(evt);
 }
 
 /*
@@ -254,4 +254,43 @@ ostream& JeuHive::operator<<(ostream& os, const Partie& partie)
 {
     partie.afficher(os);
     return os;
+}
+
+bool JeuHive::Partie::verifier_partie()
+{   
+    if (plateau.estPartieFinie())
+    {
+        terminer();
+        switch (plateau.Gagnant())
+        {
+        case BLANC:
+            if (joueur1.getCouleur() == BLANC)
+            {
+                Victorieux = &joueur1;
+            }
+            else
+            {
+                Victorieux = &joueur2;
+            }
+        case NOIR:
+            if (joueur1.getCouleur() == NOIR)
+            {
+                Victorieux = &joueur1;
+            }
+            else
+            {
+                Victorieux = &joueur2;
+            }
+        }
+        std::cout << Victorieux->getNom() << " a gagné ! \n";
+        return false;
+    }
+    else return true;
+}
+
+void JeuHive::Partie::annulerDernierCoup()
+{
+    historique.annulerDernierCoup();
+    compteurTour--;
+
 }
