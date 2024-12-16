@@ -112,13 +112,7 @@ void Partie::terminer() {
 void Partie::placerPiece(int idPiece, const Coordonnee& cooDestination) {
     if (joueurActuel->getMain().estVide()) {
         throw HiveException("Plus de pièce dans la main !");
-    if (!estCoupValide(coup)) {
-    joueurSuivant();
-}
-        throw HiveException("Coup invalide !");
-    if (!estCoupValide(coup)) {
-    joueurSuivant();
-}
+    }
 
     if (idPiece <= 0 || idPiece > joueurActuel->getMain().getPieces().size()) {
         throw HiveException("ID de pièce invalide !");
@@ -235,18 +229,19 @@ ResumePartie Partie::resumer() const {
             break;
         case EtatPartie::EN_PAUSE:
             resume.etatPartie = "En pause";
+            break;
+        case EtatPartie::TERMINEE:
+            resume.etatPartie = "Terminée";
+            break;
+    }
+    return resume;
 }
 
 
 
-ostream& JeuHive::operator<<(ostream& os, const Partie& partie)
-{
-    partie.afficher(os);
-    return os;
-}
 
-bool JeuHive::Partie::verifier_partie()
-{   
+
+bool Partie::verifier_partie() {   
     if (plateau.estPartieFinie())
     {
         terminer();
@@ -330,10 +325,3 @@ void JeuHive::Partie::verifierAnnulation()
 }
 
 // annuler X nombre de coups reviendrait à faire une boucle for allant de 0 à X de annulerDernierCoup ?
-
-
-ostream& JeuHive::operator<<(ostream& os, const Partie& partie)
-{
-    partie.afficher(os);
-    return os;
-}

@@ -16,7 +16,7 @@ namespace JeuHive {
 		bool getEstVide() const { return listeCoups.empty(); }
 		size_t getNombreCoups() const { return listeCoups.size(); }
 		HistoriqueCoup() : IndiceCourant(0) {}
-		void ajouterCoup(Coup& c);
+		void ajouterCoup(const Coup& c);
 		vector<Coup*> getlisteCoups() const { return listeCoups; }
 		void annulerDernierCoup();
 	};
