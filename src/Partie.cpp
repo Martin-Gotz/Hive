@@ -16,6 +16,7 @@ Partie::Partie(Joueur& j1, Joueur& j2) :
     plateau(),
     regles(),
     historique(),
+    CompteurRegles(regles.GetNombreRetours()),
     etatPartie(EtatPartie::NON_COMMENCEE),
     joueurActuel(nullptr),
     compteurTour(0),
@@ -131,6 +132,7 @@ void Partie::jouerCoup(const Coup& coup) {
     }
     historique.ajouterCoup(coup);
     */
+    CompteurRegles--;
     joueurSuivant();
 }
 
@@ -288,9 +290,57 @@ bool JeuHive::Partie::verifier_partie()
     else return true;
 }
 
-void JeuHive::Partie::annulerDernierCoup()
+bool JeuHive::Partie::annulerDernierCoup()
 {
-    historique.annulerDernierCoup();
-    compteurTour--;
+    if (historique.getlisteCoups().empty()) {
+        throw HiveException("Il n'y a aucun coup à annuler.");
+        return false;
+    }
 
+    Coup* dernierCoup = historique.getlisteCoups().back();
+    historique.getlisteCoups().pop_back();
+
+    if (dernierCoup->estDeplacement()) {
+        CoupDeplacement* deplacement = dynamic_cast<CoupDeplacement*>(dernierCoup);
+        if (deplacement) {
+            // Remettre la pièce à sa position d'origine
+            plateau.inverserDeplacement(deplacement);
+        }
+    }
+    else if (dernierCoup->estPlacement()) {
+        CoupPlacement* placement = dynamic_cast<CoupPlacement*>(dernierCoup);
+        if (placement) {
+            // Retirer la pièce du plateau et la remettre dans la main du joueur
+            plateau.inverserPlacement(placement);
+            joueurActuel->ajouterPieceMain(const_cast<Piece*>(placement->getPiece()));
+        }
+    }
+
+    // Décrémenter le compteur de tours si nécessaire
+    if (joueurActuel->getCouleur() == Couleur::NOIR) {
+        compteurTour--;
+    }
+
+    // Revenir au joueur précédent
+    joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
+    CompteurRegles++;
+    delete dernierCoup; 
+    return true;
 }
+
+
+void JeuHive::Partie::verifierAnnulation()
+{
+    if (CompteurRegles > regles.GetNombreRetours())
+    {
+        throw HiveException("Le nombre de retours en arrière est trop important");
+    }
+    else
+    {
+       annulerDernierCoup();
+       CompteurRegles++;
+    }
+}
+
+// annuler X nombre de coups reviendrait à faire une boucle for allant de 0 à X de annulerDernierCoup ?
+

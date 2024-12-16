@@ -36,6 +36,7 @@ namespace JeuHive {
 
         void placerPiece();
         void deplacerPiece();
+        void AnnulerPiece();
         void terminerPartieEnCours();
         void retournerMenu();
 

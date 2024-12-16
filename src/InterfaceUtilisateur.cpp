@@ -33,8 +33,9 @@ void InterfaceUtilisateur::afficherMenuPartie() const {
     cout << "Que shouhaitez vous faire ?\n";
     cout << "1. Poser une piece" << endl;
     cout << "2. Deplacer une piece" << endl;
-    cout << "3. Retour au menu principal" << endl;
-    cout << "4. Abandonner la partie" << endl;
+    cout << "3. Annuler un coup" << endl;
+    cout << "4. Retour au menu principal" << endl;
+    cout << "5. Abandonner la partie" << endl;
 }
 
 
@@ -94,8 +95,9 @@ void InterfaceUtilisateur::gererChoixUtilisateurMenuPartie() {
             switch (choix) {
                 case 1: placerPiece(); break;
                 case 2: deplacerPiece(); break;
-                case 3: retournerMenu(); return;
-                case 4: terminerPartieEnCours(); return;
+                case 3: AnnulerPiece(); break;
+                case 4: retournerMenu(); return;
+                case 5: terminerPartieEnCours(); return;
                 default: cout << "Option invalide, veuillez réessayer." << endl;
             }
         }
@@ -308,6 +310,12 @@ void JeuHive::InterfaceUtilisateur::deplacerPiece() {
 
     hive.getPartieEnCours()->deplacerPiece({ x1, y1 }, { x2, y2 });
     cout << "Piece déplacée de (" << x1 << ", " << y1 << ") a (" << x2 << ", " << y2 << ").\n";
+}
+
+void JeuHive::InterfaceUtilisateur::AnnulerPiece()
+{
+    if (hive.getPartieEnCours()->annulerDernierCoup()) cout << "Dernier coup effacé\n";
+    else throw HiveException("Erreur lors de la suppresion de la pièce");
 }
 
 

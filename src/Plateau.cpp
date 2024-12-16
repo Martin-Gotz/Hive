@@ -707,4 +707,5 @@ Couleur JeuHive::Plateau::Gagnant()
 	{
 		return NOIR;
 	}
+	else throw HiveException("Problème lors de la détermination du gagnant\n");
 }

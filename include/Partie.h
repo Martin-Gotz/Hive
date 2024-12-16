@@ -25,6 +25,8 @@ namespace JeuHive {
 		bool premierJoueurJoue;
 		int compteurTour;
 
+		int CompteurRegles; // permet de vérifier que le seuil de nombre de retours maximum n'est pas dépassé
+
 		static int prochain_id;
 
 	public:
@@ -65,7 +67,9 @@ namespace JeuHive {
 		void placerPiece(int idPiece, const Coordonnee& cooDestination);
 		void deplacerPiece(const Coordonnee& cooOrigine, const Coordonnee& cooDestination);
 		void joueurSuivant();
-		void annulerDernierCoup();
+		bool annulerDernierCoup();
+
+		void verifierAnnulation(); 
 
 
 		// Methode utilitaire pour afficher l'etat de la partie
