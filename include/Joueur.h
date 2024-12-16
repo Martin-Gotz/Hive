@@ -30,18 +30,13 @@ namespace JeuHive {
 
         // Méthodes principales
         void remplirMain();
-        //void jouerCoup(Coup& coup);
-        //void placerPiece(Piece& piece, Coordonnee c, Plateau& plateau);
-        //void prendrePiece(const Piece& piece);
         void retirerPiece(Piece* piece);
 
         // Ajouter une pièce à la main
         void ajouterPieceMain(Piece* piece);
 
-        void afficher(ostream& f) const;
         ResumeJoueur resumer() const;
     };
-    //ostream& operator<<(ostream& f, const Joueur& j);
 
 
 } // namespace JeuHive

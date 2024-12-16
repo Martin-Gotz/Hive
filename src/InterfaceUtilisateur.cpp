@@ -336,7 +336,7 @@ void InterfaceUtilisateur::retournerMenu() {
 
 // Afficher toutes les parties
 void InterfaceUtilisateur::afficherParties() const {
-    EtatHive etat = hive.getEtatHive(); // Récupère l'état des parties
+    EtatHive etat = hive.resumer(); // Récupère l'état des parties
 
     if (etat.parties.empty()) {
         cout << "Aucune partie n'est enregistree." << endl << endl;

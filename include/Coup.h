@@ -15,6 +15,8 @@ namespace JeuHive {
 	public:
 		Coup(const Piece* piece, const Coordonnee& cooDestination) : piece(piece), cooDestination(cooDestination) {}
 
+		virtual Coup* clone() const = 0;
+
 		virtual bool estPlacement() const { return false; }
 		virtual bool estDeplacement() const { return false; }
 
@@ -28,6 +30,10 @@ namespace JeuHive {
 	public:
 		CoupPlacement(const Piece* piece, const Coordonnee& cooDestination) : Coup(piece, cooDestination) {}
 
+		Coup* clone() const override {
+			return new CoupPlacement(*this);
+		}
+
 		bool estPlacement() const override { return true; }
 
 	};
@@ -38,6 +44,10 @@ namespace JeuHive {
 		Coordonnee cooOrigine;
 	public:
 		bool estDeplacement() const override { return true; }
+
+		Coup* clone() const override {
+			return new CoupDeplacement(*this);
+		}
 
 		CoupDeplacement(const Piece* piece, const Coordonnee& cooOrigine, const Coordonnee& cooDestination)
 			: Coup(piece, cooDestination), cooOrigine(cooOrigine) {}

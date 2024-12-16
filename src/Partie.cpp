@@ -70,25 +70,6 @@ void Partie::initialiser() {
     joueur1.remplirMain();
     joueur2.remplirMain();
 
-
-    // 2 : Initialisation du plateau
-    /*
-    Abeille* A_b = new Abeille(Couleur::BLANC);
-    Abeille* A_n = new Abeille(Couleur::NOIR);
-    Araignee* a_b = new Araignee(Couleur::BLANC);
-    Sauterelle* s_n = new Sauterelle(Couleur::NOIR);
-    Scarabee* S_b = new Scarabee(Couleur::BLANC);
-    Fourmi* F_n = new Fourmi(Couleur::NOIR);
-    Fourmi* F_b = new Fourmi(Couleur::BLANC);
-
-
-    plateau.ajouterPieceSurCoo(A_b, Coordonnee(0, 0));
-    plateau.ajouterPieceSurCoo(A_n, Coordonnee(0, 1));
-    plateau.ajouterPieceSurCoo(a_b, Coordonnee(1, 0));
-    plateau.ajouterPieceSurCoo(s_n, Coordonnee(-1, 1));
-    plateau.ajouterPieceSurCoo(S_b, Coordonnee(1, -1));
-    plateau.ajouterPieceSurCoo(F_n, Coordonnee(-1, 0));
-    */
     // 3 : Règles spécifiques de début de partie
     compteurTour = 1;
 
@@ -126,34 +107,26 @@ void Partie::terminer() {
 
 
 
-
-void Partie::jouerCoup(const Coup& coup) {
-    /*
-    if (!estCoupValide(coup)) {
-        throw HiveException("Coup invalide !");
-    }
-    historique.ajouterCoup(coup);
-    */
-    joueurSuivant();
-}
-
 void Partie::placerPiece(int idPiece, const Coordonnee& cooDestination) {
+    if (joueurActuel->getMain().estVide()) {
+        throw HiveException("Plus de pièce dans la main !");
+    }
+
     if (idPiece <= 0 || idPiece > joueurActuel->getMain().getPieces().size()) {
         throw HiveException("ID de pièce invalide !");
     }
 
     Piece* piece = joueurActuel->getMain().getPieces()[idPiece - 1];
 
-    CoupPlacement coup(piece, cooDestination);
+    // Construire un coup de placement
+    Coup* coup = new CoupPlacement(piece, cooDestination);
 
-    // Appliquer le coup
-    plateau.jouerCoup(coup);
+    // Retirer la pièce de la main du joueur
     joueurActuel->retirerPiece(piece);
 
-    // Ajouter à l'historique
-    historique.ajouterCoup(coup);
+    // Jouer le coup
+    jouerCoup(coup);
 
-    joueurSuivant();
 }
 
 void Partie::deplacerPiece(const Coordonnee& cooOrigine, const Coordonnee& cooDestination) {
@@ -163,15 +136,32 @@ void Partie::deplacerPiece(const Coordonnee& cooOrigine, const Coordonnee& cooDe
         throw HiveException("Vous ne pouvez déplacer que vos propres pièces !");
     }
 
-    CoupDeplacement coup(piece, cooOrigine, cooDestination);
+    // Construire un coup de déplacement
+    Coup* coup = new CoupDeplacement(piece, cooOrigine, cooDestination);
 
-    // Appliquer le coup
-    plateau.jouerCoup(coup);
+    // Jouer le coup
+    jouerCoup(coup);
+}
 
-    // Ajouter à l'historique
-    historique.ajouterCoup(coup);
+
+
+void Partie::jouerCoup(Coup* coup) {
+    // Appliquer le coup sur le plateau
+    plateau.jouerCoup(*coup);
+
+    // Ajouter le coup à l'historique
+    historique.ajouterCoup(*coup);
+
+    // Créer et notifier un événement selon le type de coup
+    TypeEvenement typeEvt = (dynamic_cast<CoupPlacement*>(coup) != nullptr)
+        ? TypeEvenement::PIECE_PLACEE
+        : TypeEvenement::PIECE_DEPLACEE;
+    EvenementPartie evt(id, typeEvt);
+    notifierObservers(evt);
 
     joueurSuivant();
+
+    delete coup;
 }
 
 void Partie::joueurSuivant() {
@@ -203,13 +193,6 @@ void Partie::annulerDernierCoup() {
     notifierObservers(evt);
 }
 */
-
-
-// Methodes utilitaires
-void Partie::afficher(ostream& os) const {
-    ResumePartie resume = resumer();  // Récupère un résumé de la partie
-    os << resume.id << " : " << resume.joueur1.nom << " vs " << resume.joueur2.nom << " - " << resume.etatPartie << endl;
-}
 
 
 
@@ -246,12 +229,4 @@ ResumePartie Partie::resumer() const {
             break;
     }
     return resume;
-}
-
-
-
-ostream& JeuHive::operator<<(ostream& os, const Partie& partie)
-{
-    partie.afficher(os);
-    return os;
 }

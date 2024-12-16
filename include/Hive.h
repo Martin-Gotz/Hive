@@ -55,7 +55,6 @@ namespace JeuHive {
 
 
 		// Methode utilitaires
-		void afficherParties() const;
-		EtatHive getEtatHive() const;
+		EtatHive resumer() const;
 	};
 }

@@ -21,7 +21,6 @@ namespace JeuHive {
 		HistoriqueCoup historique;
 		EtatPartie etatPartie;
 		Joueur* joueurActuel;
-		bool premierJoueurJoue;
 		int compteurTour;
 
 		static int prochain_id;
@@ -58,19 +57,20 @@ namespace JeuHive {
 		void terminer();
 
 
+
 		// Pour ces fonctions, il faudra s'assurer que la partie est en cours
-		void jouerCoup(const Coup& coup); // L'ajouter aussi a l'historique
 		void placerPiece(int idPiece, const Coordonnee& cooDestination);
 		void deplacerPiece(const Coordonnee& cooOrigine, const Coordonnee& cooDestination);
+		void jouerCoup(Coup* coup);
 		void joueurSuivant();
 		void annulerDernierCoup();
 
 
-		// Methode utilitaire pour afficher l'etat de la partie
-		void afficher(ostream& os) const;
+		// Autres méthodes
 		ResumePartie resumer() const;
-		friend ostream& operator<<(ostream& os, const Partie& partie);
 	};
+
+
 
 	class PartieFactory {
 	public:

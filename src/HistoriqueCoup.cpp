@@ -1,10 +1,10 @@
 #include "../include/HistoriqueCoup.h"
 using namespace JeuHive;
 
-void HistoriqueCoup::ajouterCoup(Coup& c)
+void HistoriqueCoup::ajouterCoup(const Coup& c)
 {
 	if (estVide == true) estVide = false;
-	listeCoups.push_back(&c);
+	listeCoups.push_back(c.clone());
 	NombreCoups++;
 }
 

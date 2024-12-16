@@ -111,7 +111,7 @@ void Hive::demarrerPartie(int idPartie) {
     EvenementHive evt("Demarrage de la partie " + to_string(idPartie));
     notifierObservers(evt);
 
-    // Démarre la partie
+
     partie->demarrer();
     partieEnCours = partie;
 }
@@ -145,26 +145,10 @@ void Hive::mettrePartieEnPause() {
 
 
 
-// Afficher les informations des parties
-/*
-void Hive::afficherParties() const {
-    if (parties.empty()) {
-        cout << "Aucune partie n'est enregistree." << endl << endl;
-        return;
-    }
-
-    cout << "Liste des parties :" << endl;
-    for (size_t i = 0; i < parties.size(); ++i) {
-        cout << *parties[i];
-    }
-}
-*/
-
-
 
 
 // Formatage des données pour l'abstraction de l'affichage
-EtatHive Hive::getEtatHive() const {
+EtatHive Hive::resumer() const {
     EtatHive etat;
     for (const auto& partie : parties) {
         if (partie) {
