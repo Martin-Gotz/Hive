@@ -57,9 +57,6 @@
     <ClCompile Include="src\Evenement.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="qt\src\MainWindow.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Partie.h">
@@ -110,13 +107,5 @@
     <ClInclude Include="include\ResumeClasse.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="qt\include\MainWindow.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </QtMoc>
-  </ItemGroup>
-  <ItemGroup>
-    <QtUic Include="qt\ui\MainWindow.ui" />
   </ItemGroup>
 </Project>
