@@ -121,7 +121,7 @@ void Partie::placerPiece(int idPiece, const Coordonnee& cooDestination) {
     Piece* piece = joueurActuel->getMain().getPieces()[idPiece - 1];
 
     // Construire un coup de placement
-    Coup* coup = new CoupPlacement(piece, cooDestination);
+    Coup* coup = new CoupPlacement(piece, cooDestination, compteurTour);
 
     // Retirer la pièce de la main du joueur
     joueurActuel->retirerPiece(piece);
@@ -139,7 +139,7 @@ void Partie::deplacerPiece(const Coordonnee& cooOrigine, const Coordonnee& cooDe
     }
 
     // Construire un coup de déplacement
-    Coup* coup = new CoupDeplacement(piece, cooOrigine, cooDestination);
+    Coup* coup = new CoupDeplacement(piece, cooOrigine, cooDestination, compteurTour);
 
     // Jouer le coup
     jouerCoup(coup);
