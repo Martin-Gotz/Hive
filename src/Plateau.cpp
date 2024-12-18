@@ -474,8 +474,6 @@ ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligne
 
 void JeuHive::Plateau::jouerCoup(Coup& coup)
 {
-	// cette fonction produit une exception si le coup est invalide
-
 	// Vérifie si le coup est un déplacement
 	if (auto* coup_dep = dynamic_cast<CoupDeplacement*>(&coup)) {
 		jouerDeplacement(coup_dep);
@@ -494,39 +492,21 @@ void JeuHive::Plateau::jouerCoup(Coup& coup)
 
 
 void JeuHive::Plateau::jouerPlacement(CoupPlacement* coup)
-// cette fonction produit une exception si le coup est invalide
+// cette fonction ne produit aucune vérification que le coup est valide
 {
-	set<Coordonnee> placements_possibles = ensemblePlacementsPossibles(*(coup->getPiece()), coup->getTour());
-
-	if (placements_possibles.find(coup->getCooDestination()) != placements_possibles.end()) {
-		ajouterPieceSurCoo((coup->getPiece()), coup->getCooDestination());
-	}
-	else {
-		throw HiveException("Ce coup n'est pas valide");
-	}
-
+	ajouterPieceSurCoo((coup->getPiece()), coup->getCooDestination());
 }
 
 void JeuHive::Plateau::jouerDeplacement(CoupDeplacement* coup)
-// cette fonction produit une exception si le coup est invalide
+// cette fonction ne produit aucune vérification que le coup est valide
 {
-	set<Coordonnee> deplacements_possibles = (coup->getPiece())->
-		ensembleDeplacementPossibles(*this, (coup->getCooOrigine()));
-	
-
-	if (deplacements_possibles.find(coup->getCooDestination()) != deplacements_possibles.end()) {
-		retirerPieceDeCoo(coup->getCooOrigine());
-		ajouterPieceSurCoo((coup->getPiece()), coup->getCooDestination());
-	}
-	else {
-		throw HiveException("Ce coup n'est pas valide");
-	}
-
+	retirerPieceDeCoo(coup->getCooOrigine());
+	ajouterPieceSurCoo((coup->getPiece()), coup->getCooDestination());
 }
 
 void JeuHive::Plateau::inverserCoup(Coup* coup)
 {
-	// cette fonction ne produit aucune vérification que le coup était valide
+	// cette fonction ne produit aucune vérification que le coup est valide
 	CoupDeplacement* coup_dep = static_cast<CoupDeplacement*>(coup);
 
 	if (coup_dep != nullptr) {

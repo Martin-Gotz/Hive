@@ -12,10 +12,8 @@ namespace JeuHive {
 	private:
 		Coordonnee cooDestination;
 		const Piece* piece;
-		int tour;
 	public:
-		Coup(const Piece* piece, const Coordonnee& cooDestination, int tour) 
-			: piece(piece), cooDestination(cooDestination), tour(tour) {}
+		Coup(const Piece* piece, const Coordonnee& cooDestination) : piece(piece), cooDestination(cooDestination) {}
 
 		virtual Coup* clone() const = 0;
 
@@ -25,14 +23,12 @@ namespace JeuHive {
 		const Piece* getPiece() const { return piece; }
 
 		Coordonnee getCooDestination() const { return cooDestination; }
-
-		int getTour() const { return tour; }
 	};
 
 
 	class CoupPlacement : public Coup {
 	public:
-		CoupPlacement(const Piece* piece, const Coordonnee& cooDestination, int tour) : Coup(piece, cooDestination, tour) {}
+		CoupPlacement(const Piece* piece, const Coordonnee& cooDestination) : Coup(piece, cooDestination) {}
 
 		Coup* clone() const override {
 			return new CoupPlacement(*this);
@@ -53,8 +49,8 @@ namespace JeuHive {
 			return new CoupDeplacement(*this);
 		}
 
-		CoupDeplacement(const Piece* piece, const Coordonnee& cooOrigine, const Coordonnee& cooDestination, int tour)
-			: Coup(piece, cooDestination, tour), cooOrigine(cooOrigine) {}
+		CoupDeplacement(const Piece* piece, const Coordonnee& cooOrigine, const Coordonnee& cooDestination)
+			: Coup(piece, cooDestination), cooOrigine(cooOrigine) {}
 
 		Coordonnee getCooOrigine() const { return cooOrigine; }
 	};
