@@ -319,7 +319,7 @@ set<Coordonnee> Plateau::getCooVoisinesGlissement(const Coordonnee& coo, const C
 }
 
 
-ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligner, 
+ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligner,
 	vector<Coordonnee> coos_selectionner, int marge) const
 {
 	// résultat de l'affichage:
@@ -363,7 +363,7 @@ ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligne
 		min_x = min(min_x, x_case);
 		max_x = max(max_x, x_case);
 
-		case_surlignee = find(coos_surligner.begin(), coos_surligner.end(), coo_case)!=coos_surligner.end();
+		case_surlignee = find(coos_surligner.begin(), coos_surligner.end(), coo_case) != coos_surligner.end();
 		if (case_surlignee) {
 			taille_str = max(taille_str, paire.second->getNombrePieces() * 2 + 2);
 		}
@@ -410,11 +410,11 @@ ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligne
 		y_case = coo_case.get_q() + 2 * coo_case.get_r();
 		str_case = case0->getString();
 
-		case_selectionnee = find(coos_selectionner.begin(), coos_selectionner.end(), coo_case) 
+		case_selectionnee = find(coos_selectionner.begin(), coos_selectionner.end(), coo_case)
 			!= coos_selectionner.end();
 		if (case_selectionnee) {
 			// mise en majuscule des deux derniers caractères
-			for (int i = static_cast<int>(str_case.size()-2); i < str_case.size(); i++) {
+			for (int i = static_cast<int>(str_case.size() - 2); i < str_case.size(); i++) {
 				str_case[i] = std::toupper(static_cast<unsigned char>(str_case[i]));
 			}
 		}
@@ -434,7 +434,7 @@ ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligne
 	int j_surligner;
 	string str_surligne_vide;
 	for (const Coordonnee& coo_surligner : coos_surligner) {
-				
+
 		i_surligner = coo_surligner.get_q() + 2 * coo_surligner.get_r() - min_y + marge;
 		j_surligner = coo_surligner.get_q() - min_x + marge;
 
@@ -512,7 +512,7 @@ void JeuHive::Plateau::jouerDeplacement(CoupDeplacement* coup)
 {
 	set<Coordonnee> deplacements_possibles = (coup->getPiece())->
 		ensembleDeplacementPossibles(*this, (coup->getCooOrigine()));
-	
+
 
 	if (deplacements_possibles.find(coup->getCooDestination()) != deplacements_possibles.end()) {
 		retirerPieceDeCoo(coup->getCooOrigine());
@@ -603,7 +603,7 @@ bool JeuHive::Plateau::estAbeilleEntouree(Couleur couleur) const
 		case0 = paire.second;
 		for (const Piece* piece : case0->getPieces()) {
 
-			if (piece->estAbeille() && piece->getCouleur() == couleur && getVoisinsDeCoo(case0->getCoo()).size()==6) {
+			if (piece->estAbeille() && piece->getCouleur() == couleur && getVoisinsDeCoo(case0->getCoo()).size() == 6) {
 				return true;
 				// pas de break si on veut mettre plusieurs abeilles, on sait jamais
 			}
@@ -728,4 +728,39 @@ Couleur JeuHive::Plateau::Gagnant()
 		return NOIR;
 	}
 	else throw HiveException("Problème lors de la détermination du gagnant\n");
+}
+
+vector<Coup*> JeuHive::Plateau::totalCoupsPossibles(int tour, Joueur& joueur)
+{
+	vector<Coup*> coups_possibles;
+	Coup* nouv_coup;
+
+	const Piece* piece_actuelle_plateau;
+	set<Coordonnee> coos_deplacements_pieces;
+	Coordonnee coo_origine;
+	for (pair<Coordonnee, Case*> paire : Cases) {
+
+		piece_actuelle_plateau = paire.second->getDessus();
+		coo_origine = paire.first;
+		coos_deplacements_pieces = piece_actuelle_plateau->ensembleDeplacementPossibles(*this, coo_origine);
+
+		for (Coordonnee coo_deplacement_possible : coos_deplacements_pieces) {
+			nouv_coup = new CoupDeplacement(piece_actuelle_plateau, coo_origine, coo_deplacement_possible, tour);
+			coups_possibles.push_back(nouv_coup);
+		}
+	}
+
+	set<Coordonnee> coos_placements_pieces;
+	for (Piece* piece_actuelle_main : joueur.getMain().getPieces()) {
+
+		coos_placements_pieces = ensemblePlacementsPossibles(*piece_actuelle_main, tour);
+
+		for (Coordonnee coo_placement_possible : coos_placements_pieces) {
+			nouv_coup = new CoupPlacement(piece_actuelle_main, coo_placement_possible, tour);
+			coups_possibles.push_back(nouv_coup);
+		}
+	}
+
+
+	return coups_possibles;
 }

@@ -2,7 +2,6 @@
 #include "MainPiece.h"
 #include "Piece.h"
 #include "Coordonnee.h"
-#include "Plateau.h"
 #include <string>
 #include <vector>
 
