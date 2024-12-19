@@ -185,6 +185,7 @@ namespace JeuHive {
 		resume.nom = getNom();
 		resume.symbole = getSymbole();
 		resume.couleur = (getCouleur() == Couleur::BLANC ? "Blanc" : "Noir");
+		resume.symboleCouleur = (getCouleur() == Couleur::BLANC ? 'B' : 'N');
 		return resume;
 	}
 

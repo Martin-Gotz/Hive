@@ -12,7 +12,7 @@ string Case::getString() const
 			try {
 				ResumePiece resumePiece = piece->resumer();
 				str_case.append(resumePiece.symbole);
-				//str_case.append(resumePiece.couleur);
+				str_case.append(resumePiece.symboleCouleur);
 				//str_case.append(piece->getSymbole());
 				//str_case.append(piece->getCouleur() == BLANC ? "b" : "n");
 			}

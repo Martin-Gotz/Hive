@@ -123,11 +123,13 @@ void Partie::placerPiece(int idPiece, const Coordonnee& cooDestination) {
     // Construire un coup de placement
     Coup* coup = new CoupPlacement(piece, cooDestination, compteurTour);
 
+    // Jouer le coup
+    jouerCoup(coup);
+
     // Retirer la pièce de la main du joueur
     joueurActuel->retirerPiece(piece);
 
-    // Jouer le coup
-    jouerCoup(coup);
+    joueurSuivant();
 
 }
 
@@ -143,6 +145,8 @@ void Partie::deplacerPiece(const Coordonnee& cooOrigine, const Coordonnee& cooDe
 
     // Jouer le coup
     jouerCoup(coup);
+
+    joueurSuivant();
 }
 
 
@@ -162,7 +166,6 @@ void Partie::jouerCoup(Coup* coup) {
     notifierObservers(evt);
 
     CompteurRegles--;
-    joueurSuivant();
 
     delete coup;
 }
@@ -241,7 +244,7 @@ ResumePartie Partie::resumer() const {
 
 
 
-bool Partie::verifier_partie() {   
+bool Partie::verifier_partie() {
     if (plateau.estPartieFinie())
     {
         terminer();

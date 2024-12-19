@@ -595,24 +595,27 @@ bool Plateau::estAbeillePlacee(Couleur couleur) const
 	return false;
 }
 
+
 bool JeuHive::Plateau::estAbeilleEntouree(Couleur couleur) const
 {
-	// on test juste chaque pièce de chaque case
-	Case* case0;
-	for (pair<Coordonnee, Case*> paire : Cases) {
-		case0 = paire.second;
+	// Parcourt chaque case du plateau
+	for (const auto& paire : Cases) {
+		const Case* case0 = paire.second;
+
+		// Parcourt les pièces de la case actuelle
 		for (const Piece* piece : case0->getPieces()) {
-
-			if (piece->estAbeille() && piece->getCouleur() == couleur && getVoisinsDeCoo(case0->getCoo()).size() == 6) {
-				return true;
-				// pas de break si on veut mettre plusieurs abeilles, on sait jamais
+			if (piece->estAbeille() && piece->getCouleur() == couleur) {
+				// Vérifie si l'abeille est entourée (6 voisins)
+				if (getVoisinsDeCoo(case0->getCoo()).size() == 6) {
+					return true;
+				}
 			}
-
 		}
-
 	}
-	throw HiveException("La reine abeille de la couleur specifiee n'est pas encore placee");
+
+	return false;
 }
+
 
 
 /*

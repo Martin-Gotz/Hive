@@ -19,6 +19,7 @@ struct ResumePiece {
     string nom;
     string couleur;
     string symbole;
+    string symboleCouleur;
 };
 
 // Structure pour afficher une main (check)

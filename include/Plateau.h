@@ -43,8 +43,7 @@ namespace JeuHive {
 		bool estAbeilleEntouree(Couleur couleur) const;
 
 		bool estPartieFinie() const {
-			return ((estAbeillePlacee(BLANC) && estAbeilleEntouree(BLANC)))
-				|| ((estAbeillePlacee(NOIR) && estAbeilleEntouree(NOIR)));
+			return (estAbeillePlacee(BLANC) && estAbeilleEntouree(BLANC)) || (estAbeillePlacee(NOIR) && estAbeilleEntouree(NOIR));
 		}
 
 		// ------------------ méthodes liées au mouvements et aux placements-------------------
