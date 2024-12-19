@@ -314,8 +314,8 @@ void JeuHive::InterfaceUtilisateur::deplacerPiece() {
 
 void JeuHive::InterfaceUtilisateur::AnnulerPiece()
 {
-    if (hive.getPartieEnCours()->annulerDernierCoup()) cout << "Dernier coup effacé\n";
-    else throw HiveException("Erreur lors de la suppresion de la pièce");
+    hive.getPartieEnCours()->annulerDernierCoup();
+    cout << "Dernier coup effacé\n";
 }
 
 

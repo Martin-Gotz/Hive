@@ -720,9 +720,13 @@ ostream& JeuHive::operator<<(ostream& f, const Plateau& p) {
 	return p.afficher(f, {}, {}, 1);
 }
 
-Couleur JeuHive::Plateau::Gagnant()
+Couleur JeuHive::Plateau::Gagnant() const
 {
-	if ((estAbeillePlacee(BLANC) && estAbeilleEntouree(BLANC)))
+	if ((estAbeillePlacee(NOIR) && estAbeilleEntouree(NOIR)) && (estAbeillePlacee(BLANC) && estAbeilleEntouree(BLANC)))
+	{
+		return NEUTRE;
+	}
+	else if ((estAbeillePlacee(BLANC) && estAbeilleEntouree(BLANC)))
 	{
 		return BLANC;
 	}

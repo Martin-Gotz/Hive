@@ -71,7 +71,7 @@ namespace JeuHive {
 		void inverserPlacement(CoupPlacement* coup);
 		void inverserDeplacement(CoupDeplacement* coup);
 
-		Couleur Gagnant();
+		Couleur Gagnant() const;
 
 		vector<Coup*> totalCoupsPossibles(int tour, Joueur& joueur);
 		// renvoie TOUS les coups possibles par TOUTES les pièces, utile pour faire une IA

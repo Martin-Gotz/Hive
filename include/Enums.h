@@ -10,7 +10,8 @@ namespace JeuHive {
 
 	enum Couleur {
 		BLANC,
-		NOIR
+		NOIR,
+		NEUTRE
 	};
 
 	enum Action {

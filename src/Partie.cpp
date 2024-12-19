@@ -275,17 +275,15 @@ bool Partie::verifier_partie() {
     else return true;
 }
 
-bool JeuHive::Partie::annulerDernierCoup()
+void JeuHive::Partie::annulerDernierCoup()
 {
     if (historique.getlisteCoups().empty()) {
         throw HiveException("Il n'y a aucun coup à annuler.");
-        return false;
     }
-
     Coup* dernierCoup = historique.getlisteCoups().back();
-    historique.getlisteCoups().pop_back();
-
-    if (dernierCoup->estDeplacement()) {
+    historique.annulerDernierCoup();
+    joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
+    if (dernierCoup != nullptr && dernierCoup->estDeplacement()) {
         CoupDeplacement* deplacement = dynamic_cast<CoupDeplacement*>(dernierCoup);
         if (deplacement) {
             // Remettre la pièce à sa position d'origine
@@ -307,10 +305,8 @@ bool JeuHive::Partie::annulerDernierCoup()
     }
 
     // Revenir au joueur précédent
-    joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
     CompteurRegles++;
-    delete dernierCoup; 
-    return true;
+    dernierCoup = nullptr;
 }
 
 
