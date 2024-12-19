@@ -32,6 +32,8 @@ namespace JeuHive {
 		Partie(Joueur& j1, Joueur& j2);
 		~Partie() = default;
 
+		void modifierRegles(const Regle& r);
+
 		// Accesseurs
 		int getId() const { return id; }
 
@@ -50,6 +52,13 @@ namespace JeuHive {
 		const Joueur* getJoueurActuel() const { return joueurActuel; }
 
 		const int getCompteurTour() const { return compteurTour; }
+
+		const int getCompteurRegles() const { return CompteurRegles; }
+
+		void incrementerCompteurRegles() { CompteurRegles++; }
+		void decrementerCompteurRegles() { CompteurRegles--; }
+
+		const Regle getRegles() const { return regles; }
 
 		bool verifier_partie();
 

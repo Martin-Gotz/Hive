@@ -143,7 +143,33 @@ void InterfaceUtilisateur::ajouterPartie() {
         }
     } while (nomJoueur2.empty());
 
-    cout << endl;
+    string nbretourstring;
+    int nbRetours = -1;
+    do {
+        cout << "Entrez le nombre de retours en arrière possible : ";
+        cin >> nbretourstring;
+
+        try {
+            size_t pos;
+            float temp = stof(nbretourstring, &pos);
+            if (pos != nbretourstring.length() || temp != static_cast<int>(temp)) {
+                throw invalid_argument("Veuillez entrer un entier");
+            }
+            nbRetours = static_cast<int>(temp);
+        }
+        catch (const invalid_argument&) {
+            cout << "Entrée invalide, veuillez saisir un entier positif" << endl;
+            nbRetours = -1;
+        }
+        catch (const out_of_range&) {
+            cout << "Entrée invalide, veuillez saisir un entier positif" << endl;
+            nbRetours = -1;
+        }
+
+        if (nbRetours < 0) {
+            cout << "Entrée invalide, veuillez saisir un entier positif" << endl;
+        }
+    } while (nbRetours < 0);
 
     //hive.ajouterPartie(nomJoueur1, typeJoueur1, nomJoueur2, typeJoueur2);
     hive.ajouterPartie(nomJoueur1, TypeJoueur::HUMAIN, nomJoueur2, TypeJoueur::IA);
@@ -281,7 +307,7 @@ void JeuHive::InterfaceUtilisateur::placerPiece() {
         cout << "Entrée invalide. Veuillez réessayer.\n";
         return;
     }
-
+    hive.getPartieEnCours()->decrementerCompteurRegles();
     hive.getPartieEnCours()->placerPiece(idTypePiece, { x, y });
     cout << "Pièce " << idTypePiece << " placée en (" << x << ", " << y << ").\n";
 }
@@ -307,15 +333,19 @@ void JeuHive::InterfaceUtilisateur::deplacerPiece() {
         cout << "Entrée invalide. Veuillez réessayer.\n";
         return;
     }
-
+    hive.getPartieEnCours()->decrementerCompteurRegles();
     hive.getPartieEnCours()->deplacerPiece({ x1, y1 }, { x2, y2 });
     cout << "Piece déplacée de (" << x1 << ", " << y1 << ") a (" << x2 << ", " << y2 << ").\n";
 }
 
 void JeuHive::InterfaceUtilisateur::AnnulerPiece()
 {
-    hive.getPartieEnCours()->annulerDernierCoup();
-    cout << "Dernier coup effacé\n";
+    if (hive.getPartieEnCours()->getCompteurRegles() < hive.getPartieEnCours()->getRegles().GetNombreRetours()) {
+        hive.getPartieEnCours()->annulerDernierCoup();
+        hive.getPartieEnCours()->incrementerCompteurRegles();
+        cout << "Dernier coup effacé\n";
+    }
+    else throw "Seuil de nombre de coups atteint !\n";
 }
 
 

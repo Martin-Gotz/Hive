@@ -48,6 +48,11 @@ void Partie::demarrer() {
     etatPartie = EtatPartie::EN_COURS;
 }
 
+void Partie::modifierRegles(const Regle &r)
+{
+    regles.setNombreRetours(r.GetNombreRetours());
+}
+
 
 // Mise en place des éléments la première fois que la partie est lancée
 void Partie::initialiser() {
@@ -305,7 +310,8 @@ void JeuHive::Partie::annulerDernierCoup()
     }
 
     // Revenir au joueur précédent
-    CompteurRegles++;
+    regles.GetNombreRetours();
+    //CompteurRegles++;
     dernierCoup = nullptr;
 }
 

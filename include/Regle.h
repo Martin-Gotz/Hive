@@ -8,5 +8,6 @@ namespace JeuHive {
 	public:
 		Regle(int nombre = 1) :  nombre_retours(nombre) {}
 		int GetNombreRetours() const { return nombre_retours; }
+		void setNombreRetours(const int a) { nombre_retours = a; }
 	};
 }
