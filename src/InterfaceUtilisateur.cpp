@@ -114,10 +114,6 @@ void InterfaceUtilisateur::gererChoixUtilisateurMenuPartie() {
 
 // Demander à l'utilisateur les informations nécessaires pour ajouter une partie
 void InterfaceUtilisateur::ajouterPartie() {
-
-    //TypeJoueur typeJoueur1 = demanderTypeJoueur("joueur 1");
-    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
     string nomJoueur1, nomJoueur2;
     do {
         cout << "Entrez le nom du joueur 1 : ";
@@ -127,8 +123,8 @@ void InterfaceUtilisateur::ajouterPartie() {
         }
     } while (nomJoueur1.empty());
 
-    //TypeJoueur typeJoueur2 = demanderTypeJoueur("joueur 2");
-    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    TypeJoueur typeJoueur2 = demanderTypeJoueur("joueur 2");
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     do {
         cout << "Entrez le nom du joueur 2 : ";
@@ -153,7 +149,7 @@ void InterfaceUtilisateur::ajouterPartie() {
             nbRetours = static_cast<int>(temp);
         }
         catch (const invalid_argument&) {
-            cout << "Entrée invalide, veuillez saisir un nombre" << endl;
+            cout << "Entrée invalide, veuillez saisir un entier positif" << endl;
             nbRetours = -1;
         }
         catch (const out_of_range&) {
@@ -165,9 +161,9 @@ void InterfaceUtilisateur::ajouterPartie() {
             cout << "Entrée invalide, veuillez saisir un entier positif" << endl;
         }
     } while (nbRetours < 0);
-    Regle r(nbRetours);
+
     //hive.ajouterPartie(nomJoueur1, typeJoueur1, nomJoueur2, typeJoueur2);
-    hive.ajouterPartie(nomJoueur1, TypeJoueur::HUMAIN, nomJoueur2, TypeJoueur::IA, r);
+    hive.ajouterPartie(nomJoueur1, TypeJoueur::HUMAIN, nomJoueur2, TypeJoueur::IA);
 }
 
 
@@ -179,26 +175,31 @@ TypeJoueur InterfaceUtilisateur::demanderTypeJoueur(const string& nomJoueur) {
     do {
         cout << "Quel est le type de " << nomJoueur << " ? (0 pour HUMAIN, 1 pour IA) : ";
         cin >> entree;
-
-        // Vérifie si l'entrée est un entier valide
         try {
             choix = stoi(entree);
         }
-        catch (const invalid_argument&) {
-            choix = -1; // Valeur hors intervalle pour forcer la boucle à continuer
+        catch (...) {
+            choix = -1; // Force la boucle à continuer en cas d'erreur
         }
-        catch (const out_of_range&) {
-            choix = -1;
-        }
-
-        if (choix != 0 && choix != 1) {
+        if (choix != 0 && choix != 1)
             cout << "Entrée invalide. Veuillez entrer 0 pour HUMAIN ou 1 pour IA." << endl;
-        }
     } while (choix != 0 && choix != 1);
+
 
     return static_cast<TypeJoueur>(choix);
 }
 
+
+int InterfaceUtilisateur::demanderNombreDeRetours() {
+    int nbRetours = -1;
+    cout << "Entrez le nombre de retours en arrière possible : ";
+    while (!(cin >> nbRetours) || nbRetours < 0) {
+        cout << "Entrée invalide, veuillez saisir un entier positif : ";
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+    return nbRetours;
+}
 
 // Partie à démarrer
 void InterfaceUtilisateur::demarrerPartie() {

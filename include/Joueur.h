@@ -16,7 +16,6 @@ namespace JeuHive {
 
     public:
         Joueur(string nom, TypeJoueur type);
-        Joueur(string nom, TypeJoueur type, Couleur couleur);
 
         // Accesseurs
         string getNom() const { return nom; }
