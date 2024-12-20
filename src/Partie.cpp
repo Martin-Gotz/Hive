@@ -16,6 +16,7 @@ Partie::Partie(Joueur& j1, Joueur& j2, int nombreRetours) :
     plateau(),
     regles(),
     historique(),
+    compteurRegles(0),
     etatPartie(EtatPartie::NON_COMMENCEE),
     joueurActuel(nullptr),
     compteurTour(0),
@@ -75,8 +76,6 @@ void Partie::initialiser() {
 
     // 3 : Règles spécifiques de début de partie
     compteurTour = 1;
-
-    compteurRegles = regles.GetNombreRetours();
 
     EvenementPartie evt(id, TypeEvenement::DEBUT_PARTIE);
     notifierObservers(evt);
@@ -168,7 +167,7 @@ void Partie::jouerCoup(Coup* coup) {
     EvenementPartie evt(id, typeEvt);
     notifierObservers(evt);
 
-    compteurRegles--;
+    //CompteurRegles--;
 
     delete coup;
 }
@@ -308,8 +307,7 @@ void JeuHive::Partie::annulerDernierCoup()
     }
 
     // Revenir au joueur précédent
-    regles.GetNombreRetours();
-    //compteurRegles++;
+    //CompteurRegles++;
     dernierCoup = nullptr;
 }
 

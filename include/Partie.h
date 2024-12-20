@@ -24,7 +24,7 @@ namespace JeuHive {
 		Joueur* Victorieux;
 		int compteurTour;
 		int nombreRetours;
-		int compteurRegles; // permet de vérifier que le seuil de nombre de retours maximum n'est pas dépassé
+		unsigned int compteurRegles; // permet de vérifier que le seuil de nombre de retours maximum n'est pas dépassé
 
 		static int prochain_id;
 
@@ -36,6 +36,8 @@ namespace JeuHive {
 
 		// Accesseurs
 		int getId() const { return id; }
+
+		const static int getProchainId() { return prochain_id; }
 
 		const Joueur& getJoueur1() const { return joueur1; }
 		Joueur& getJoueur1() { return joueur1; }
@@ -55,8 +57,9 @@ namespace JeuHive {
 
 		const int getCompteurRegles() const { return compteurRegles; }
 
-		void incrementerCompteurRegles() { compteurRegles++; }
-		void decrementerCompteurRegles() { compteurRegles--; }
+		void initialiserCompteurRegles() { CompteurRegles = 0; }
+		void incrementerCompteurRegles() { ++CompteurRegles; }
+		void decrementerCompteurRegles() { if (CompteurRegles > 0) --CompteurRegles; else CompteurRegles = 0; }
 
 		const Regle getRegles() const { return regles; }
 

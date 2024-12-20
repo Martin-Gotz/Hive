@@ -110,11 +110,6 @@ void InterfaceUtilisateur::gererChoixUtilisateurMenuPartie() {
 }
 
 
-
-
-
-
-
 // ===== METHODES RELATIVES A HIVE =====
 
 // Demander à l'utilisateur les informations nécessaires pour ajouter une partie
@@ -287,9 +282,9 @@ void JeuHive::InterfaceUtilisateur::placerPiece() {
         cout << "Entrée invalide. Veuillez réessayer.\n";
         return;
     }
-    hive.getPartieEnCours()->decrementerCompteurRegles();
     hive.getPartieEnCours()->placerPiece(idTypePiece, { x, y });
     cout << "Pièce " << idTypePiece << " placée en (" << x << ", " << y << ").\n";
+    hive.getPartieEnCours()->decrementerCompteurRegles();
 }
 
 void JeuHive::InterfaceUtilisateur::deplacerPiece() {
@@ -313,6 +308,7 @@ void JeuHive::InterfaceUtilisateur::deplacerPiece() {
         cout << "Entrée invalide. Veuillez réessayer.\n";
         return;
     }
+
     hive.getPartieEnCours()->decrementerCompteurRegles();
     hive.getPartieEnCours()->deplacerPiece({ x1, y1 }, { x2, y2 });
     cout << "Piece déplacée de (" << x1 << ", " << y1 << ") a (" << x2 << ", " << y2 << ").\n";
@@ -322,14 +318,12 @@ void JeuHive::InterfaceUtilisateur::AnnulerPiece()
 {
     if (hive.getPartieEnCours()->getCompteurRegles() < hive.getPartieEnCours()->getRegles().GetNombreRetours()) {
         hive.getPartieEnCours()->annulerDernierCoup();
+        cout << "Compteur Regles : " << hive.getPartieEnCours()->getCompteurRegles() << endl;
         hive.getPartieEnCours()->incrementerCompteurRegles();
         cout << "Dernier coup effacé\n";
     }
-    else throw "Seuil de nombre de coups atteint !\n";
+    else throw HiveException("Seuil de nombre de coups atteint !\n");
 }
-
-
-
 
 
 // Terminer la partie en cours
