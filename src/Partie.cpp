@@ -1,5 +1,6 @@
 ﻿#include "../include/Partie.h"
 #include <random>
+#include <sstream>
 using namespace JeuHive;
 using namespace std;
 
@@ -121,7 +122,7 @@ void Partie::placerPiece(int idPiece, const Coordonnee& cooDestination) {
     Piece* piece = joueurActuel->getMain().getPieces()[idPiece - 1];
 
     // Construire un coup de placement
-    Coup* coup = new CoupPlacement(piece, cooDestination);
+    Coup* coup = new CoupPlacement(piece, cooDestination, compteurTour);
 
     // Retirer la pièce de la main du joueur
     joueurActuel->retirerPiece(piece);
@@ -139,7 +140,7 @@ void Partie::deplacerPiece(const Coordonnee& cooOrigine, const Coordonnee& cooDe
     }
 
     // Construire un coup de déplacement
-    Coup* coup = new CoupDeplacement(piece, cooOrigine, cooDestination);
+    Coup* coup = new CoupDeplacement(piece, cooOrigine, cooDestination, compteurTour);
 
     // Jouer le coup
     jouerCoup(coup);
@@ -237,7 +238,19 @@ ResumePartie Partie::resumer() const {
     return resume;
 }
 
-
+string Partie::tostringresumer() const {
+    ostringstream retour;
+    ResumePartie resume = resumer();
+    retour << "Résumé de l'état de la partie :" << resume.etatPartie << endl
+        << "Nom du joueur 1 : " << resume.joueur1.nom << endl
+        << "Couleur du joueur 1 : " << resume.joueur1.couleur << endl
+        << "Type de joueur 1 : " << resume.joueur1.type << endl
+        << "============" << endl
+        << "Nom du joueur 2 : " << resume.joueur2.nom << endl
+        << "Couleur du joueur 2 : " << resume.joueur2.couleur << endl
+        << "Type de joueur 2 : " << resume.joueur2.type << endl;
+    return retour.str();
+}
 
 
 

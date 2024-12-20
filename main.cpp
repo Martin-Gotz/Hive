@@ -2,6 +2,7 @@
 #include "./include/InterfaceUtilisateur.h"
 #include <QApplication>
 #include "./qt/include/MainWindow.h"
+#include "VuePartie.h"
 
 using namespace std;
 using namespace JeuHive;
@@ -10,13 +11,14 @@ int main(int argc, char* argv[]) {
 
     Hive& hive = Hive::getInstance();
     InterfaceUtilisateur ui(hive);
-    ui.gererChoixUtilisateur();
+    //ui.gererChoixUtilisateur();
 
 
     QApplication app(argc, argv);
-
-    MainWindow w;
-    w.show();
+    VuePartie vuepartie;
+    vuepartie.show();
+    //MainWindow w;
+    //w.show();
 
     return app.exec();
 }

@@ -155,6 +155,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="qt\src\MainWindow.cpp" />
+    <ClCompile Include="NouvellePartie.cpp" />
     <ClCompile Include="src\Evenement.cpp" />
     <ClCompile Include="src\InterfaceUtilisateur.cpp" />
     <ClCompile Include="src\Case.cpp" />
@@ -169,8 +170,11 @@
     <ClCompile Include="src\Piece.cpp" />
     <ClCompile Include="src\Plateau.cpp" />
     <ClCompile Include="src\Regle.cpp" />
+    <ClCompile Include="VuePartie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="NouvellePartie.h" />
+    <QtMoc Include="VuePartie.h" />
     <ClInclude Include="include\ResumeClasse.h" />
     <ClInclude Include="include\Case.h" />
     <ClInclude Include="include\Coordonnee.h" />

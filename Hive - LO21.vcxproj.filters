@@ -60,6 +60,12 @@
     <ClCompile Include="qt\src\MainWindow.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="VuePartie.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="NouvellePartie.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Partie.h">
@@ -113,6 +119,12 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="qt\include\MainWindow.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </QtMoc>
+    <QtMoc Include="VuePartie.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </QtMoc>
+    <QtMoc Include="NouvellePartie.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </QtMoc>
   </ItemGroup>
