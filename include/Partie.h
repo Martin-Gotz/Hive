@@ -24,18 +24,20 @@ namespace JeuHive {
 		Joueur* Victorieux;
 		int compteurTour;
 
-		int CompteurRegles; // permet de vérifier que le seuil de nombre de retours maximum n'est pas dépassé
+		unsigned int CompteurRegles; // permet de vérifier que le seuil de nombre de retours maximum n'est pas dépassé
 
 		static int prochain_id;
 
 	public:
-		Partie(Joueur& j1, Joueur& j2);
+		Partie(Joueur& j1, Joueur& j2, Regle r);
 		~Partie() = default;
 
 		void modifierRegles(const Regle& r);
 
 		// Accesseurs
 		int getId() const { return id; }
+
+		const static int getProchainId() { return prochain_id; }
 
 		const Joueur& getJoueur1() const { return joueur1; }
 		Joueur& getJoueur1() { return joueur1; }
@@ -55,8 +57,9 @@ namespace JeuHive {
 
 		const int getCompteurRegles() const { return CompteurRegles; }
 
-		void incrementerCompteurRegles() { CompteurRegles++; }
-		void decrementerCompteurRegles() { CompteurRegles--; }
+		void initialiserCompteurRegles() { CompteurRegles = 0; }
+		void incrementerCompteurRegles() { ++CompteurRegles; }
+		void decrementerCompteurRegles() { if (CompteurRegles > 0) --CompteurRegles; else CompteurRegles = 0; }
 
 		const Regle getRegles() const { return regles; }
 
@@ -89,8 +92,8 @@ namespace JeuHive {
 
 	class PartieFactory {
 	public:
-		static Partie* creerPartie(Joueur& joueur1, Joueur& joueur2) {
-			return new Partie(joueur1, joueur2);
+		static Partie* creerPartie(Joueur& joueur1, Joueur& joueur2, Regle r) {
+			return new Partie(joueur1, joueur2, r);
 		}
 	};
 }

@@ -9,14 +9,14 @@ int Partie::prochain_id = 1;
 
 
 //Constructeurs
-Partie::Partie(Joueur& j1, Joueur& j2) :
+Partie::Partie(Joueur& j1, Joueur& j2, Regle r) :
     id(prochain_id),
     joueur1(j1),
     joueur2(j2),
     plateau(),
-    regles(),
+    regles(r),
     historique(),
-    CompteurRegles(regles.GetNombreRetours()),
+    CompteurRegles(0),
     etatPartie(EtatPartie::NON_COMMENCEE),
     joueurActuel(nullptr),
     compteurTour(0),
@@ -170,7 +170,7 @@ void Partie::jouerCoup(Coup* coup) {
     EvenementPartie evt(id, typeEvt);
     notifierObservers(evt);
 
-    CompteurRegles--;
+    //CompteurRegles--;
 
     delete coup;
 }
@@ -310,7 +310,6 @@ void JeuHive::Partie::annulerDernierCoup()
     }
 
     // Revenir au joueur précédent
-    regles.GetNombreRetours();
     //CompteurRegles++;
     dernierCoup = nullptr;
 }
