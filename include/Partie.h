@@ -63,7 +63,7 @@ namespace JeuHive {
 
 		const Regle getRegles() const { return regles; }
 
-		bool verifier_partie();
+		bool verifierEtatPartie();
 
 		// Methodes principales
 		void demarrer();

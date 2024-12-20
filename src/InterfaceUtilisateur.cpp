@@ -70,14 +70,20 @@ void InterfaceUtilisateur::gererChoixUtilisateur() {
         int choix = obtenirEntreeUtilisateur("Entrez votre choix : ", true);
         cout << "---------------------\n";
 
-        switch (choix) {
-            case 1: ajouterPartie(); break;
-            case 2: demarrerPartie(); break;
-            case 3: supprimerPartie(); break;
-            case 4: afficherParties(); break;
-            case 5: cout << "Au revoir !\n"; return;
-            default: cout << "Option invalide, veuillez réessayer.\n";
+        try {
+            switch (choix) {
+                case 1: ajouterPartie(); break;
+                case 2: demarrerPartie(); break;
+                case 3: supprimerPartie(); break;
+                case 4: afficherParties(); break;
+                case 5: cout << "Au revoir !\n"; return;
+                default: cout << "Option invalide, veuillez réessayer.\n";
+            }
         }
+        catch (const HiveException& e) {
+            cout << "Erreur : " << e.getInfo() << '\n';
+        }
+
         cout << endl << endl;
     }
 }
@@ -108,6 +114,8 @@ void InterfaceUtilisateur::gererChoixUtilisateurMenuPartie() {
         cout << endl << endl;
     }
 }
+
+
 
 
 // ===== METHODES RELATIVES A HIVE =====
@@ -202,28 +210,23 @@ void InterfaceUtilisateur::demarrerPartie() {
         return;
     }
 
-    try {
-        partieObservee = hive.getPartie(idPartie);
+    partieObservee = hive.getPartie(idPartie);
 
-        if (partieObservee) {
-            // Démarre la partie
-            hive.demarrerPartie(idPartie);
+    if (partieObservee) {
+        // Démarre la partie
+        hive.demarrerPartie(idPartie);
 
-            // Si la partie est trouvée, on ajoute l'observateur
-            partieObservee->ajouterObserver(this);
+        // Si la partie est trouvée, on ajoute l'observateur
+        partieObservee->ajouterObserver(this);
 
-            cout << endl << endl;
-            cout << "-------------------- Partie " << to_string(partieObservee->getId()) << " --------------------" << endl;
+        cout << endl << endl;
+        cout << "-------------------- Partie " << to_string(partieObservee->getId()) << " --------------------" << endl;
 
-            gererChoixUtilisateurMenuPartie();
-        }
-        else {
-            // Si la partie n'a pas été trouvée
-            throw HiveException("Aucune partie trouvée avec cet ID.");
-        }
+        gererChoixUtilisateurMenuPartie();
     }
-    catch (const HiveException& e) {
-        cout << "Erreur : " << e.getInfo() << endl;
+    else {
+        // Si la partie n'a pas été trouvée
+        throw HiveException("Aucune partie trouvée avec cet ID.");
     }
 }
 
@@ -245,12 +248,7 @@ void InterfaceUtilisateur::supprimerPartie() {
         return;
     }
 
-    try {
-        hive.supprimerPartie(idPartie);
-    }
-    catch (const HiveException& e) {
-        cout << "Erreur : " << e.getInfo() << endl;
-    }
+    hive.supprimerPartie(idPartie);
 }
 
 
@@ -284,7 +282,6 @@ void JeuHive::InterfaceUtilisateur::placerPiece() {
     }
     hive.getPartieEnCours()->placerPiece(idTypePiece, { x, y });
     cout << "Pièce " << idTypePiece << " placée en (" << x << ", " << y << ").\n";
-    hive.getPartieEnCours()->decrementerCompteurRegles();
 }
 
 void JeuHive::InterfaceUtilisateur::deplacerPiece() {
@@ -309,18 +306,14 @@ void JeuHive::InterfaceUtilisateur::deplacerPiece() {
         return;
     }
 
-    hive.getPartieEnCours()->decrementerCompteurRegles();
     hive.getPartieEnCours()->deplacerPiece({ x1, y1 }, { x2, y2 });
     cout << "Piece déplacée de (" << x1 << ", " << y1 << ") a (" << x2 << ", " << y2 << ").\n";
 }
 
 void JeuHive::InterfaceUtilisateur::AnnulerPiece()
 {
-    if (hive.getPartieEnCours()->getCompteurRegles() < hive.getPartieEnCours()->getRegles().GetNombreRetours()) {
+    if (hive.getPartieEnCours()->getCompteurRegles() < hive.getPartieEnCours()->getRegles().getNombreRetours()) {
         hive.getPartieEnCours()->annulerDernierCoup();
-        cout << "Compteur Regles : " << hive.getPartieEnCours()->getCompteurRegles() << endl;
-        hive.getPartieEnCours()->incrementerCompteurRegles();
-        cout << "Dernier coup effacé\n";
     }
     else throw HiveException("Seuil de nombre de coups atteint !\n");
 }
@@ -474,6 +467,9 @@ void InterfaceUtilisateur::afficherEvenement(const Evenement& e) const {
     }
     else if (e.getType() == TypeEvenement::CHANGEMENT_JOUEUR) {
         cout << "Changement de joueur" << endl;
+    }
+    else if (e.getType() == TypeEvenement::ANNULER_COUP) {
+        cout << "Annulation du coup" << endl;
     }
 }
 
