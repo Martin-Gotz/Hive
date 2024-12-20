@@ -147,7 +147,7 @@ void InterfaceUtilisateur::ajouterPartie() {
     // Parametrage du nombre de retours possibles
     int nbRetours = demanderNombreDeRetours();
 
-    hive.ajouterPartie(nomJoueur1, TypeJoueur::HUMAIN, nomJoueur2, typeJoueur2);
+    hive.ajouterPartie(nomJoueur1, TypeJoueur::HUMAIN, nomJoueur2, typeJoueur2, nbRetours);
 }
 
 

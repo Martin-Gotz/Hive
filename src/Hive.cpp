@@ -14,21 +14,13 @@ Hive::~Hive() {
 
 // Méthodes pour gérer les parties
 
-void Hive::ajouterPartie(Joueur& joueur1, Joueur& joueur2) {
-    // Créer une nouvelle partie en utilisant la factory
-    parties.push_back(PartieFactory::creerPartie(joueur1, joueur2));
-
-    EvenementHive evt("Nouvelle partie creee \n");
-    notifierObservers(evt);
-}
-
-void Hive::ajouterPartie(const string& nomJoueur1, TypeJoueur typeJoueur1, const string& nomJoueur2, TypeJoueur typeJoueur2) {
+void Hive::ajouterPartie(const string& nomJoueur1, TypeJoueur typeJoueur1, const string& nomJoueur2, TypeJoueur typeJoueur2, int nombreRetours = 0) {
     // Instancier les joueurs
     Joueur joueur1(nomJoueur1, typeJoueur1);
     Joueur joueur2(nomJoueur2, typeJoueur2);
 
     // Créer une nouvelle partie en utilisant la factory
-    parties.push_back(PartieFactory::creerPartie(joueur1, joueur2));
+    parties.push_back(PartieFactory::creerPartie(joueur1, joueur2, nombreRetours));
     EvenementHive evt("Nouvelle partie creee \n");
     notifierObservers(evt);
 }

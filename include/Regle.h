@@ -4,10 +4,10 @@ namespace JeuHive {
 	class Regle
 	{
 	private:
-		int nombre_retours;
+		int nombreRetours;
 	public:
-		Regle(int nombre = 1) :  nombre_retours(nombre) {}
-		int GetNombreRetours() const { return nombre_retours; }
-		void setNombreRetours(const int a) { nombre_retours = a; }
+		Regle(int nombre = 1) :  nombreRetours(nombre) {}
+		int GetNombreRetours() const { return nombreRetours; }
+		void setNombreRetours(const int a) { nombreRetours = a; }
 	};
 }

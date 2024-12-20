@@ -9,20 +9,21 @@ int Partie::prochain_id = 1;
 
 
 //Constructeurs
-Partie::Partie(Joueur& j1, Joueur& j2) :
+Partie::Partie(Joueur& j1, Joueur& j2, int nombreRetours) :
     id(prochain_id),
     joueur1(j1),
     joueur2(j2),
     plateau(),
     regles(),
     historique(),
-    CompteurRegles(regles.GetNombreRetours()),
     etatPartie(EtatPartie::NON_COMMENCEE),
     joueurActuel(nullptr),
     compteurTour(0),
+    nombreRetours(nombreRetours),
     Victorieux(nullptr)
 {
     prochain_id++; // Incrémentation du compteur statique pour suivre le nombre de parties créé
+    regles.setNombreRetours(nombreRetours);
 }
 
 
@@ -46,11 +47,6 @@ void Partie::demarrer() {
     }
 
     etatPartie = EtatPartie::EN_COURS;
-}
-
-void Partie::modifierRegles(const Regle &r)
-{
-    regles.setNombreRetours(r.GetNombreRetours());
 }
 
 
@@ -79,6 +75,8 @@ void Partie::initialiser() {
 
     // 3 : Règles spécifiques de début de partie
     compteurTour = 1;
+
+    compteurRegles = regles.GetNombreRetours();
 
     EvenementPartie evt(id, TypeEvenement::DEBUT_PARTIE);
     notifierObservers(evt);
@@ -170,7 +168,7 @@ void Partie::jouerCoup(Coup* coup) {
     EvenementPartie evt(id, typeEvt);
     notifierObservers(evt);
 
-    CompteurRegles--;
+    compteurRegles--;
 
     delete coup;
 }
@@ -311,21 +309,21 @@ void JeuHive::Partie::annulerDernierCoup()
 
     // Revenir au joueur précédent
     regles.GetNombreRetours();
-    //CompteurRegles++;
+    //compteurRegles++;
     dernierCoup = nullptr;
 }
 
 
 void JeuHive::Partie::verifierAnnulation()
 {
-    if (CompteurRegles > regles.GetNombreRetours())
+    if (compteurRegles > regles.GetNombreRetours())
     {
         throw HiveException("Le nombre de retours en arrière est trop important");
     }
     else
     {
        annulerDernierCoup();
-       CompteurRegles++;
+       compteurRegles++;
     }
 }
 
