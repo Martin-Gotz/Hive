@@ -167,7 +167,7 @@ void Partie::jouerCoup(Coup* coup) {
     EvenementPartie evt(id, typeEvt);
     notifierObservers(evt);
 
-    //CompteurRegles--;
+    //compteurRegles--;
 
     delete coup;
 }
@@ -307,7 +307,7 @@ void JeuHive::Partie::annulerDernierCoup()
     }
 
     // Revenir au joueur précédent
-    //CompteurRegles++;
+    //compteurRegles++;
     dernierCoup = nullptr;
 }
 
