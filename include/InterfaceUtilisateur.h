@@ -25,6 +25,7 @@ namespace JeuHive {
 
         void ajouterPartie();
         TypeJoueur demanderTypeJoueur(const string& nomJoueur);
+        int demanderNombreDeRetours();
         void supprimerPartie();
         void demarrerPartie();
         void afficherParties() const;

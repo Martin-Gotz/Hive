@@ -13,9 +13,6 @@ namespace JeuHive {
 Joueur::Joueur(string nom, TypeJoueur type)
     : nom(nom), type(type), couleur(Couleur::BLANC) {}
 
-Joueur::Joueur(string nom, TypeJoueur type, Couleur couleur)
-    : nom(nom), type(type), couleur(couleur) {}
-
 
 void Joueur::remplirMain()
 {
