@@ -19,6 +19,7 @@ private slots:
     void selectionnerPartieExistante();
     void afficherDetailsPartie(QListWidgetItem* item);
     void terminerPartie();
+    void quitterApplication();
 private:
     QVBoxLayout* layout;
     QPushButton* btnNouvellePartie;
@@ -29,6 +30,7 @@ private:
     QPushButton* deleteButton;
     QPushButton* lancerButton; // Déclaration du bouton Lancer
     QPushButton* terminerButton;
+    QPushButton* quitterButton;
     void initialiserUI();
     void chargerPartiesExistantes();
     void supprimerPartie();

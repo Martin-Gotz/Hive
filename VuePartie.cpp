@@ -1,6 +1,7 @@
 #include "VuePartie.h"
 #include "NouvellePartie.h"
 #include <QMessageBox>
+#include <QApplication>
 
 VuePartie::VuePartie(QWidget* parent) : QWidget(parent) {
     initialiserUI();
@@ -36,6 +37,10 @@ void VuePartie::initialiserUI() {
     terminerButton = new QPushButton("Terminer", this); // Initialisation du bouton Terminer
     connect(terminerButton, &QPushButton::clicked, this, &VuePartie::terminerPartie); // Connexion du bouton Terminer
     layout->addWidget(terminerButton);
+
+    quitterButton = new QPushButton("Quitter", this); // Initialisation du bouton Quitter
+    connect(quitterButton, &QPushButton::clicked, this, &VuePartie::quitterApplication); // Connexion du bouton Quitter
+    layout->addWidget(quitterButton);
 
     labelDetailsPartie = new QLabel(this);
     layout->addWidget(labelDetailsPartie);
@@ -144,5 +149,14 @@ void VuePartie::lancerPartie(int partieId) {
     if (partie) {
         JeuHive::Hive::getInstance().demarrerPartie(partieId);
         // introduire le code pour lancer le plateau
+    }
+}
+
+void VuePartie::quitterApplication() {
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Quitter l'application", "Êtes-vous sûr de vouloir quitter l'application?",
+        QMessageBox::Yes | QMessageBox::No);
+    if (reply == QMessageBox::Yes) {
+        QApplication::quit();
     }
 }
