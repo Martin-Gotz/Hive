@@ -161,9 +161,10 @@ void InterfaceUtilisateur::ajouterPartie() {
             cout << "Entrée invalide, veuillez saisir un entier positif" << endl;
         }
     } while (nbRetours < 0);
+    Regle r(nbRetours);
 
     //hive.ajouterPartie(nomJoueur1, typeJoueur1, nomJoueur2, typeJoueur2);
-    hive.ajouterPartie(nomJoueur1, TypeJoueur::HUMAIN, nomJoueur2, TypeJoueur::IA);
+    hive.ajouterPartie(nomJoueur1, TypeJoueur::HUMAIN, nomJoueur2, TypeJoueur::IA, r);
 }
 
 
