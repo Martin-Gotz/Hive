@@ -243,11 +243,11 @@ string Partie::tostringresumer() const {
     ResumePartie resume = resumer();
     retour << "Résumé de l'état de la partie :" << resume.etatPartie << endl
         << "Nom du joueur 1 : " << resume.joueur1.nom << endl
-        << "Couleur du joueur 1 : " << resume.joueur1.couleur << endl
+        //<< "Couleur du joueur 1 : " << resume.joueur1.couleur << endl
         << "Type de joueur 1 : " << resume.joueur1.type << endl
         << "============" << endl
         << "Nom du joueur 2 : " << resume.joueur2.nom << endl
-        << "Couleur du joueur 2 : " << resume.joueur2.couleur << endl
+        //<< "Couleur du joueur 2 : " << resume.joueur2.couleur << endl
         << "Type de joueur 2 : " << resume.joueur2.type << endl;
     return retour.str();
 }

@@ -22,8 +22,11 @@ private:
     QLineEdit* nomJoueur2Edit;
     QPushButton* okButton;
     QPushButton* cancelButton;
-
+    QPushButton* deleteButton;
     void setupUI();
+
+private slots: 
+    void supprimerPartie();
 };
 
 #endif // NOUVELLEPARTIE_H

@@ -131,6 +131,8 @@ void Hive::terminerPartie() {
     partieEnCours = nullptr;
 }
 
+
+
 // Mettre en pause la partie en cours
 void Hive::mettrePartieEnPause() {
     if (partieEnCours == nullptr) {

@@ -26,6 +26,7 @@ void NouvellePartie::setupUI() {
     buttonLayout->addWidget(okButton);
     buttonLayout->addWidget(cancelButton);
 
+
     layout->addLayout(buttonLayout);
 
     connect(okButton, &QPushButton::clicked, this, &QDialog::accept);
@@ -40,4 +41,14 @@ QString NouvellePartie::getNomJoueur1() const {
 
 QString NouvellePartie::getNomJoueur2() const {
     return nomJoueur2Edit->text();
+}
+
+
+void NouvellePartie::supprimerPartie() {
+    // Implémentation de la suppression de la partie
+    // Vous pouvez ajouter ici le code nécessaire pour supprimer la partie
+    // Par exemple, réinitialiser les champs de texte ou effectuer d'autres actions nécessaires
+    nomJoueur1Edit->clear();
+    nomJoueur2Edit->clear();
+    // Vous pouvez également émettre un signal ou appeler une fonction pour notifier la suppression
 }
