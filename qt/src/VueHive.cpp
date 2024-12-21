@@ -12,7 +12,7 @@ void VueHive::initialiserUI() {
     layout->addWidget(labelTitre);
 
     // Actions sur la liste des parties
-    btnNouvellePartie = new QPushButton("Créer une nouvelle partie", this);
+    btnNouvellePartie = new QPushButton("Creer une nouvelle partie", this);
     connect(btnNouvellePartie, &QPushButton::clicked, this, &VueHive::creerNouvellePartie);
     layout->addWidget(btnNouvellePartie);
 
@@ -92,27 +92,20 @@ void VueHive::afficherDetailsPartie(QListWidgetItem* item) {
     QString itemText = item->text();
     int partieId = itemText.split(" ").last().toInt();
 
+
     const auto* partie = JeuHive::Hive::getInstance().getPartie(partieId);
+
+    ResumePartie resumePartie = partie->resumer();
+
     if (partie) {
         QString details = QString("Partie numéro : %1\nJoueur 1 : %2\nJoueur 2 : %3")
-            .arg(partie->getId())
-            .arg(QString::fromStdString(partie->getJoueur1().getNom()))
-            .arg(QString::fromStdString(partie->getJoueur2().getNom()));
+            .arg(resumePartie.id)
+            .arg(QString::fromStdString(resumePartie.joueur1.nom))
+            .arg(QString::fromStdString(resumePartie.joueur2.nom));
+        
+        details += "\nEtat : ";
 
-        switch (partie->getEtatPartie()) {
-        case JeuHive::EtatPartie::NON_COMMENCEE:
-            details += "\nÉtat de la partie : Non commencee";
-            break;
-        case JeuHive::EtatPartie::EN_COURS:
-            details += "\nÉtat de la partie : En cours";
-            break;
-        case JeuHive::EtatPartie::EN_PAUSE:
-            details += "\nÉtat de la partie : En pause";
-            break;
-        case JeuHive::EtatPartie::TERMINEE:
-            details += "\nÉtat de la partie : Terminee";
-            break;
-        }
+        details += resumePartie.etatPartie;
 
         labelDetailsPartie->setText(details);
     }

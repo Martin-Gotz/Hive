@@ -47,12 +47,10 @@ void VuePartie::placerPiece(const JeuHive::Piece* piece, const QPointF& position
         return;
     }
 
-    // Check if the current player is allowed to place the piece
     if (partie->getJoueurActuel()->getMain().getPieces().size() == 0) {
         return;
     }
 
-    // Determine if the piece is being placed or moved
     bool isPlacement = !partie->getPlateau().estPlacee(*piece);
 
     JeuHive::Coordonnee coord(position.x(), position.y());
@@ -68,13 +66,11 @@ void VuePartie::placerPiece(const JeuHive::Piece* piece, const QPointF& position
 
     partie->jouerCoup(coup);
 
-    // Update the piece's position in the scene
     if (isPlacement) {
         VuePiece* pieceItem = new VuePiece(piece);
         pieceItem->setPos(position);
         scene->addItem(pieceItem);
 
-        // Remove the piece from the player's hand
         if (partie->getJoueurActuel() == &partie->getJoueur1()) {
             listPiecesJoueur1->clear();
             for (const auto* p : partie->getJoueur1().getMain().getPieces()) {
@@ -112,9 +108,11 @@ void VuePartie::creerPlateau(int partieId) {
     }
 
     const int nombreCases = static_cast<int>(partie->getPlateau().getNombreCases());
+    /*
     if (nombreCases == 0) {
         QMessageBox::warning(this, "Attention", "Le plateau ne contient aucune case.");
     }
+    */
 
     const int rows = static_cast<int>(sqrt(nombreCases));
     const int cols = (nombreCases + rows - 1) / (rows + 1);
