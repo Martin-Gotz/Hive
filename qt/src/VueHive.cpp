@@ -16,31 +16,36 @@ void VueHive::initialiserUI() {
     labelTitre = new QLabel("Menu du Jeu Hive", this);
     layout->addWidget(labelTitre);
 
+    // Actions sur la liste des parties
     btnNouvellePartie = new QPushButton("Créer une nouvelle partie", this);
     connect(btnNouvellePartie, &QPushButton::clicked, this, &VueHive::creerNouvellePartie);
     layout->addWidget(btnNouvellePartie);
 
-    AffichagePartie = new QLabel(this); // Initialisation de AffichagePartie
-    layout->addWidget(AffichagePartie); // Ajout de AffichagePartie à la disposition
+    affichagePartie = new QLabel(this);
+    layout->addWidget(affichagePartie);
 
     listeParties = new QListWidget(this);
     connect(listeParties, &QListWidget::itemClicked, this, &VueHive::afficherDetailsPartie);
     layout->addWidget(listeParties);
 
-    deleteButton = new QPushButton("Supprimer", this);
-    connect(deleteButton, &QPushButton::clicked, this, &VueHive::supprimerPartie);
-    layout->addWidget(deleteButton);
 
-    lancerButton = new QPushButton("Lancer", this); // Initialisation du bouton Lancer
-    connect(lancerButton, &QPushButton::clicked, this, &VueHive::lancerPartie); // Connexion du bouton Lancer
+
+
+    // Actions sur une partie selectionnée
+    lancerButton = new QPushButton("Lancer", this);
+    connect(lancerButton, &QPushButton::clicked, this, &VueHive::lancerPartie);
     layout->addWidget(lancerButton);
 
-    terminerButton = new QPushButton("Terminer", this); // Initialisation du bouton Terminer
-    connect(terminerButton, &QPushButton::clicked, this, &VueHive::terminerPartie); // Connexion du bouton Terminer
-    layout->addWidget(terminerButton);
+    supprimerButton = new QPushButton("Supprimer", this);
+    connect(supprimerButton, &QPushButton::clicked, this, &VueHive::supprimerPartie);
+    layout->addWidget(supprimerButton);
 
-    quitterButton = new QPushButton("Quitter", this); // Initialisation du bouton Quitter
-    connect(quitterButton, &QPushButton::clicked, this, &VueHive::quitterApplication); // Connexion du bouton Quitter
+
+
+
+    // Autres affichages
+    quitterButton = new QPushButton("Quitter", this);
+    connect(quitterButton, &QPushButton::clicked, this, &VueHive::quitterApplication);
     layout->addWidget(quitterButton);
 
     labelDetailsPartie = new QLabel(this);
@@ -55,7 +60,7 @@ void VueHive::initialiserUI() {
 }
 
 void VueHive::creerPlateau(int partieId) {
-    clearPlateau(); // Clear the current board
+    clearPlateau();
 
     const auto* partie = JeuHive::Hive::getInstance().getPartie(partieId);
     if (!partie) {
@@ -125,14 +130,14 @@ void VueHive::chargerPartiesExistantes() {
     listeParties->clear();
 
     if (JeuHive::Hive::getInstance().nombreParties() > 0) {
-        AffichagePartie->setText("Affichage des parties : ");
+        affichagePartie->setText("Affichage des parties : ");
         for (const auto* parties : JeuHive::Hive::getInstance().getAllParties()) {
             QString itemText = QString("Partie numéro : %1").arg(parties->getId());
             listeParties->addItem(itemText);
         }
     }
     else {
-        AffichagePartie->setText("Aucune partie en cours");
+        affichagePartie->setText("Aucune partie en cours");
     }
 }
 
@@ -152,7 +157,7 @@ void VueHive::selectionnerPartieExistante() {
         QString itemText = currentItem->text();
         int partieId = itemText.split(" ").last().toInt();
         lancerPartie();
-        creerPlateau(partieId); // Create a new board for the selected game
+        creerPlateau(partieId);
     }
     else {
         QMessageBox::warning(this, "Erreur", "Aucune partie n'a été sélectionnée pour lancement.");
@@ -192,33 +197,6 @@ void VueHive::afficherDetailsPartie(QListWidgetItem* item) {
     }
 }
 
-void VueHive::terminerPartie() {
-    try {
-        const auto* partieEnCours = JeuHive::Hive::getInstance().getPartieEnCours();
-        if (partieEnCours) {
-            int partieId = partieEnCours->getId();
-            JeuHive::Hive::getInstance().terminerPartie();
-            chargerPartiesExistantes();
-            labelDetailsPartie->clear();
-            QMessageBox::information(this, "Partie terminee", "La partie en cours a ete terminee avec succes.");
-
-            // Close the game window if it is open
-            if (openGameWindows.contains(partieId)) {
-                openGameWindows[partieId]->close();
-                openGameWindows.remove(partieId);
-            }
-        }
-        else
-        {
-            QMessageBox::warning(this, "Erreur", "Impossible de terminer une partie qui n'a pas commencée.");
-            return;
-        }
-    }
-    catch (const JeuHive::HiveException& e) {
-        QMessageBox::warning(this, "Erreur", QString::fromStdString(e.getInfo()));
-    }
-}
-
 void VueHive::supprimerPartie() {
     QListWidgetItem* currentItem = listeParties->currentItem();
     if (currentItem) {
@@ -234,9 +212,9 @@ void VueHive::supprimerPartie() {
             labelDetailsPartie->clear();
 
             // Close the game window if it is open
-            if (openGameWindows.contains(partieId)) {
-                openGameWindows[partieId]->close();
-                openGameWindows.remove(partieId);
+            if (ouvrirVuePartie.contains(partieId)) {
+                ouvrirVuePartie[partieId]->close();
+                ouvrirVuePartie.remove(partieId);
             }
         }
     }
@@ -265,9 +243,18 @@ void VueHive::lancerPartie() {
             }
         }
         JeuHive::Hive::getInstance().demarrerPartie(partieId);
-        VuePartie* gameWindow = new VuePartie(partieId);
-        openGameWindows[partieId] = gameWindow; // Track the open game window
-        gameWindow->show();
+        VuePartie* vuePartie = new VuePartie(partieId);
+        ouvrirVuePartie[partieId] = vuePartie;
+
+        this->setEnabled(false); // Désactiver la fenètre lorsqu'une partie se lance
+
+        // Connecter le signal de fermeture de la fenêtre de partie pour réactiver la fenêtre principale
+        connect(vuePartie, &QWidget::destroyed, this, [this, partieId]() {
+            this->setEnabled(true);
+            ouvrirVuePartie.remove(partieId);
+            });
+
+        vuePartie->show();
     }
     else {
         QMessageBox::warning(this, "Erreur", "Aucune partie n'a été sélectionnée pour lancement.");

@@ -20,7 +20,7 @@ private:
     QLineEdit* nomJoueur2Edit;
     QPushButton* okButton;
     QPushButton* cancelButton;
-    QPushButton* deleteButton;
+    QPushButton* supprimerButton;
     void setupUI();
 
 private slots: 

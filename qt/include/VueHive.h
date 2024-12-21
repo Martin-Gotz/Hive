@@ -23,7 +23,6 @@ private slots:
     void selectionnerPartieExistante();
     void afficherDetailsPartie(QListWidgetItem* item);
     void supprimerPartie();
-    void terminerPartie();
     void quitterApplication();
     void lancerPartie();
 
@@ -33,17 +32,16 @@ private:
     QListWidget* listeParties;
     QLabel* labelTitre;
     QLabel* labelDetailsPartie;
-    QLabel* AffichagePartie;
+    QLabel* affichagePartie;
     QLabel* labelJoueur1;
     QLabel* labelJoueur2;
     QLabel* labelTour;
-    QPushButton* deleteButton;
+    QPushButton* supprimerButton;
     QPushButton* lancerButton;
-    QPushButton* terminerButton;
     QPushButton* quitterButton;
     QGraphicsView* graphicsView;
     QGraphicsScene* scene;
-    QMap<int, VuePartie*> openGameWindows; // Map to track open game windows
+    QMap<int, VuePartie*> ouvrirVuePartie;
     void initialiserUI();
     void chargerPartiesExistantes();
     void creerPlateau(int partieId);
