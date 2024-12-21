@@ -71,7 +71,7 @@ void VueHive::creerNouvellePartie() {
         QString nomjoueur2 = dialog.getNomJoueur2();
         JeuHive::TypeJoueur typeJoueur1 = dialog.getTypeJoueur1();
         JeuHive::TypeJoueur typeJoueur2 = dialog.getTypeJoueur2();
-        JeuHive::Hive::getInstance().ajouterPartie(nomjoueur1.toStdString(), JeuHive::TypeJoueur::HUMAIN, nomjoueur2.toStdString(), JeuHive::TypeJoueur::HUMAIN);
+        JeuHive::Hive::getInstance().ajouterPartie(nomjoueur1.toStdString(), typeJoueur1, nomjoueur2.toStdString(), typeJoueur2);
         chargerPartiesExistantes();
     }
 }
@@ -171,7 +171,7 @@ void VueHive::lancerPartie() {
         this->setEnabled(false); // Désactiver la fenètre lorsqu'une partie se lance
 
         // Connecter le signal de fermeture de la fenêtre de partie pour réactiver la fenêtre principale
-        connect(vuePartie, &QWidget::destroyed, this, [this, partieId]() {
+        connect(vuePartie, &VuePartie::partieFermee, this, [this, partieId]() {
             this->setEnabled(true);
             ouvrirVuePartie.remove(partieId);
             });
