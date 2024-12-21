@@ -3,13 +3,13 @@
 #include <QWidget>
 #include <QGraphicsView>
 #include <QGraphicsScene>
-#include "Hexagon.h"
+#include "VueCase.h"
 
-class GameWindow : public QWidget {
+class VuePartie : public QWidget {
     Q_OBJECT
 
 public:
-    explicit GameWindow(int partieId, QWidget* parent = nullptr);
+    explicit VuePartie(int partieId, QWidget* parent = nullptr);
 
 private:
     QGraphicsView* graphicsView;

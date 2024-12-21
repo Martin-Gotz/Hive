@@ -154,11 +154,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Hexagon.cpp" />
-    <ClCompile Include="qt\src\MainWindow.cpp" />
-    <ClCompile Include="NouvellePartie.cpp" />
+    <ClCompile Include="qt\src\VueCase.cpp" />
+    <ClCompile Include="qt\src\VueNouvellePartie.cpp" />
     <ClCompile Include="src\Evenement.cpp" />
-    <ClCompile Include="src\GameWindow.cpp" />
+    <ClCompile Include="qt\src\VuePartie.cpp" />
     <ClCompile Include="src\InterfaceUtilisateur.cpp" />
     <ClCompile Include="src\Case.cpp" />
     <ClCompile Include="src\Coordonnee.cpp" />
@@ -172,13 +171,13 @@
     <ClCompile Include="src\Piece.cpp" />
     <ClCompile Include="src\Plateau.cpp" />
     <ClCompile Include="src\Regle.cpp" />
-    <ClCompile Include="VuePartie.cpp" />
+    <ClCompile Include="qt\src\VueHive.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="NouvellePartie.h" />
-    <QtMoc Include="VuePartie.h" />
-    <QtMoc Include="GameWindow.h" />
-    <ClInclude Include="Hexagon.h" />
+    <QtMoc Include="qt\include\VueNouvellePartie.h" />
+    <QtMoc Include="qt\include\VueHive.h" />
+    <QtMoc Include="qt\include\VuePartie.h" />
+    <ClInclude Include="qt\include\VueCase.h" />
     <ClInclude Include="include\ResumeClasse.h" />
     <ClInclude Include="include\Case.h" />
     <ClInclude Include="include\Coordonnee.h" />
@@ -195,7 +194,6 @@
     <ClInclude Include="include\Plateau.h" />
     <ClInclude Include="include\Regle.h" />
     <ClInclude Include="include\InterfaceUtilisateur.h" />
-    <QtMoc Include="qt\include\MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="qt\ui\MainWindow.ui" />

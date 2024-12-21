@@ -1,7 +1,7 @@
+#include "VueHive.h"
+#include "VueNouvellePartie.h"
+#include "VueCase.h"
 #include "VuePartie.h"
-#include "NouvellePartie.h"
-#include "Hexagon.h"
-#include "GameWindow.h"
 #include <QMessageBox>
 #include <QApplication>
 #include <cmath>
@@ -13,9 +13,8 @@ PieceItem::PieceItem(const JeuHive::Piece* piece, QGraphicsItem* parent)
     setBrush(piece->getCouleur() == JeuHive::Couleur::BLANC ? Qt::white : Qt::black);
 }
 
-const JeuHive::Piece* PieceItem::getPiece() const {
-    return piece;
-}
+void VuePartie::initialiserUI() {
+    layout = new QVBoxLayout(this);
 
 void GameBoardWindow::placerPiece(const JeuHive::Piece* piece, const QPointF& position) {
     auto* partie = JeuHive::Hive::getInstance().getPartieEnCours();
@@ -155,7 +154,7 @@ void GameBoardWindow::creerPlateau(int partieId) {
             qreal y = row * hexHeight;
 
             // Create and add the hexagon to the scene
-            Hexagone* hex = new Hexagone(x, y, hexSize);
+            VueCase* hex = new VueCase(x, y, hexSize);
             scene->addItem(hex);
         }
     }
@@ -255,23 +254,23 @@ void VuePartie::initialiserUI() {
     setLayout(layout);
 }
 
-void VuePartie::chargerPartiesExistantes() {
+void VueHive::chargerPartiesExistantes() {
     listeParties->clear();
 
     if (JeuHive::Hive::getInstance().nombreParties() > 0) {
-        AffichagePartie->setText("Affichage des parties : ");
+        affichagePartie->setText("Affichage des parties : ");
         for (const auto* parties : JeuHive::Hive::getInstance().getAllParties()) {
             QString itemText = QString("Partie numéro : %1").arg(parties->getId());
             listeParties->addItem(itemText);
         }
     }
     else {
-        AffichagePartie->setText("Aucune partie en cours");
+        affichagePartie->setText("Aucune partie en cours");
     }
 }
 
-void VuePartie::creerNouvellePartie() {
-    NouvellePartie dialog(this);
+void VueHive::creerNouvellePartie() {
+    VueNouvellePartie dialog(this);
     if (dialog.exec() == QDialog::Accepted) {
         QString nomjoueur1 = dialog.getNomJoueur1();
         QString nomjoueur2 = dialog.getNomJoueur2();
@@ -280,7 +279,7 @@ void VuePartie::creerNouvellePartie() {
     }
 }
 
-void VuePartie::selectionnerPartieExistante() {
+void VueHive::selectionnerPartieExistante() {
     QListWidgetItem* currentItem = listeParties->currentItem();
     if (currentItem) {
         QString itemText = currentItem->text();
@@ -292,7 +291,7 @@ void VuePartie::selectionnerPartieExistante() {
     }
 }
 
-void VuePartie::afficherDetailsPartie(QListWidgetItem* item) {
+void VueHive::afficherDetailsPartie(QListWidgetItem* item) {
     QString itemText = item->text();
     int partieId = itemText.split(" ").last().toInt();
 
@@ -325,34 +324,7 @@ void VuePartie::afficherDetailsPartie(QListWidgetItem* item) {
     }
 }
 
-void VuePartie::terminerPartie() {
-    try {
-        const auto* partieEnCours = JeuHive::Hive::getInstance().getPartieEnCours();
-        if (partieEnCours) {
-            int partieId = partieEnCours->getId();
-            JeuHive::Hive::getInstance().terminerPartie();
-            chargerPartiesExistantes();
-            labelDetailsPartie->clear();
-            QMessageBox::information(this, "Partie terminee", "La partie en cours a ete terminee avec succes.");
-
-            // Close the game window if it is open
-            if (openGameWindows.contains(partieId)) {
-                openGameWindows[partieId]->close();
-                openGameWindows.remove(partieId);
-            }
-        }
-        else
-        {
-            QMessageBox::warning(this, "Erreur", "Impossible de terminer une partie qui n'a pas commencée.");
-            return;
-        }
-    }
-    catch (const JeuHive::HiveException& e) {
-        QMessageBox::warning(this, "Erreur", QString::fromStdString(e.getInfo()));
-    }
-}
-
-void VuePartie::supprimerPartie() {
+void VueHive::supprimerPartie() {
     QListWidgetItem* currentItem = listeParties->currentItem();
     if (currentItem) {
         QString itemText = currentItem->text();
@@ -367,9 +339,9 @@ void VuePartie::supprimerPartie() {
             labelDetailsPartie->clear();
 
             // Close the game window if it is open
-            if (openGameWindows.contains(partieId)) {
-                openGameWindows[partieId]->close();
-                openGameWindows.remove(partieId);
+            if (ouvrirVuePartie.contains(partieId)) {
+                ouvrirVuePartie[partieId]->close();
+                ouvrirVuePartie.remove(partieId);
             }
         }
     }
@@ -405,7 +377,7 @@ void VuePartie::lancerPartie() {
     }
 }
 
-void VuePartie::quitterApplication() {
+void VueHive::quitterApplication() {
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this, "Quitter l'application", "Êtes-vous sûr de vouloir quitter l'application?",
         QMessageBox::Yes | QMessageBox::No);

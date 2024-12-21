@@ -4,9 +4,9 @@
 #include <QPolygonF>
 #include <QBrush>
 
-class Hexagone : public QGraphicsPolygonItem {
+class VueCase : public QGraphicsPolygonItem {
 public:
-    Hexagone(qreal x, qreal y, qreal size, QGraphicsItem* parent = nullptr);
+    VueCase(qreal x, qreal y, qreal size, QGraphicsItem* parent = nullptr);
 
 private:
     QPolygonF createHexagone(qreal size);

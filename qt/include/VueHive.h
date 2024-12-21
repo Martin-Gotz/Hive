@@ -12,7 +12,7 @@
 #include <QMap>
 #include "include/Hive.h"
 #include "include/Piece.h"
-#include "GameWindow.h"
+#include "VuePartie.h"
 
 class PieceItem : public QGraphicsEllipseItem {
 public:
@@ -52,14 +52,13 @@ class VuePartie : public QWidget {
     Q_OBJECT
 
 public:
-    explicit VuePartie(QWidget* parent = nullptr);
+    explicit VueHive(QWidget* parent = nullptr);
 
 private slots:
     void creerNouvellePartie();
     void selectionnerPartieExistante();
     void afficherDetailsPartie(QListWidgetItem* item);
     void supprimerPartie();
-    void terminerPartie();
     void quitterApplication();
     void lancerPartie();
 
@@ -72,7 +71,6 @@ private:
     QLabel* AffichagePartie;
     QPushButton* deleteButton;
     QPushButton* lancerButton;
-    QPushButton* terminerButton;
     QPushButton* quitterButton;
     QMap<int, GameBoardWindow*> openGameWindows; // Map to track open game windows
 

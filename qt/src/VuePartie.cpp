@@ -1,7 +1,7 @@
-#include "GameWindow.h"
+#include "VuePartie.h"
 #include "QVBoxLayout"
 
-GameWindow::GameWindow(int partieId, QWidget* parent) : QWidget(parent) {
+VuePartie::VuePartie(int partieId, QWidget* parent) : QWidget(parent) {
     QVBoxLayout* layout = new QVBoxLayout(this);
 
     graphicsView = new QGraphicsView(this);
@@ -14,7 +14,7 @@ GameWindow::GameWindow(int partieId, QWidget* parent) : QWidget(parent) {
     creerPlateau(partieId);
 }
 
-void GameWindow::creerPlateau(int partieId) {
+void VuePartie::creerPlateau(int partieId) {
     const int rows = 10;
     const int cols = 10;
     const qreal hexSize = 30.0;
@@ -25,7 +25,7 @@ void GameWindow::creerPlateau(int partieId) {
         for (int col = 0; col < cols; ++col) {
             qreal x = col * hexWidth + (row % 2) * (hexWidth / 2);
             qreal y = row * hexHeight;
-            Hexagone* hex = new Hexagone(x, y, hexSize);
+            VueCase* hex = new VueCase(x, y, hexSize);
             scene->addItem(hex);
         }
     }
