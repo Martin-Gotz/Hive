@@ -1,6 +1,4 @@
 #pragma once
-#ifndef NOUVELLEPARTIE_H
-#define NOUVELLEPARTIE_H
 
 #include <QDialog>
 #include <QLabel>
@@ -8,11 +6,11 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-class NouvellePartie : public QDialog {
+class VueNouvellePartie : public QDialog {
     Q_OBJECT
 
 public:
-    explicit NouvellePartie(QWidget* parent = nullptr);
+    explicit VueNouvellePartie(QWidget* parent = nullptr);
 
     QString getNomJoueur1() const;
     QString getNomJoueur2() const;
@@ -28,5 +26,3 @@ private:
 private slots: 
     void supprimerPartie();
 };
-
-#endif // NOUVELLEPARTIE_H

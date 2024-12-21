@@ -1,10 +1,10 @@
-#include "NouvellePartie.h"
+#include "VueNouvellePartie.h"
 
-NouvellePartie::NouvellePartie(QWidget* parent) : QDialog(parent) {
+VueNouvellePartie::VueNouvellePartie(QWidget* parent) : QDialog(parent) {
     setupUI();
 }
 
-void NouvellePartie::setupUI() {
+void VueNouvellePartie::setupUI() {
     QVBoxLayout* layout = new QVBoxLayout(this);
 
     QLabel* labelJoueur1 = new QLabel("Nom du Joueur 1:", this);
@@ -35,16 +35,16 @@ void NouvellePartie::setupUI() {
     setLayout(layout);
 }
 
-QString NouvellePartie::getNomJoueur1() const {
+QString VueNouvellePartie::getNomJoueur1() const {
     return nomJoueur1Edit->text();
 }
 
-QString NouvellePartie::getNomJoueur2() const {
+QString VueNouvellePartie::getNomJoueur2() const {
     return nomJoueur2Edit->text();
 }
 
 
-void NouvellePartie::supprimerPartie() {
+void VueNouvellePartie::supprimerPartie() {
     // Implémentation de la suppression de la partie
     // Vous pouvez ajouter ici le code nécessaire pour supprimer la partie
     // Par exemple, réinitialiser les champs de texte ou effectuer d'autres actions nécessaires

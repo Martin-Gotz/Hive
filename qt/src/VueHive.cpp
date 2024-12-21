@@ -1,46 +1,46 @@
+#include "VueHive.h"
+#include "VueNouvellePartie.h"
+#include "VueCase.h"
 #include "VuePartie.h"
-#include "NouvellePartie.h"
-#include "Hexagon.h"
-#include "GameWindow.h"
 #include <QMessageBox>
 #include <QApplication>
 
-VuePartie::VuePartie(QWidget* parent) : QWidget(parent) {
+VueHive::VueHive(QWidget* parent) : QWidget(parent) {
     initialiserUI();
     chargerPartiesExistantes();
 }
 
-void VuePartie::initialiserUI() {
+void VueHive::initialiserUI() {
     layout = new QVBoxLayout(this);
 
     labelTitre = new QLabel("Menu du Jeu Hive", this);
     layout->addWidget(labelTitre);
 
     btnNouvellePartie = new QPushButton("Créer une nouvelle partie", this);
-    connect(btnNouvellePartie, &QPushButton::clicked, this, &VuePartie::creerNouvellePartie);
+    connect(btnNouvellePartie, &QPushButton::clicked, this, &VueHive::creerNouvellePartie);
     layout->addWidget(btnNouvellePartie);
 
     AffichagePartie = new QLabel(this); // Initialisation de AffichagePartie
     layout->addWidget(AffichagePartie); // Ajout de AffichagePartie à la disposition
 
     listeParties = new QListWidget(this);
-    connect(listeParties, &QListWidget::itemClicked, this, &VuePartie::afficherDetailsPartie);
+    connect(listeParties, &QListWidget::itemClicked, this, &VueHive::afficherDetailsPartie);
     layout->addWidget(listeParties);
 
     deleteButton = new QPushButton("Supprimer", this);
-    connect(deleteButton, &QPushButton::clicked, this, &VuePartie::supprimerPartie);
+    connect(deleteButton, &QPushButton::clicked, this, &VueHive::supprimerPartie);
     layout->addWidget(deleteButton);
 
     lancerButton = new QPushButton("Lancer", this); // Initialisation du bouton Lancer
-    connect(lancerButton, &QPushButton::clicked, this, &VuePartie::lancerPartie); // Connexion du bouton Lancer
+    connect(lancerButton, &QPushButton::clicked, this, &VueHive::lancerPartie); // Connexion du bouton Lancer
     layout->addWidget(lancerButton);
 
     terminerButton = new QPushButton("Terminer", this); // Initialisation du bouton Terminer
-    connect(terminerButton, &QPushButton::clicked, this, &VuePartie::terminerPartie); // Connexion du bouton Terminer
+    connect(terminerButton, &QPushButton::clicked, this, &VueHive::terminerPartie); // Connexion du bouton Terminer
     layout->addWidget(terminerButton);
 
     quitterButton = new QPushButton("Quitter", this); // Initialisation du bouton Quitter
-    connect(quitterButton, &QPushButton::clicked, this, &VuePartie::quitterApplication); // Connexion du bouton Quitter
+    connect(quitterButton, &QPushButton::clicked, this, &VueHive::quitterApplication); // Connexion du bouton Quitter
     layout->addWidget(quitterButton);
 
     labelDetailsPartie = new QLabel(this);
@@ -54,7 +54,7 @@ void VuePartie::initialiserUI() {
     setLayout(layout);
 }
 
-void VuePartie::creerPlateau(int partieId) {
+void VueHive::creerPlateau(int partieId) {
     clearPlateau(); // Clear the current board
 
     const auto* partie = JeuHive::Hive::getInstance().getPartie(partieId);
@@ -80,7 +80,7 @@ void VuePartie::creerPlateau(int partieId) {
             qreal y = row * hexHeight;
 
             // Create and add the hexagon to the scene
-            Hexagone* hex = new Hexagone(x, y, hexSize);
+            VueCase* hex = new VueCase(x, y, hexSize);
             scene->addItem(hex);
 
             // Optional: Highlight specific cells (e.g., in red)
@@ -91,7 +91,7 @@ void VuePartie::creerPlateau(int partieId) {
     }
 }
 
-void VuePartie::afficherInfosJoueurs(int partieId) {
+void VueHive::afficherInfosJoueurs(int partieId) {
     const auto* partie = JeuHive::Hive::getInstance().getPartie(partieId);
     if (!partie) {
         return;
@@ -117,11 +117,11 @@ void VuePartie::afficherInfosJoueurs(int partieId) {
 
 
 
-void VuePartie::clearPlateau() {
+void VueHive::clearPlateau() {
     scene->clear();
 }
 
-void VuePartie::chargerPartiesExistantes() {
+void VueHive::chargerPartiesExistantes() {
     listeParties->clear();
 
     if (JeuHive::Hive::getInstance().nombreParties() > 0) {
@@ -136,8 +136,8 @@ void VuePartie::chargerPartiesExistantes() {
     }
 }
 
-void VuePartie::creerNouvellePartie() {
-    NouvellePartie dialog(this);
+void VueHive::creerNouvellePartie() {
+    VueNouvellePartie dialog(this);
     if (dialog.exec() == QDialog::Accepted) {
         QString nomjoueur1 = dialog.getNomJoueur1();
         QString nomjoueur2 = dialog.getNomJoueur2();
@@ -146,7 +146,7 @@ void VuePartie::creerNouvellePartie() {
     }
 }
 
-void VuePartie::selectionnerPartieExistante() {
+void VueHive::selectionnerPartieExistante() {
     QListWidgetItem* currentItem = listeParties->currentItem();
     if (currentItem) {
         QString itemText = currentItem->text();
@@ -159,7 +159,7 @@ void VuePartie::selectionnerPartieExistante() {
     }
 }
 
-void VuePartie::afficherDetailsPartie(QListWidgetItem* item) {
+void VueHive::afficherDetailsPartie(QListWidgetItem* item) {
     QString itemText = item->text();
     int partieId = itemText.split(" ").last().toInt();
 
@@ -192,7 +192,7 @@ void VuePartie::afficherDetailsPartie(QListWidgetItem* item) {
     }
 }
 
-void VuePartie::terminerPartie() {
+void VueHive::terminerPartie() {
     try {
         const auto* partieEnCours = JeuHive::Hive::getInstance().getPartieEnCours();
         if (partieEnCours) {
@@ -219,7 +219,7 @@ void VuePartie::terminerPartie() {
     }
 }
 
-void VuePartie::supprimerPartie() {
+void VueHive::supprimerPartie() {
     QListWidgetItem* currentItem = listeParties->currentItem();
     if (currentItem) {
         QString itemText = currentItem->text();
@@ -247,7 +247,7 @@ void VuePartie::supprimerPartie() {
 
 
 
-void VuePartie::lancerPartie() {
+void VueHive::lancerPartie() {
     const auto* partieEnCours = JeuHive::Hive::getInstance().getPartieEnCours();
     QListWidgetItem* currentItem = listeParties->currentItem();
     if (currentItem) {
@@ -265,7 +265,7 @@ void VuePartie::lancerPartie() {
             }
         }
         JeuHive::Hive::getInstance().demarrerPartie(partieId);
-        GameWindow* gameWindow = new GameWindow(partieId);
+        VuePartie* gameWindow = new VuePartie(partieId);
         openGameWindows[partieId] = gameWindow; // Track the open game window
         gameWindow->show();
     }
@@ -274,7 +274,7 @@ void VuePartie::lancerPartie() {
     }
 }
 
-void VuePartie::quitterApplication() {
+void VueHive::quitterApplication() {
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this, "Quitter l'application", "Êtes-vous sûr de vouloir quitter l'application?",
         QMessageBox::Yes | QMessageBox::No);

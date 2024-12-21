@@ -1,8 +1,7 @@
 #include "./include/Hive.h"
 #include "./include/InterfaceUtilisateur.h"
 #include <QApplication>
-#include "./qt/include/MainWindow.h"
-#include "VuePartie.h"
+#include "VueHive.h"
 
 using namespace std;
 using namespace JeuHive;
@@ -15,10 +14,8 @@ int main(int argc, char* argv[]) {
 
 
     QApplication app(argc, argv);
-    VuePartie vuepartie;
-    vuepartie.show();
-    //MainWindow w;
-    //w.show();
+    VueHive vueHive;
+    vueHive.show();
 
     return app.exec();
 }

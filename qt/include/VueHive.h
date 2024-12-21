@@ -10,13 +10,13 @@
 #include <QMap>
 #include "include/Hive.h"
 #include "include/Piece.h"
-#include "GameWindow.h"
+#include "VuePartie.h"
 
-class VuePartie : public QWidget {
+class VueHive : public QWidget {
     Q_OBJECT
 
 public:
-    explicit VuePartie(QWidget* parent = nullptr);
+    explicit VueHive(QWidget* parent = nullptr);
 
 private slots:
     void creerNouvellePartie();
@@ -43,7 +43,7 @@ private:
     QPushButton* quitterButton;
     QGraphicsView* graphicsView;
     QGraphicsScene* scene;
-    QMap<int, GameWindow*> openGameWindows; // Map to track open game windows
+    QMap<int, VuePartie*> openGameWindows; // Map to track open game windows
     void initialiserUI();
     void chargerPartiesExistantes();
     void creerPlateau(int partieId);
