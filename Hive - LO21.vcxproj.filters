@@ -66,6 +66,12 @@
     <ClCompile Include="NouvellePartie.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="Hexagon.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameWindow.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Partie.h">
@@ -116,6 +122,9 @@
     <ClInclude Include="include\ResumeClasse.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="Hexagon.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="qt\include\MainWindow.h">
@@ -125,6 +134,9 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </QtMoc>
     <QtMoc Include="NouvellePartie.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </QtMoc>
+    <QtMoc Include="GameWindow.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </QtMoc>
   </ItemGroup>
