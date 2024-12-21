@@ -35,7 +35,7 @@ private:
     void afficherPiecesJoueurs(int partieId);
 
     void closeEvent(QCloseEvent* event) override;
-
+    //void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
 signals:
     void partieFermee(); // Signal émis à la fermeture
 };
