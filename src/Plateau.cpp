@@ -10,7 +10,7 @@ void Plateau::ajouterPieceSurCoo(const Piece* piece, const Coordonnee& coo) {
 
 	if (case_sur_coo == nullptr) {
 		Case* nouv_case = new Case(coo);
-		Cases.insert(make_pair(coo, nouv_case));
+		cases.insert(make_pair(coo, nouv_case));
 		nouv_case->ajouterPiece(piece);
 	}
 	else {
@@ -28,7 +28,7 @@ void Plateau::retirerPieceDeCoo(const Coordonnee& coo) {
 		case_sur_coo->retirerPiece();
 
 		if (case_sur_coo->estVide()) {
-			Cases.erase(coo);
+			cases.erase(coo);
 			delete case_sur_coo;
 		}
 	}
@@ -37,9 +37,9 @@ void Plateau::retirerPieceDeCoo(const Coordonnee& coo) {
 Case* Plateau::getCaseDeCoo(const Coordonnee& coo) const {
 	// renvoie nullptr si rien n'est trouvé
 	// d'où le choix de renvoi d'un pointeur
-	unordered_map<Coordonnee, Case*>::const_iterator case0 = Cases.find(coo);
+	unordered_map<Coordonnee, Case*>::const_iterator case0 = cases.find(coo);
 
-	if (case0 != Cases.end()) {
+	if (case0 != cases.end()) {
 		return case0->second;
 	}
 	else {
@@ -50,7 +50,7 @@ Case* Plateau::getCaseDeCoo(const Coordonnee& coo) const {
 
 Case* JeuHive::Plateau::getCaseDePiece(const Piece& piece) const
 {
-	for (pair<Coordonnee, Case*> paire : Cases) {
+	for (pair<Coordonnee, Case*> paire : cases) {
 		for (const Piece* piece0 : paire.second->getPieces()) {
 			if (piece0 == &piece) {
 				return paire.second;
@@ -69,7 +69,7 @@ size_t Plateau::getNombrePieces() const
 {
 	size_t resultat = 0;
 	Case* case0;
-	for (pair<Coordonnee, Case*> paire : Cases) {
+	for (pair<Coordonnee, Case*> paire : cases) {
 		case0 = paire.second;
 		resultat += case0->getNombrePieces();
 	}
@@ -133,8 +133,8 @@ set<Coordonnee> Plateau::ensemblePlacementsPossibles(const Piece& piece, int tou
 	Coordonnee coo_case;
 	unordered_map<Coordonnee, Case*>::const_iterator itr;
 
-	for (itr = Cases.begin();
-		itr != Cases.end(); itr++)
+	for (itr = cases.begin();
+		itr != cases.end(); itr++)
 	{
 		coo_case = itr->first;
 		case_ptr = itr->second;
@@ -564,7 +564,7 @@ bool Plateau::estAbeillePlacee(Couleur couleur) const
 {
 	// on test juste chaque pièce de chaque case
 	Case* case0;
-	for (pair<Coordonnee, Case*> paire : Cases) {
+	for (pair<Coordonnee, Case*> paire : cases) {
 		case0 = paire.second;
 		for (const Piece* piece : case0->getPieces()) {
 
@@ -582,7 +582,7 @@ bool Plateau::estAbeillePlacee(Couleur couleur) const
 bool JeuHive::Plateau::estAbeilleEntouree(Couleur couleur) const
 {
 	// Parcourt chaque case du plateau
-	for (const auto& paire : Cases) {
+	for (const auto& paire : cases) {
 		const Case* case0 = paire.second;
 
 		// Parcourt les pièces de la case actuelle
@@ -629,7 +629,7 @@ vector<Coup*> JeuHive::Plateau::totalCoupsPossibles(int tour, Joueur& joueur)
 	const Piece* piece_actuelle_plateau;
 	set<Coordonnee> coos_deplacements_pieces;
 	Coordonnee coo_origine;
-	for (pair<Coordonnee, Case*> paire : Cases) {
+	for (pair<Coordonnee, Case*> paire : cases) {
 
 		piece_actuelle_plateau = paire.second->getDessus();
 		coo_origine = paire.first;
@@ -654,4 +654,15 @@ vector<Coup*> JeuHive::Plateau::totalCoupsPossibles(int tour, Joueur& joueur)
 
 
 	return coups_possibles;
+}
+
+ResumePlateau Plateau::resumer() const {
+	ResumePlateau resume;
+
+	for (const auto& casePair : cases) {
+		ResumeCase resumeCase = casePair.second->resumer();
+		resume.cases.push_back(resumeCase);
+	}
+
+	return resume;
 }
