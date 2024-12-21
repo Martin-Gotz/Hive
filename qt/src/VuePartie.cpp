@@ -1,5 +1,46 @@
 #include "VuePartie.h"
 
+VuePartie::VuePartie(int partieId, QWidget* parent) : QWidget(parent) {
+    // Layout vertical pour les informations
+    layoutBarreInfo = new QVBoxLayout();
+
+    labelJoueur1 = new QLabel("Joueur 1", this);
+    layoutBarreInfo->addWidget(labelJoueur1);
+
+    listPiecesJoueur1 = new QListWidget(this);
+    layoutBarreInfo->addWidget(listPiecesJoueur1);
+
+    labelJoueur2 = new QLabel("Joueur 2", this);
+    layoutBarreInfo->addWidget(labelJoueur2);
+
+    listPiecesJoueur2 = new QListWidget(this);
+    layoutBarreInfo->addWidget(listPiecesJoueur2);
+
+    labelTour = new QLabel("Tour actuel", this);
+    layoutBarreInfo->addWidget(labelTour);
+
+    boutonQuitter = new QPushButton("Quitter", this);
+    layoutBarreInfo->addWidget(boutonQuitter);
+    connect(boutonQuitter, &QPushButton::clicked, this, &QWidget::close);
+
+    graphicsView = new QGraphicsView(this);
+    scene = new QGraphicsScene(this);
+    graphicsView->setScene(scene);
+    graphicsView->setMinimumWidth(600);
+    graphicsView->setMinimumHeight(200);
+
+    // Layout horizontal principal
+    QHBoxLayout* layoutPartie = new QHBoxLayout(this);
+    layoutPartie->addWidget(graphicsView);
+    layoutPartie->addLayout(layoutBarreInfo);
+
+    setLayout(layoutPartie);
+
+    creerPlateau(partieId);
+    afficherInfosJoueurs(partieId);
+    afficherPiecesJoueurs(partieId);
+}
+
 void VuePartie::placerPiece(const JeuHive::Piece* piece, const QPointF& position) {
     auto* partie = JeuHive::Hive::getInstance().getPartieEnCours();
     if (!partie) {
@@ -18,16 +59,13 @@ void VuePartie::placerPiece(const JeuHive::Piece* piece, const QPointF& position
     JeuHive::Coup* coup = nullptr;
 
     if (isPlacement) {
-        // Create a placement coup
         coup = new JeuHive::CoupPlacement(piece, coord, partie->getCompteurTour());
     }
     else {
-        // Create a movement coup
         const JeuHive::Coordonnee& currentCoord = partie->getPlateau().getCaseDePiece(*piece)->getCoo();
         coup = new JeuHive::CoupDeplacement(piece, currentCoord, coord, partie->getCompteurTour());
     }
 
-    // Play the coup
     partie->jouerCoup(coup);
 
     // Update the piece's position in the scene
@@ -63,35 +101,6 @@ void VuePartie::placerPiece(const JeuHive::Piece* piece, const QPointF& position
             }
         }
     }
-}
-
-
-VuePartie::VuePartie(int partieId, QWidget* parent) : QWidget(parent) {
-    layout = new QVBoxLayout(this);
-
-    labelJoueur1 = new QLabel(this);
-    layout->addWidget(labelJoueur1);
-
-    labelJoueur2 = new QLabel(this);
-    layout->addWidget(labelJoueur2);
-
-    labelTour = new QLabel(this);
-    layout->addWidget(labelTour);
-
-    listPiecesJoueur1 = new QListWidget(this);
-    layout->addWidget(listPiecesJoueur1);
-
-    listPiecesJoueur2 = new QListWidget(this);
-    layout->addWidget(listPiecesJoueur2);
-
-    graphicsView = new QGraphicsView(this);
-    scene = new QGraphicsScene(this);
-    graphicsView->setScene(scene);
-    layout->addWidget(graphicsView);
-
-    setLayout(layout);
-
-    creerPlateau(partieId);
 }
 
 void VuePartie::creerPlateau(int partieId) {
@@ -130,8 +139,6 @@ void VuePartie::creerPlateau(int partieId) {
     }
 
     graphicsView->update(); // Force the view to update
-    afficherInfosJoueurs(partieId);
-    afficherPiecesJoueurs(partieId);
 }
 
 void VuePartie::afficherInfosJoueurs(int partieId) {
@@ -159,6 +166,7 @@ void VuePartie::afficherInfosJoueurs(int partieId) {
     labelJoueur2->setText(joueur2Info);
     labelTour->setText(tourInfo);
 }
+
 void VuePartie::afficherPiecesJoueurs(int partieId) {
     const auto* partie = JeuHive::Hive::getInstance().getPartieEnCours();
     if (!partie) {
