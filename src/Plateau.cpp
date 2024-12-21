@@ -65,23 +65,6 @@ bool JeuHive::Plateau::estPlacee(const Piece& piece) const
 	return (getCaseDePiece(piece) != nullptr);
 }
 
-
-/*
-ostream& operator<<(ostream& f, const Plateau& p)
-	{
-		f << "Nombre de cellules : " << p.getNombreCases() << "\n";
-		int i = 0;
-		unordered_map<Coordonnee, Case*>::const_iterator itr;
-		for (itr = p.getCases().begin();
-			itr != p.getCases().end(); itr++)
-		{
-			f << "Case numéro : " << i++ << " Coordonnées : (" << itr->first.get_q() << itr->first.get_r() << ")\n";
-		}
-		return f;
-	}
-
-*/
-
 size_t Plateau::getNombrePieces() const
 {
 	size_t resultat = 0;
@@ -323,7 +306,7 @@ ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligne
 	vector<Coordonnee> coos_selectionner, int marge) const
 {
 	// résultat de l'affichage:
-	// Pour chaque hexagone, la pile de pièce est affichée: un pièce est représentée par un entier(0 pour BLANC, 1 pour
+	// Pour chaque hexagone, la pile de pièce est affichée: un pièce est représentée par une couleur(B pour BLANC, N pour
 	// NOIR) et d'un caractère pour le type d'insecte:
 	// r:reine abeille, a:araignée, s:scarabée, c:sauterelle(criquet), f:fourmi, m: moustique, b:coccinelle
 	// surligne aussi des coos
@@ -616,105 +599,6 @@ bool JeuHive::Plateau::estAbeilleEntouree(Couleur couleur) const
 	return false;
 }
 
-
-
-/*
-ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
-{
-	// résultat de l'affichage:
-	// Pour chaque hexagone, la pile de pièce est affichée: un pièce est représentée par un entier(0 pour BLANC, 1 pour
-	// NOIR) et d'un caractère pour le type d'insecte:
-	// A:abeille, a:araignée, S:scarabée, s:sauterelle, f:fourmi, m: moustique, c:coccinelle
-
-
-	// pour afficher dans la console le plateau, peut convertir les coos hexagonales en une hauteur y(1 pour chaque ligne)
-	// et une position x(un certain nombre de caractères)
-	// Pour s'assurer qu'il y ait assez de place, la convertion sera linéaire et se fera de cette manière:
-	// y=2q+r, x=r
-	// les lignes ne s'afficheront bien que si le jeu n'est pas trop étendu sur l'axe gauche-droite,
-	// et on ne peut rien y faire
-
-	if (p.estVide()) {
-		return f;
-	}
-
-	int taille_str = 4;	// la taille que prendra chaque hexagone à afficher
-
-	//on commence par calculer les x et y min et max pour gacher le moins de place possible
-	int min_y = 10000;  // on suppose qu'aucune case ne sera à de telles coordonnées
-	int max_y = -10000;
-	int min_x = 10000;
-	int max_x = -10000;
-
-	Coordonnee coo_case;
-	int x_case;
-	int y_case;
-
-	for (auto paire : p.getCases()) {
-		coo_case = paire.first;
-		x_case = coo_case.get_q();
-		y_case = coo_case.get_q() + 2 * coo_case.get_r();
-		min_y = min(min_y, y_case);
-		max_y = max(max_y, y_case);
-		min_x = min(min_x, x_case);
-		max_x = max(max_x, x_case);
-		taille_str = max(taille_str, paire.second->getNombrePieces() * 2);
-
-	}
-
-	int marge = 1;// espace autour
-	int taille_x = max_x - min_x + 1 + 2 * marge;
-	int taille_y = max_y - min_y + 1 + 2 * marge;
-
-	string str_espaces = string(taille_str, ' ');
-
-	string str_point = " .";
-	str_point.append(string(taille_str - 2, ' '));
-
-
-	// tableau bidimensionnel rempli de str_espaces
-	vector<vector<string>> tab = vector<vector<string>>(taille_y, vector<string>(taille_x, ""));
-
-
-	Case* case0;
-	string str_case;
-	for (auto paire : p.getCases()) {
-		coo_case = paire.first;
-		case0 = paire.second;
-
-		x_case = coo_case.get_q();
-		y_case = coo_case.get_q() + 2 * coo_case.get_r();
-		str_case = case0->toString();
-		str_case.append(string(taille_str - str_case.size(), ' '));
-
-		tab.at(y_case - min_y + marge).at(x_case - min_x + marge) = str_case;
-
-	}
-	// tableau maintenant rempli
-
-
-	for (int i = taille_y - 1; i >= 0; i--) {		// boucle inversée car on print de haut en bas
-		for (int j = 0; j < taille_x; j++) {
-			if (tab.at(i).at(j) == "") {
-				if ((i + j + min_x + min_y) % 2 == 0) {
-					f << str_point;
-				}
-				else {
-					f << str_espaces;
-				}
-			}
-			else {
-				f << tab.at(i).at(j);
-			}
-		}
-		f << "\n";
-	}
-
-	return f;
-
-}
-
-*/
 
 ostream& JeuHive::operator<<(ostream& f, const Plateau& p) {
 	return p.afficher(f, {}, {}, 1);

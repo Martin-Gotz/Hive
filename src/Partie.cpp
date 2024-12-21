@@ -125,9 +125,11 @@ void Partie::placerPiece(int idPiece, const Coordonnee& cooDestination) {
 
     // Construire un coup de placement
     Coup* coup = new CoupPlacement(piece, cooDestination, compteurTour);
-
+    
     // Jouer le coup
     jouerCoup(coup);
+
+    
 
     // Retirer la pièce de la main du joueur
     joueurActuel->retirerPiece(piece);
@@ -136,7 +138,14 @@ void Partie::placerPiece(int idPiece, const Coordonnee& cooDestination) {
 }
 
 void Partie::deplacerPiece(const Coordonnee& cooOrigine, const Coordonnee& cooDestination) {
-    const Piece* piece = plateau.getCaseDeCoo(cooOrigine)->getDessus();
+
+    const Case* case0 = plateau.getCaseDeCoo(cooOrigine);
+
+    if (case0 == nullptr) {
+        throw HiveException("Aucune pièce n'est située à ces coordonnées");
+    }
+
+    const Piece* piece = case0->getDessus();
 
     if (piece->getCouleur() != joueurActuel->getCouleur()) {
         throw HiveException("Vous ne pouvez déplacer que vos propres pièces !");
