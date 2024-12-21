@@ -1,54 +1,21 @@
 #pragma once
 
+#include <QApplication>
 #include <QWidget>
 #include <QPushButton>
 #include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QListWidget>
 #include <QLabel>
 #include <QGraphicsView>
 #include <QGraphicsScene>
-#include <QGraphicsItem>
 #include <QMap>
 #include "include/Hive.h"
 #include "include/Piece.h"
 #include "VuePartie.h"
+#include <VueNouvellePartie.h>
 
-class PieceItem : public QGraphicsEllipseItem {
-public:
-    PieceItem(const JeuHive::Piece* piece, QGraphicsItem* parent = nullptr);
-    const JeuHive::Piece* getPiece() const;
 
-protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
-
-private:
-    const JeuHive::Piece* piece;
-};
-
-class GameBoardWindow : public QWidget {
-    Q_OBJECT
-
-public:
-    explicit GameBoardWindow(int partieId, QWidget* parent = nullptr);
-    void creerPlateau(int partieId);
-    void placerPiece(const JeuHive::Piece* piece, const QPointF& position);
-
-private:
-    QVBoxLayout* layout;
-    QGraphicsView* graphicsView;
-    QGraphicsScene* scene;
-    QLabel* labelJoueur1;
-    QLabel* labelJoueur2;
-    QLabel* labelTour;
-    QListWidget* listPiecesJoueur1;
-    QListWidget* listPiecesJoueur2;
-
-    void afficherInfosJoueurs(int partieId);
-    void afficherPiecesJoueurs(int partieId);
-};
-
-class VuePartie : public QWidget {
+class VueHive : public QWidget {
     Q_OBJECT
 
 public:
@@ -68,13 +35,13 @@ private:
     QListWidget* listeParties;
     QLabel* labelTitre;
     QLabel* labelDetailsPartie;
-    QLabel* AffichagePartie;
-    QPushButton* deleteButton;
-    QPushButton* lancerButton;
-    QPushButton* quitterButton;
-    QMap<int, GameBoardWindow*> openGameWindows; // Map to track open game windows
+    QLabel* affichagePartie;
+    QPushButton* boutonSupprimer;
+    QPushButton* boutonLancer;
+    QPushButton* boutonQuitter;
+    QMap<int, VuePartie*> ouvrirVuePartie;
 
     void initialiserUI();
     void chargerPartiesExistantes();
-    void clearPlateau();
+    void afficherInfosJoueurs(int partieId);
 };

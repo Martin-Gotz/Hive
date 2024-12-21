@@ -1,8 +1,16 @@
 #pragma once
 
 #include <QWidget>
+#include <QGraphicsItem>
 #include <QGraphicsView>
 #include <QGraphicsScene>
+#include <QGraphicsSceneMouseEvent>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QListWidget>
+#include <QMessageBox>
+#include "include/Hive.h"
+#include "VuePiece.h"
 #include "VueCase.h"
 
 class VuePartie : public QWidget {
@@ -10,9 +18,19 @@ class VuePartie : public QWidget {
 
 public:
     explicit VuePartie(int partieId, QWidget* parent = nullptr);
+    void creerPlateau(int partieId);
+    void placerPiece(const JeuHive::Piece* piece, const QPointF& position);
 
 private:
+    QVBoxLayout* layout;
     QGraphicsView* graphicsView;
     QGraphicsScene* scene;
-    void creerPlateau(int partieId);
+    QLabel* labelJoueur1;
+    QLabel* labelJoueur2;
+    QLabel* labelTour;
+    QListWidget* listPiecesJoueur1;
+    QListWidget* listPiecesJoueur2;
+
+    void afficherInfosJoueurs(int partieId);
+    void afficherPiecesJoueurs(int partieId);
 };
