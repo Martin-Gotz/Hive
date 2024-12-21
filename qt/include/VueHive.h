@@ -36,7 +36,7 @@ private:
     QLabel* labelJoueur1;
     QLabel* labelJoueur2;
     QLabel* labelTour;
-    QPushButton* supprimerButton;
+    QPushButton* boutonSupprimer;
     QPushButton* lancerButton;
     QPushButton* quitterButton;
     QGraphicsView* graphicsView;

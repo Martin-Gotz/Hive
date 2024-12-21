@@ -5,6 +5,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QMessageBox>
 
 class VueNouvellePartie : public QDialog {
     Q_OBJECT
@@ -18,10 +19,10 @@ public:
 private:
     QLineEdit* nomJoueur1Edit;
     QLineEdit* nomJoueur2Edit;
-    QPushButton* okButton;
-    QPushButton* cancelButton;
-    QPushButton* supprimerButton;
-    void setupUI();
+    QPushButton* boutonOk;
+    QPushButton* boutonAnnuler;
+    QPushButton* boutonSupprimer;
+    void initialiser();
 
 private slots: 
     void supprimerPartie();

@@ -36,9 +36,9 @@ void VueHive::initialiserUI() {
     connect(lancerButton, &QPushButton::clicked, this, &VueHive::lancerPartie);
     layout->addWidget(lancerButton);
 
-    supprimerButton = new QPushButton("Supprimer", this);
-    connect(supprimerButton, &QPushButton::clicked, this, &VueHive::supprimerPartie);
-    layout->addWidget(supprimerButton);
+    boutonSupprimer = new QPushButton("Supprimer", this);
+    connect(boutonSupprimer, &QPushButton::clicked, this, &VueHive::supprimerPartie);
+    layout->addWidget(boutonSupprimer);
 
 
 

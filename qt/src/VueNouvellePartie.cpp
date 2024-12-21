@@ -1,10 +1,10 @@
 #include "VueNouvellePartie.h"
 
 VueNouvellePartie::VueNouvellePartie(QWidget* parent) : QDialog(parent) {
-    setupUI();
+    initialiser();
 }
 
-void VueNouvellePartie::setupUI() {
+void VueNouvellePartie::initialiser() {
     QVBoxLayout* layout = new QVBoxLayout(this);
 
     QLabel* labelJoueur1 = new QLabel("Nom du Joueur 1:", this);
@@ -19,18 +19,29 @@ void VueNouvellePartie::setupUI() {
     nomJoueur2Edit = new QLineEdit(this);
     layout->addWidget(nomJoueur2Edit);
 
-    okButton = new QPushButton("OK", this);
-    cancelButton = new QPushButton("Annuler", this);
+    boutonOk = new QPushButton("OK", this);
+    boutonAnnuler = new QPushButton("Annuler", this);
 
     QHBoxLayout* buttonLayout = new QHBoxLayout();
-    buttonLayout->addWidget(okButton);
-    buttonLayout->addWidget(cancelButton);
+    buttonLayout->addWidget(boutonOk);
+    buttonLayout->addWidget(boutonAnnuler);
 
 
     layout->addLayout(buttonLayout);
 
-    connect(okButton, &QPushButton::clicked, this, &QDialog::accept);
-    connect(cancelButton, &QPushButton::clicked, this, &QDialog::reject);
+    connect(boutonOk, &QPushButton::clicked, this, [this]() {
+        QString nomJoueur1 = nomJoueur1Edit->text().trimmed();
+        QString nomJoueur2 = nomJoueur2Edit->text().trimmed();
+
+        // Vérifier que les deux noms sont remplis
+        if (nomJoueur1.isEmpty() || nomJoueur2.isEmpty()) {
+            QMessageBox::warning(this, "Erreur", "Les noms des deux joueurs doivent être renseignés.");
+            return;
+        }
+
+        accept();
+        });
+    connect(boutonAnnuler, &QPushButton::clicked, this, &QDialog::reject);
 
     setLayout(layout);
 }
