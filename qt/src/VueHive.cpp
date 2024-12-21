@@ -146,6 +146,8 @@ void VueHive::creerNouvellePartie() {
     if (dialog.exec() == QDialog::Accepted) {
         QString nomjoueur1 = dialog.getNomJoueur1();
         QString nomjoueur2 = dialog.getNomJoueur2();
+        JeuHive::TypeJoueur typeJoueur1 = dialog.getTypeJoueur1();
+        JeuHive::TypeJoueur typeJoueur2 = dialog.getTypeJoueur2();
         JeuHive::Hive::getInstance().ajouterPartie(nomjoueur1.toStdString(), JeuHive::TypeJoueur::HUMAIN, nomjoueur2.toStdString(), JeuHive::TypeJoueur::HUMAIN);
         chargerPartiesExistantes();
     }

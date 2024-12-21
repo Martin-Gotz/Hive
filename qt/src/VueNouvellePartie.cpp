@@ -15,9 +15,15 @@ void VueNouvellePartie::initialiser() {
 
     QLabel* labelJoueur2 = new QLabel("Nom du Joueur 2:", this);
     layout->addWidget(labelJoueur2);
+    
+    // Checkbox pour l'IA
+    iaCheckBox = new QCheckBox("Joueur 2 est une IA ?", this);
 
     nomJoueur2Edit = new QLineEdit(this);
     layout->addWidget(nomJoueur2Edit);
+
+    layout->addWidget(iaCheckBox);
+
 
     boutonOk = new QPushButton("OK", this);
     boutonAnnuler = new QPushButton("Annuler", this);
@@ -28,6 +34,19 @@ void VueNouvellePartie::initialiser() {
 
 
     layout->addLayout(buttonLayout);
+
+
+    connect(iaCheckBox, &QCheckBox::toggled, this, [this](bool checked) {
+        if (checked) {
+            nomJoueur2Edit->setText("IA");
+            nomJoueur2Edit->setEnabled(false);
+        }
+        else {
+            nomJoueur2Edit->clear();
+            nomJoueur2Edit->setEnabled(true);
+        }
+        });
+
 
     connect(boutonOk, &QPushButton::clicked, this, [this]() {
         QString nomJoueur1 = nomJoueur1Edit->text().trimmed();
@@ -53,6 +72,15 @@ QString VueNouvellePartie::getNomJoueur1() const {
 QString VueNouvellePartie::getNomJoueur2() const {
     return nomJoueur2Edit->text();
 }
+
+JeuHive::TypeJoueur VueNouvellePartie::getTypeJoueur1() {
+    return JeuHive::HUMAIN;
+}
+
+JeuHive::TypeJoueur VueNouvellePartie::getTypeJoueur2() {
+    return iaCheckBox->isChecked() ? JeuHive::IA : JeuHive::HUMAIN;
+}
+
 
 
 void VueNouvellePartie::supprimerPartie() {
