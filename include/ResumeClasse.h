@@ -26,7 +26,7 @@ struct ResumePiece {
 
 struct ResumeMain {
     vector<ResumePiece> pieces;
-    int nombre_pieces_restantes;
+    size_t nombre_pieces_restantes;
     string estVide;
 };
 

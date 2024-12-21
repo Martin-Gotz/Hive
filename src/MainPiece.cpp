@@ -6,7 +6,7 @@ using namespace std;
 
 
 void MainPiece::ajouterPiece(Piece* piece) { 
-	auto it = std::find(pieces.begin(), pieces.end(), piece);
+	auto it = find(pieces.begin(), pieces.end(), piece);
 	if (it != pieces.end()) {
 		throw HiveException("La piece est deja dans la main");
 	}
@@ -17,7 +17,7 @@ void MainPiece::ajouterPiece(Piece* piece) {
 
 void MainPiece::retirerPiece(Piece* piece)
 	{
-	auto it = std::find(pieces.begin(), pieces.end(), piece);
+	auto it = find(pieces.begin(), pieces.end(), piece);
 	if (it == pieces.end()) {
 		throw HiveException("La piece est deja dans la main");
 	}

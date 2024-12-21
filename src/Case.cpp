@@ -4,27 +4,26 @@
 using namespace JeuHive;
 using namespace std;
 
-string Case::getString() const
+string Case::toString() const
 {
-	string str_case = "";
+	string str_case;
+
 	for (const Piece* piece : pieces) {
-		if (piece != nullptr) {
-			try {
-				ResumePiece resumePiece = piece->resumer();
-				str_case.append(resumePiece.symbole);
-				str_case.append(resumePiece.symboleCouleur);
-				//str_case.append(piece->getSymbole());
-				//str_case.append(piece->getCouleur() == BLANC ? "b" : "n");
-			}
-			catch (const HiveException& e) {
-				std::cerr << "Erreur dans getSymbole(): " << e.getInfo() << std::endl;
-			}
+		if (!piece) {
+			cerr << "Erreur : pièce null dans la case." << endl;
+			continue;
 		}
-		else {
-			std::cerr << "Pointeur nullptr dans pieces" << std::endl;
+
+		try {
+			str_case.append(piece->toString());
+		}
+		catch (const HiveException& e) {
+			cerr << "Erreur lors de la génération de la représentation textuelle : " << e.getInfo() << endl;
 		}
 	}
+
 	return str_case;
+
 
 	/*
 	// la couleur ajoute 9 caractères invisibles
@@ -56,4 +55,10 @@ string Case::getString() const
 	}
 	return str_case;
 	*/
+}
+
+ostream& JeuHive::operator<<(ostream& os, const Case& c)
+{
+	os << c.toString();
+	return os;
 }

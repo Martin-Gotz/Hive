@@ -14,15 +14,14 @@ Joueur::Joueur(string nom, TypeJoueur type)
     : nom(nom), type(type), couleur(Couleur::BLANC) {}
 
 
-void Joueur::remplirMain()
+void Joueur::remplirMain(const FabriquePiece& fabrique)
 {
     main.getPieces().clear();
+    vector<Piece*> nouvellesPieces = fabrique.creerPieces(couleur);
 
-    ajouterPieceMain(new Abeille(couleur));
-    ajouterPieceMain(new Fourmi(couleur));
-    ajouterPieceMain(new Araignee(couleur));
-    ajouterPieceMain(new Sauterelle(couleur));
-    ajouterPieceMain(new Scarabee(couleur));
+    for (Piece* piece : nouvellesPieces) {
+        ajouterPieceMain(piece);
+    }
 }
 
 

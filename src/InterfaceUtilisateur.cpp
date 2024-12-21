@@ -153,8 +153,7 @@ void InterfaceUtilisateur::ajouterPartie() {
     hive.ajouterPartie(nomJoueur1, TypeJoueur::HUMAIN, nomJoueur2, typeJoueur2, nbRetours);
 }
 
-
-// Permet de gérer l'entrée utilisateur correspondant aux types des joueurs
+// gérer l'entrée utilisateur correspondant aux types des joueurs
 TypeJoueur InterfaceUtilisateur::demanderTypeJoueur(const string& nomJoueur) {
     string entree;
     int choix;
@@ -176,7 +175,6 @@ TypeJoueur InterfaceUtilisateur::demanderTypeJoueur(const string& nomJoueur) {
     return static_cast<TypeJoueur>(choix);
 }
 
-
 int InterfaceUtilisateur::demanderNombreDeRetours() {
     int nbRetours = -1;
     cout << "Entrez le nombre de retours en arrière possible : ";
@@ -188,7 +186,7 @@ int InterfaceUtilisateur::demanderNombreDeRetours() {
     return nbRetours;
 }
 
-// Partie à démarrer
+
 void InterfaceUtilisateur::demarrerPartie() {
     if (hive.nombreParties() == 0) {
         cout << "Aucune partie à démarrer." << endl;
@@ -219,8 +217,8 @@ void InterfaceUtilisateur::demarrerPartie() {
         // Si la partie est trouvée, on ajoute l'observateur
         partieObservee->ajouterObserver(this);
 
-        cout << endl << endl;
-        cout << "-------------------- Partie " << to_string(partieObservee->getId()) << " --------------------" << endl;
+        cout << endl << endl << endl;
+        cout << "------------------------- Partie " << to_string(partieObservee->getId()) << " -------------------------" << endl;
 
         gererChoixUtilisateurMenuPartie();
     }
@@ -409,7 +407,7 @@ void JeuHive::InterfaceUtilisateur::afficherMain(const ResumeMain& main) const
         cout << "   Pièces : ";
         int numero = 1;
         for (const auto& piece : main.pieces) {
-            cout << numero << ". " << piece.nom << " ";
+            cout << numero << ". " << piece.nom << " | ";
             ++numero;
         }
         cout << '\n';

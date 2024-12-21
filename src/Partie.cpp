@@ -71,8 +71,9 @@ void Partie::initialiser() {
         joueurActuel = &joueur2; // Le joueur blanc commence
     }
 
-    joueur1.remplirMain();
-    joueur2.remplirMain();
+    FabriquePiece fabrique = initialiserFabriquePiece();
+    joueur1.remplirMain(fabrique);
+    joueur2.remplirMain(fabrique);
 
     // 3 : Règles spécifiques de début de partie
     compteurTour = 1;
@@ -255,7 +256,7 @@ bool Partie::verifierEtatPartie() {
                 Victorieux = &joueur2;
             }
         }
-        std::cout << Victorieux->getNom() << " a gagné ! \n";
+        cout << Victorieux->getNom() << " a gagné ! \n";
         return false;
     }
     else return true;

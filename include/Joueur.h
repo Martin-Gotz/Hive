@@ -27,7 +27,7 @@ namespace JeuHive {
         void setCouleur(Couleur nouvelleCouleur) { couleur = nouvelleCouleur; }
 
         // Méthodes principales
-        void remplirMain();
+        void remplirMain(const FabriquePiece& fabrique);
         void retirerPiece(Piece* piece);
 
         // Ajouter une pièce à la main

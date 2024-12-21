@@ -15,7 +15,6 @@ namespace JeuHive {
 
         // Gestion des choix de l'utilisateur
         void gererChoixUtilisateur();
-        Hive& getHive() { return hive; }
 
     private:
         // Menu général
@@ -42,12 +41,12 @@ namespace JeuHive {
         void retournerMenu();
 
 
+        // Méthodes d'affichage
         void afficherInformationsPartie() const;
         void afficherInformationsJoueurs() const;
         void afficherJoueur(const string& titre, const ResumeJoueur& joueur, bool estJoueurActuel) const;
         void afficherMain(const ResumeMain& main) const;
         void afficherPlateau() const;
-
 
 
         // Reaction aux observable

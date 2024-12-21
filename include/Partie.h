@@ -32,8 +32,6 @@ namespace JeuHive {
 		Partie(Joueur& j1, Joueur& j2, int nombreRetours);
 		~Partie() = default;
 
-		void modifierRegles(const Regle& r);
-
 		// Accesseurs
 		int getId() const { return id; }
 
@@ -90,7 +88,7 @@ namespace JeuHive {
 
 
 
-	class PartieFactory {
+	class FabriquePartie {
 	public:
 		static Partie* creerPartie(Joueur& joueur1, Joueur& joueur2, int nombreRetours) {
 			return new Partie(joueur1, joueur2, nombreRetours);

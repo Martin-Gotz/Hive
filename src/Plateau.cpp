@@ -243,7 +243,7 @@ bool Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) con
 	}
 	/*
 	for (Case* case0 : visitees) {
-		cout << case0->getString() << " " << case0->getCoo() << "\n";
+		cout << case0->toString() << " " << case0->getCoo() << "\n";
 	}
 	*/
 
@@ -408,14 +408,14 @@ ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligne
 
 		x_case = coo_case.get_q();
 		y_case = coo_case.get_q() + 2 * coo_case.get_r();
-		str_case = case0->getString();
+		str_case = case0->toString();
 
 		case_selectionnee = find(coos_selectionner.begin(), coos_selectionner.end(), coo_case)
 			!= coos_selectionner.end();
 		if (case_selectionnee) {
 			// mise en majuscule des deux derniers caractères
 			for (int i = static_cast<int>(str_case.size() - 2); i < str_case.size(); i++) {
-				str_case[i] = std::toupper(static_cast<unsigned char>(str_case[i]));
+				str_case[i] = toupper(static_cast<unsigned char>(str_case[i]));
 			}
 		}
 
@@ -684,7 +684,7 @@ ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
 
 		x_case = coo_case.get_q();
 		y_case = coo_case.get_q() + 2 * coo_case.get_r();
-		str_case = case0->getString();
+		str_case = case0->toString();
 		str_case.append(string(taille_str - str_case.size(), ' '));
 
 		tab.at(y_case - min_y + marge).at(x_case - min_x + marge) = str_case;

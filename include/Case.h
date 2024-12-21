@@ -26,8 +26,9 @@ namespace JeuHive {
 		int getNombrePieces() const { return static_cast<int>(pieces.size()); }
 		Case(const Coordonnee& coo) : coo(coo) {}
 
-		string getString() const;
+		string toString() const;
 	};
+	ostream& operator<<(ostream& os, const Case& c);
 }
 
 // Case* getCaseByCoord(Coordonnee& c, const Plateau& p)  déplacé dans la classe plateau

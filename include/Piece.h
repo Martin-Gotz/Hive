@@ -1,4 +1,5 @@
 #pragma once
+
 #include <vector>
 #include <set>
 #include "Enums.h"
@@ -20,29 +21,28 @@ namespace JeuHive {
 		string symbole;
 
 	public:
+		Piece(Couleur c, string n, string s) : couleur(c), nom(n), symbole(s) {}
+
 		// on garde l'opérateur == par défault, qui apparemment ne peut pas être défini avec un =default
 		// il compare l'adresse mémoire des pieces (pas de comparaison d'attributs)
 
-		Piece(Couleur c, string n, string s) : couleur(c), nom(n), symbole(s) {}
-
 		Couleur getCouleur() const { return couleur; }
-
 		string getNom() const { return nom; };
 		string getSymbole() const { return symbole; };	// une lettre pour afficher dans la console
-
-		virtual bool estAbeille() const { return false; }
-		// redéfinie uniquement dans la classe Abeille
+		
+		virtual bool estAbeille() const { return false; } // redéfinie uniquement dans la classe Abeille
 
 		virtual set<Coordonnee> ensembleDeplacementPossibles(const Plateau& plateau, const Coordonnee& coo) const = 0;
 
-		// faire la concaténation entre symbole et couleur
-		// Methode utilitaire pour afficher l'etat de la partie
-		void afficher(ostream& os) const;
+		// Concaténation entre symbole et couleur
+		string toString() const;
+
 		ResumePiece resumer() const;
-	};		
-	ostream& operator<<(ostream& os, const Piece& piece);
+	};
 
 
+
+	// Types de pièces
 	class Abeille : public Piece
 	{
 	public:
