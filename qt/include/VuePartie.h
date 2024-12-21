@@ -5,6 +5,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
+#include <QPushButton>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QListWidget>
@@ -22,7 +23,8 @@ public:
     void placerPiece(const JeuHive::Piece* piece, const QPointF& position);
 
 private:
-    QVBoxLayout* layout;
+    QHBoxLayout* layoutPartie;
+    QVBoxLayout* layoutBarreInfo;
     QGraphicsView* graphicsView;
     QGraphicsScene* scene;
     QLabel* labelJoueur1;
@@ -30,6 +32,7 @@ private:
     QLabel* labelTour;
     QListWidget* listPiecesJoueur1;
     QListWidget* listPiecesJoueur2;
+    QPushButton* boutonQuitter;
 
     void afficherInfosJoueurs(int partieId);
     void afficherPiecesJoueurs(int partieId);
