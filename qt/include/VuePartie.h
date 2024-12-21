@@ -33,4 +33,9 @@ private:
 
     void afficherInfosJoueurs(int partieId);
     void afficherPiecesJoueurs(int partieId);
+
+    void closeEvent(QCloseEvent* event) override;
+
+signals:
+    void partieFermee(); // Signal émis à la fermeture
 };

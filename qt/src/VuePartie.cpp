@@ -178,3 +178,8 @@ void VuePartie::afficherPiecesJoueurs(int partieId) {
         listPiecesJoueur2->addItem(pieceInfo);
     }
 }
+
+void VuePartie::closeEvent(QCloseEvent* event) {
+    emit partieFermee();
+    QWidget::closeEvent(event);
+}

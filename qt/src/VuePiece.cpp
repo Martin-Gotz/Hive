@@ -17,10 +17,11 @@ void VuePiece::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     if (scene()->views().isEmpty()) {
         return;
     }
-
+    
+    /*
     VuePartie* vuePartie = qobject_cast<VuePartie*>(scene()->views().first()->parentWidget());
     if (vuePartie) {
         vuePartie->placerPiece(piece, event->scenePos());
     }
+    */
 }
-
