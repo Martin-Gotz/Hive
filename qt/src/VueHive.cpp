@@ -4,52 +4,115 @@
 #include "VuePartie.h"
 #include <QMessageBox>
 #include <QApplication>
+#include <cmath>
+#include <QGraphicsSceneMouseEvent>
 
-VueHive::VueHive(QWidget* parent) : QWidget(parent) {
-    initialiserUI();
-    chargerPartiesExistantes();
+PieceItem::PieceItem(const JeuHive::Piece* piece, QGraphicsItem* parent)
+    : QGraphicsEllipseItem(parent), piece(piece) {
+    setRect(0, 0, 30, 30); // Set the size of the piece
+    setBrush(piece->getCouleur() == JeuHive::Couleur::BLANC ? Qt::white : Qt::black);
 }
 
-void VueHive::initialiserUI() {
+void VuePartie::initialiserUI() {
     layout = new QVBoxLayout(this);
 
-    labelTitre = new QLabel("Menu du Jeu Hive", this);
-    layout->addWidget(labelTitre);
+void GameBoardWindow::placerPiece(const JeuHive::Piece* piece, const QPointF& position) {
+    auto* partie = JeuHive::Hive::getInstance().getPartieEnCours();
+    if (!partie) {
+        return;
+    }
 
-    // Actions sur la liste des parties
-    btnNouvellePartie = new QPushButton("Créer une nouvelle partie", this);
-    connect(btnNouvellePartie, &QPushButton::clicked, this, &VueHive::creerNouvellePartie);
-    layout->addWidget(btnNouvellePartie);
+    // Check if the current player is allowed to place the piece
+    if (partie->getJoueurActuel()->getMain().getPieces().size() == 0) {
+        return;
+    }
 
-    affichagePartie = new QLabel(this);
-    layout->addWidget(affichagePartie);
+    // Determine if the piece is being placed or moved
+    bool isPlacement = !partie->getPlateau().estPlacee(*piece);
 
-    listeParties = new QListWidget(this);
-    connect(listeParties, &QListWidget::itemClicked, this, &VueHive::afficherDetailsPartie);
-    layout->addWidget(listeParties);
+    JeuHive::Coordonnee coord(position.x(), position.y());
+    JeuHive::Coup* coup = nullptr;
+
+    if (isPlacement) {
+        // Create a placement coup
+        coup = new JeuHive::CoupPlacement(piece, coord, partie->getCompteurTour());
+    }
+    else {
+        // Create a movement coup
+        const JeuHive::Coordonnee& currentCoord = partie->getPlateau().getCaseDePiece(*piece)->getCoo();
+        coup = new JeuHive::CoupDeplacement(piece, currentCoord, coord, partie->getCompteurTour());
+    }
+
+    // Play the coup
+    partie->jouerCoup(coup);
+
+    // Update the piece's position in the scene
+    if (isPlacement) {
+        PieceItem* pieceItem = new PieceItem(piece);
+        pieceItem->setPos(position);
+        scene->addItem(pieceItem);
+
+        // Remove the piece from the player's hand
+        if (partie->getJoueurActuel() == &partie->getJoueur1()) {
+            listPiecesJoueur1->clear();
+            for (const auto* p : partie->getJoueur1().getMain().getPieces()) {
+                if (p != piece) {
+                    listPiecesJoueur1->addItem(new QListWidgetItem(QString::fromStdString(p->getNom())));
+                }
+            }
+        }
+        else {
+            listPiecesJoueur2->clear();
+            for (const auto* p : partie->getJoueur2().getMain().getPieces()) {
+                if (p != piece) {
+                    listPiecesJoueur2->addItem(new QListWidgetItem(QString::fromStdString(p->getNom())));
+                }
+            }
+        }
+    }
+    else {
+        for (auto* item : scene->items()) {
+            PieceItem* pieceItem = dynamic_cast<PieceItem*>(item);
+            if (pieceItem && pieceItem->getPiece() == piece) {
+                pieceItem->setPos(position);
+                break;
+            }
+        }
+    }
+}
 
 
 
+void PieceItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+    if (scene()->views().isEmpty()) {
+        return;
+    }
 
-    // Actions sur une partie selectionnée
-    lancerButton = new QPushButton("Lancer", this);
-    connect(lancerButton, &QPushButton::clicked, this, &VueHive::lancerPartie);
-    layout->addWidget(lancerButton);
-
-    boutonSupprimer = new QPushButton("Supprimer", this);
-    connect(boutonSupprimer, &QPushButton::clicked, this, &VueHive::supprimerPartie);
-    layout->addWidget(boutonSupprimer);
+    GameBoardWindow* gameBoardWindow = qobject_cast<GameBoardWindow*>(scene()->views().first()->parentWidget());
+    if (gameBoardWindow) {
+        gameBoardWindow->placerPiece(piece, event->scenePos());
+    }
+}
 
 
 
+GameBoardWindow::GameBoardWindow(int partieId, QWidget* parent) : QWidget(parent) {
+    layout = new QVBoxLayout(this);
 
-    // Autres affichages
-    quitterButton = new QPushButton("Quitter", this);
-    connect(quitterButton, &QPushButton::clicked, this, &VueHive::quitterApplication);
-    layout->addWidget(quitterButton);
+    labelJoueur1 = new QLabel(this);
+    layout->addWidget(labelJoueur1);
 
-    labelDetailsPartie = new QLabel(this);
-    layout->addWidget(labelDetailsPartie);
+    labelJoueur2 = new QLabel(this);
+    layout->addWidget(labelJoueur2);
+
+    labelTour = new QLabel(this);
+    layout->addWidget(labelTour);
+
+    listPiecesJoueur1 = new QListWidget(this);
+    layout->addWidget(listPiecesJoueur1);
+
+    listPiecesJoueur2 = new QListWidget(this);
+    layout->addWidget(listPiecesJoueur2);
 
     graphicsView = new QGraphicsView(this);
     scene = new QGraphicsScene(this);
@@ -57,19 +120,25 @@ void VueHive::initialiserUI() {
     layout->addWidget(graphicsView);
 
     setLayout(layout);
+
+    creerPlateau(partieId);
 }
 
-void VueHive::creerPlateau(int partieId) {
-    clearPlateau();
+void GameBoardWindow::creerPlateau(int partieId) {
+    scene->clear(); // Clear the current board
 
     const auto* partie = JeuHive::Hive::getInstance().getPartie(partieId);
     if (!partie) {
         return;
     }
 
-    const int nombreCases = partie->getPlateau().getNombreCases();
+    const int nombreCases = static_cast<int>(partie->getPlateau().getNombreCases());
+    if (nombreCases == 0) {
+        QMessageBox::warning(this, "Attention", "Le plateau ne contient aucune case.");
+    }
+
     const int rows = static_cast<int>(sqrt(nombreCases));
-    const int cols = (nombreCases + rows - 1) / rows;
+    const int cols = (nombreCases + rows - 1) / (rows +1);
 
     const qreal hexSize = 30.0;
     const qreal hexWidth = 2 * hexSize * cos(M_PI / 6); // Width of each hexagon
@@ -87,21 +156,22 @@ void VueHive::creerPlateau(int partieId) {
             // Create and add the hexagon to the scene
             VueCase* hex = new VueCase(x, y, hexSize);
             scene->addItem(hex);
-
-            // Optional: Highlight specific cells (e.g., in red)
-            if ((row == 3 && col == 3) || (row == 4 && col == 3) || (row == 3 && col == 5)) {
-                hex->setBrush(Qt::red);
-            }
         }
     }
+
+    graphicsView->update(); // Force the view to update
+    afficherInfosJoueurs(partieId);
+    afficherPiecesJoueurs(partieId);
 }
 
-void VueHive::afficherInfosJoueurs(int partieId) {
-    const auto* partie = JeuHive::Hive::getInstance().getPartie(partieId);
+void GameBoardWindow::afficherInfosJoueurs(int partieId) {
+    const auto* partie = JeuHive::Hive::getInstance().getPartieEnCours();
     if (!partie) {
+        cout << "Aucune partie en cours";
         return;
     }
-
+    
+    cout << partie->getJoueur1().getCouleur();
     QString joueur1Info = QString("Joueur 1: %1\nCouleur: %2\nPièces: %3")
         .arg(QString::fromStdString(partie->getJoueur1().getNom()))
         .arg(partie->getJoueur1().getCouleur() == JeuHive::Couleur::BLANC ? "Blanc" : "Noir")
@@ -119,11 +189,69 @@ void VueHive::afficherInfosJoueurs(int partieId) {
     labelJoueur2->setText(joueur2Info);
     labelTour->setText(tourInfo);
 }
+void GameBoardWindow::afficherPiecesJoueurs(int partieId) {
+    const auto* partie = JeuHive::Hive::getInstance().getPartieEnCours();
+    if (!partie) {
+        return;
+    }
+
+    listPiecesJoueur1->clear();
+    listPiecesJoueur2->clear();
+
+    for (const auto* piece : partie->getJoueur1().getMain().getPieces()) {
+        QString pieceInfo = QString("%1 (%2)").arg(QString::fromStdString(piece->getNom())).arg(QString::fromStdString(piece->getSymbole()));
+        listPiecesJoueur1->addItem(pieceInfo);
+    }
+
+    for (const auto* piece : partie->getJoueur2().getMain().getPieces()) {
+        QString pieceInfo = QString("%1 (%2)").arg(QString::fromStdString(piece->getNom())).arg(QString::fromStdString(piece->getSymbole()));
+        listPiecesJoueur2->addItem(pieceInfo);
+    }
+}
 
 
+VuePartie::VuePartie(QWidget* parent) : QWidget(parent) {
+    initialiserUI();
+    chargerPartiesExistantes();
+}
 
-void VueHive::clearPlateau() {
-    scene->clear();
+void VuePartie::initialiserUI() {
+    layout = new QVBoxLayout(this);
+
+    labelTitre = new QLabel("Menu du Jeu Hive", this);
+    layout->addWidget(labelTitre);
+
+    btnNouvellePartie = new QPushButton("Créer une nouvelle partie", this);
+    connect(btnNouvellePartie, &QPushButton::clicked, this, &VuePartie::creerNouvellePartie);
+    layout->addWidget(btnNouvellePartie);
+
+    AffichagePartie = new QLabel(this); // Initialisation de AffichagePartie
+    layout->addWidget(AffichagePartie); // Ajout de AffichagePartie à la disposition
+
+    listeParties = new QListWidget(this);
+    connect(listeParties, &QListWidget::itemClicked, this, &VuePartie::afficherDetailsPartie);
+    layout->addWidget(listeParties);
+
+    deleteButton = new QPushButton("Supprimer", this);
+    connect(deleteButton, &QPushButton::clicked, this, &VuePartie::supprimerPartie);
+    layout->addWidget(deleteButton);
+
+    lancerButton = new QPushButton("Lancer", this); // Initialisation du bouton Lancer
+    connect(lancerButton, &QPushButton::clicked, this, &VuePartie::lancerPartie); // Connexion du bouton Lancer
+    layout->addWidget(lancerButton);
+
+    terminerButton = new QPushButton("Terminer", this); // Initialisation du bouton Terminer
+    connect(terminerButton, &QPushButton::clicked, this, &VuePartie::terminerPartie); // Connexion du bouton Terminer
+    layout->addWidget(terminerButton);
+
+    quitterButton = new QPushButton("Quitter", this); // Initialisation du bouton Quitter
+    connect(quitterButton, &QPushButton::clicked, this, &VuePartie::quitterApplication); // Connexion du bouton Quitter
+    layout->addWidget(quitterButton);
+
+    labelDetailsPartie = new QLabel(this);
+    layout->addWidget(labelDetailsPartie);
+
+    setLayout(layout);
 }
 
 void VueHive::chargerPartiesExistantes() {
@@ -159,7 +287,6 @@ void VueHive::selectionnerPartieExistante() {
         QString itemText = currentItem->text();
         int partieId = itemText.split(" ").last().toInt();
         lancerPartie();
-        creerPlateau(partieId);
     }
     else {
         QMessageBox::warning(this, "Erreur", "Aucune partie n'a été sélectionnée pour lancement.");
@@ -225,9 +352,7 @@ void VueHive::supprimerPartie() {
     }
 }
 
-
-
-void VueHive::lancerPartie() {
+void VuePartie::lancerPartie() {
     const auto* partieEnCours = JeuHive::Hive::getInstance().getPartieEnCours();
     QListWidgetItem* currentItem = listeParties->currentItem();
     if (currentItem) {
@@ -245,18 +370,9 @@ void VueHive::lancerPartie() {
             }
         }
         JeuHive::Hive::getInstance().demarrerPartie(partieId);
-        VuePartie* vuePartie = new VuePartie(partieId);
-        ouvrirVuePartie[partieId] = vuePartie;
-
-        this->setEnabled(false); // Désactiver la fenètre lorsqu'une partie se lance
-
-        // Connecter le signal de fermeture de la fenêtre de partie pour réactiver la fenêtre principale
-        connect(vuePartie, &QWidget::destroyed, this, [this, partieId]() {
-            this->setEnabled(true);
-            ouvrirVuePartie.remove(partieId);
-            });
-
-        vuePartie->show();
+        GameBoardWindow* gameBoardWindow = new GameBoardWindow(partieId);
+        openGameWindows[partieId] = gameBoardWindow; // Track the open game window
+        gameBoardWindow->show();
     }
     else {
         QMessageBox::warning(this, "Erreur", "Aucune partie n'a été sélectionnée pour lancement.");
@@ -271,6 +387,3 @@ void VueHive::quitterApplication() {
         QApplication::quit();
     }
 }
-
-
-
