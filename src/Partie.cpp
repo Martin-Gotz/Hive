@@ -168,6 +168,8 @@ void Partie::jouerCoup(Coup* coup) {
     delete coup;
 }
 
+
+
 void Partie::joueurSuivant() {
     if (etatPartie != EtatPartie::EN_COURS) {
         throw HiveException("Impossible de passer le tour d'une partie qui n'est pas en cours !");

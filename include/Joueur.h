@@ -38,5 +38,41 @@ namespace JeuHive {
         ResumeJoueur resumer() const;
     };
 
+    class IntelligenceA : public Joueur {
+    public:
+        IntelligenceA() : Joueur("IA", TypeJoueur::IA) {}
+        /*
+        void jouerCoupIA(Plateau& plateau, int tour) {
+            // Obtenir tous les coups possibles pour le joueur
+            //vector<Coup*> coupsPossibles = plateau.(*this);
+            //plateau.
+
+            // Vérifier s'il y a des coups possibles
+            if (coupsPossibles.empty()) {
+                throw HiveException("Aucun coup possible pour le joueur.");
+            }
+
+            // Initialiser le générateur de nombres aléatoires
+            std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
+            // Choisir un coup aléatoirement
+            int indexCoupChoisi = std::rand() % coupsPossibles.size();
+            Coup* coupChoisi = coupsPossibles[indexCoupChoisi];
+
+            // Jouer le coup choisi
+            plateau.jouerCoup(*coupChoisi);
+
+            // Nettoyer la mémoire des coups possibles
+            for (Coup* coup : coupsPossibles) {
+                delete coup;
+            }
+
+            // Notifier les observateurs
+            EvenementHive evt("Coup joué par l'IA pour le joueur " + getNom() + "\n");
+            notifierObservers(evt);
+        }
+        */
+    };
+
 
 } // namespace JeuHive
