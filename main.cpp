@@ -5,6 +5,8 @@ using namespace std;
 using namespace std;
 using namespace JeuHive;
 
+
+
 int main() {
     /*
     Plateau pla;
@@ -40,10 +42,10 @@ int main() {
     cout << pla;
 
     Case* origine = pla.getCaseDeCoo(Coordonnee(0, 0));
-    cout << " case origine: " << origine->getString() << "\n";
+    cout << " case origine: " << origine->toString() << "\n";
     vector<Case*> cases_voisines = pla.getVoisinsDeCoo(origine->getCoo());
     for (Case* case_voisine : cases_voisines) {
-        cout << case_voisine->getString() << "\n";
+        cout << case_voisine->toString() << "\n";
     }
 
 
@@ -69,14 +71,14 @@ int main() {
     cout << "--------------------------------------------------------";
     cout << "deplacement possible \n";
     for (pair<Coordonnee, Case*> paire : pla.getCases()) {
-        cout << paire.second->getString() << pla.deplacementPossible(*(paire.second->getDessus()), paire.first) << "\n";
+        cout << paire.second->toString() << pla.deplacementPossible(*(paire.second->getDessus()), paire.first) << "\n";
     }
 
     cout << "--------------------------------------------------------";
     cout << "deplacements glissements \n";
 
     for (pair<Coordonnee, Case*> paire : pla.getCases()) {
-        cout << "coos sont " << paire.first << paire.second->getString() << "\n";
+        cout << "coos sont " << paire.first << paire.second->toString() << "\n";
         for (Coordonnee coo_voisine : pla.getCooVoisinesGlissement(paire.first)) {
             cout << coo_voisine << "\n";
         }
@@ -90,7 +92,7 @@ int main() {
     set<Coordonnee> coos_possibles;
     for (pair<Coordonnee, Case*> paire : pla.getCases()) {
         cout << "-------------------------------\n";
-        cout << "coos possoble " << paire.first << paire.second->getString() << "\n";
+        cout << "coos possoble " << paire.first << paire.second->toString() << "\n";
         coos_possibles = paire.second->getDessus()->ensembleDeplacementPossibles(pla, paire.first);
         for (Coordonnee coo_possible : coos_possibles) {
             cout << coo_possible << "\n";

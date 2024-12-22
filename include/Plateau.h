@@ -16,7 +16,7 @@ namespace JeuHive {
 	class Plateau	// responsable des cases
 	{
 	private:
-		unordered_map<Coordonnee, Case*> Cases;
+		unordered_map<Coordonnee, Case*> cases;
 
 		void ajouterPieceSurCoo(const Piece* piece, const Coordonnee& coo);
 		void retirerPieceDeCoo(const Coordonnee& coo);
@@ -24,13 +24,13 @@ namespace JeuHive {
 	public:
 
 
-		const unordered_map<Coordonnee, Case*> getCases() const { return Cases; }
+		const unordered_map<Coordonnee, Case*> getCases() const { return cases; }
 		Plateau() {}
 		//friend ostream& operator<<(ostream& f, Plateau& p); une autre méthode est déjà présente
 
-		size_t getNombreCases() const { return Cases.size(); }
+		size_t getNombreCases() const { return cases.size(); }
 		size_t getNombrePieces() const;
-		bool estVide() const { return Cases.empty(); }
+		bool estVide() const { return cases.empty(); }
 
 		Case* getCaseDeCoo(const Coordonnee& coo) const;
 		Case* getCaseDePiece(const Piece& piece) const;
@@ -58,9 +58,6 @@ namespace JeuHive {
 		// ça rajoute une contrainte en plus que getVoisinsDeCoo car des pièces voisines peuvent bloquer un glissement
 		// (voir règles du jeu)
 
-		ostream& afficher(ostream& f, vector<Coordonnee> coos_surligner, vector<Coordonnee> coos_selectionnees,
-			int marge = 1) const;
-
 		// modification du plateau
 
 		void jouerCoup(Coup& coup);
@@ -75,6 +72,10 @@ namespace JeuHive {
 
 		vector<Coup*> totalCoupsPossibles(int tour, Joueur& joueur);
 		// renvoie TOUS les coups possibles par TOUTES les pièces, utile pour faire une IA
+
+
+		ostream& afficher(ostream& f, vector<Coordonnee> coos_surligner, vector<Coordonnee> coos_selectionnees, int marge = 1) const;
+		ResumePlateau resumer() const;
 
 	};
 	ostream& operator<<(ostream& f, const Plateau& p);

@@ -173,10 +173,10 @@ namespace JeuHive {
 		return resultat;
 	}
 
-	void Piece::afficher(ostream& f) const
+	string Piece::toString() const
 	{
 		ResumePiece resume = resumer();
-		f << resume.couleur + resume.symbole;
+		return resume.symbole + resume.symboleCouleur;
 	}
 
 	ResumePiece Piece::resumer() const
@@ -185,15 +185,7 @@ namespace JeuHive {
 		resume.nom = getNom();
 		resume.symbole = getSymbole();
 		resume.couleur = (getCouleur() == Couleur::BLANC ? "Blanc" : "Noir");
-		resume.symboleCouleur = (getCouleur() == Couleur::BLANC ? 'B' : 'N');
+		resume.symboleCouleur = (resume.couleur[0]);
 		return resume;
 	}
-
-	ostream& JeuHive::operator<<(ostream& os, const Piece& piece)
-	{
-		piece.afficher(os);
-		return os;
-	}
-
-
 }

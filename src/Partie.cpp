@@ -9,20 +9,22 @@ int Partie::prochain_id = 1;
 
 
 //Constructeurs
-Partie::Partie(Joueur& j1, Joueur& j2, Regle r) :
+Partie::Partie(Joueur& j1, Joueur& j2, int nombreRetours) :
     id(prochain_id),
     joueur1(j1),
     joueur2(j2),
     plateau(),
-    regles(r),
+    regles(),
     historique(),
-    CompteurRegles(0),
+    compteurRegles(0),
     etatPartie(EtatPartie::NON_COMMENCEE),
     joueurActuel(nullptr),
     compteurTour(0),
+    nombreRetours(nombreRetours),
     Victorieux(nullptr)
 {
     prochain_id++; // Incrémentation du compteur statique pour suivre le nombre de parties créé
+    regles.setNombreRetours(nombreRetours);
 }
 
 
@@ -49,11 +51,6 @@ void Partie::demarrer() {
 
 }
 
-void Partie::modifierRegles(const Regle &r)
-{
-    regles.setNombreRetours(r.GetNombreRetours());
-}
-
 
 // Mise en place des éléments la première fois que la partie est lancée
 void Partie::initialiser() {
@@ -75,8 +72,9 @@ void Partie::initialiser() {
         joueurActuel = &joueur2; // Le joueur blanc commence
     }
 
-    joueur1.remplirMain();
-    joueur2.remplirMain();
+    FabriquePiece fabrique = initialiserFabriquePiece();
+    joueur1.remplirMain(fabrique);
+    joueur2.remplirMain(fabrique);
 
     // 3 : Règles spécifiques de début de partie
     compteurTour = 1;
@@ -129,19 +127,27 @@ void Partie::placerPiece(int idPiece, const Coordonnee& cooDestination) {
 
     // Construire un coup de placement
     Coup* coup = new CoupPlacement(piece, cooDestination, compteurTour);
-
+    
     // Jouer le coup
     jouerCoup(coup);
+
+    
 
     // Retirer la pièce de la main du joueur
     joueurActuel->retirerPiece(piece);
 
     joueurSuivant();
-
 }
 
 void Partie::deplacerPiece(const Coordonnee& cooOrigine, const Coordonnee& cooDestination) {
-    const Piece* piece = plateau.getCaseDeCoo(cooOrigine)->getDessus();
+
+    const Case* case0 = plateau.getCaseDeCoo(cooOrigine);
+
+    if (case0 == nullptr) {
+        throw HiveException("Aucune pièce n'est située à ces coordonnées");
+    }
+
+    const Piece* piece = case0->getDessus();
 
     if (piece->getCouleur() != joueurActuel->getCouleur()) {
         throw HiveException("Vous ne pouvez déplacer que vos propres pièces !");
@@ -257,9 +263,6 @@ void Partie::annulerDernierCoup() {
 }
 */
 
-
-
-
 // Formatage des données pour l'abstraction de l'affichage
 ResumePartie Partie::resumer() const {
 
@@ -298,7 +301,7 @@ ResumePartie Partie::resumer() const {
 
 
 
-bool Partie::verifier_partie() {
+bool Partie::verifierEtatPartie() {
     if (plateau.estPartieFinie())
     {
         terminer();
@@ -323,7 +326,7 @@ bool Partie::verifier_partie() {
                 Victorieux = &joueur2;
             }
         }
-        std::cout << Victorieux->getNom() << " a gagné ! \n";
+        cout << Victorieux->getNom() << " a gagné ! \n";
         return false;
     }
     else return true;
@@ -334,46 +337,50 @@ void JeuHive::Partie::annulerDernierCoup()
     if (historique.getlisteCoups().empty()) {
         throw HiveException("Il n'y a aucun coup à annuler.");
     }
+
     Coup* dernierCoup = historique.getlisteCoups().back();
     historique.annulerDernierCoup();
     joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
-    if (dernierCoup != nullptr && dernierCoup->estDeplacement()) {
+
+    if (dernierCoup) {
         CoupDeplacement* deplacement = dynamic_cast<CoupDeplacement*>(dernierCoup);
         if (deplacement) {
             // Remettre la pièce à sa position d'origine
             plateau.inverserDeplacement(deplacement);
         }
-    }
-    else if (dernierCoup->estPlacement()) {
+
         CoupPlacement* placement = dynamic_cast<CoupPlacement*>(dernierCoup);
         if (placement) {
             // Retirer la pièce du plateau et la remettre dans la main du joueur
             plateau.inverserPlacement(placement);
             joueurActuel->ajouterPieceMain(const_cast<Piece*>(placement->getPiece()));
         }
+
+        // Décrémenter le compteur de tours si nécessaire
+        if (joueurActuel->getCouleur() == Couleur::NOIR) {
+            compteurTour--;
+        }
     }
 
-    // Décrémenter le compteur de tours si nécessaire
-    if (joueurActuel->getCouleur() == Couleur::NOIR) {
-        compteurTour--;
-    }
+    incrementerCompteurRegles();
 
-    // Revenir au joueur précédent
-    //CompteurRegles++;
+    EvenementPartie evt(id, TypeEvenement::ANNULER_COUP);
+    notifierObservers(evt);
+
     dernierCoup = nullptr;
 }
 
 
 void JeuHive::Partie::verifierAnnulation()
 {
-    if (CompteurRegles > regles.GetNombreRetours())
+    if (compteurRegles > regles.getNombreRetours())
     {
         throw HiveException("Le nombre de retours en arrière est trop important");
     }
     else
     {
        annulerDernierCoup();
-       CompteurRegles++;
+       compteurRegles++;
     }
 }
 

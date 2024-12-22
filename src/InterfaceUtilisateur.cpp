@@ -70,14 +70,20 @@ void InterfaceUtilisateur::gererChoixUtilisateur() {
         int choix = obtenirEntreeUtilisateur("Entrez votre choix : ", true);
         cout << "---------------------\n";
 
-        switch (choix) {
-            case 1: ajouterPartie(); break;
-            case 2: demarrerPartie(); break;
-            case 3: supprimerPartie(); break;
-            case 4: afficherParties(); break;
-            case 5: cout << "Au revoir !\n"; return;
-            default: cout << "Option invalide, veuillez réessayer.\n";
+        try {
+            switch (choix) {
+                case 1: ajouterPartie(); break;
+                case 2: demarrerPartie(); break;
+                case 3: supprimerPartie(); break;
+                case 4: afficherParties(); break;
+                case 5: cout << "Au revoir !\n"; return;
+                default: cout << "Option invalide, veuillez réessayer.\n";
+            }
         }
+        catch (const HiveException& e) {
+            cout << "Erreur : " << e.getInfo() << '\n';
+        }
+
         cout << endl << endl;
     }
 }
@@ -109,6 +115,9 @@ void InterfaceUtilisateur::gererChoixUtilisateurMenuPartie() {
     }
 }
 
+
+
+
 // ===== METHODES RELATIVES A HIVE =====
 
 // Demander à l'utilisateur les informations nécessaires pour ajouter une partie
@@ -125,49 +134,26 @@ void InterfaceUtilisateur::ajouterPartie() {
     TypeJoueur typeJoueur2 = demanderTypeJoueur("joueur 2");
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-    do {
-        cout << "Entrez le nom du joueur 2 : ";
-        getline(cin, nomJoueur2);
-        if (nomJoueur2.empty()) {
-            cout << "Le nom du joueur 2 ne peut pas etre vide. Essayez encore." << endl;
-        }
-    } while (nomJoueur2.empty());
-
-    string nbretourstring;
-    int nbRetours = -1;
-    do {
-        cout << "Entrez le nombre de retours en arrière possible : ";
-        cin >> nbretourstring;
-
-        try {
-            size_t pos;
-            float temp = stof(nbretourstring, &pos);
-            if (pos != nbretourstring.length() || temp != static_cast<int>(temp)) {
-                throw invalid_argument("Veuillez entrer un entier");
+    if (typeJoueur2 == TypeJoueur::IA) {
+        nomJoueur2 = "IA";
+    }
+    else {
+        do {
+            cout << "Entrez le nom du joueur 2 : ";
+            getline(cin, nomJoueur2);
+            if (nomJoueur2.empty()) {
+                cout << "Le nom du joueur 2 ne peut pas etre vide. Essayez encore." << endl;
             }
-            nbRetours = static_cast<int>(temp);
-        }
-        catch (const invalid_argument&) {
-            cout << "Entrée invalide, veuillez saisir un entier positif" << endl;
-            nbRetours = -1;
-        }
-        catch (const out_of_range&) {
-            cout << "Entrée invalide, veuillez saisir un entier positif" << endl;
-            nbRetours = -1;
-        }
+        } while (nomJoueur2.empty());
+    }
 
-        if (nbRetours < 0) {
-            cout << "Entrée invalide, veuillez saisir un entier positif" << endl;
-        }
-    } while (nbRetours < 0);
-    Regle r(nbRetours);
+    // Parametrage du nombre de retours possibles
+    int nbRetours = demanderNombreDeRetours();
 
-    //hive.ajouterPartie(nomJoueur1, typeJoueur1, nomJoueur2, typeJoueur2);
-    hive.ajouterPartie(nomJoueur1, TypeJoueur::HUMAIN, nomJoueur2, TypeJoueur::IA, r);
+    hive.ajouterPartie(nomJoueur1, TypeJoueur::HUMAIN, nomJoueur2, typeJoueur2, nbRetours);
 }
 
-
-// Permet de gérer l'entrée utilisateur correspondant aux types des joueurs
+// gérer l'entrée utilisateur correspondant aux types des joueurs
 TypeJoueur InterfaceUtilisateur::demanderTypeJoueur(const string& nomJoueur) {
     string entree;
     int choix;
@@ -189,7 +175,6 @@ TypeJoueur InterfaceUtilisateur::demanderTypeJoueur(const string& nomJoueur) {
     return static_cast<TypeJoueur>(choix);
 }
 
-
 int InterfaceUtilisateur::demanderNombreDeRetours() {
     int nbRetours = -1;
     cout << "Entrez le nombre de retours en arrière possible : ";
@@ -201,7 +186,7 @@ int InterfaceUtilisateur::demanderNombreDeRetours() {
     return nbRetours;
 }
 
-// Partie à démarrer
+
 void InterfaceUtilisateur::demarrerPartie() {
     if (hive.nombreParties() == 0) {
         cout << "Aucune partie à démarrer." << endl;
@@ -223,28 +208,23 @@ void InterfaceUtilisateur::demarrerPartie() {
         return;
     }
 
-    try {
-        partieObservee = hive.getPartie(idPartie);
+    partieObservee = hive.getPartie(idPartie);
 
-        if (partieObservee) {
-            // Démarre la partie
-            hive.demarrerPartie(idPartie);
+    if (partieObservee) {
+        // Démarre la partie
+        hive.demarrerPartie(idPartie);
 
-            // Si la partie est trouvée, on ajoute l'observateur
-            partieObservee->ajouterObserver(this);
+        // Si la partie est trouvée, on ajoute l'observateur
+        partieObservee->ajouterObserver(this);
 
-            cout << endl << endl;
-            cout << "-------------------- Partie " << to_string(partieObservee->getId()) << " --------------------" << endl;
+        cout << endl << endl << endl;
+        cout << "------------------------- Partie " << to_string(partieObservee->getId()) << " -------------------------" << endl;
 
-            gererChoixUtilisateurMenuPartie();
-        }
-        else {
-            // Si la partie n'a pas été trouvée
-            throw HiveException("Aucune partie trouvée avec cet ID.");
-        }
+        gererChoixUtilisateurMenuPartie();
     }
-    catch (const HiveException& e) {
-        cout << "Erreur : " << e.getInfo() << endl;
+    else {
+        // Si la partie n'a pas été trouvée
+        throw HiveException("Aucune partie trouvée avec cet ID.");
     }
 }
 
@@ -266,12 +246,7 @@ void InterfaceUtilisateur::supprimerPartie() {
         return;
     }
 
-    try {
-        hive.supprimerPartie(idPartie);
-    }
-    catch (const HiveException& e) {
-        cout << "Erreur : " << e.getInfo() << endl;
-    }
+    hive.supprimerPartie(idPartie);
 }
 
 
@@ -305,7 +280,6 @@ void JeuHive::InterfaceUtilisateur::placerPiece() {
     }
     hive.getPartieEnCours()->placerPiece(idTypePiece, { x, y });
     cout << "Pièce " << idTypePiece << " placée en (" << x << ", " << y << ").\n";
-    hive.getPartieEnCours()->decrementerCompteurRegles();
 }
 
 void JeuHive::InterfaceUtilisateur::deplacerPiece() {
@@ -330,18 +304,14 @@ void JeuHive::InterfaceUtilisateur::deplacerPiece() {
         return;
     }
 
-    hive.getPartieEnCours()->decrementerCompteurRegles();
     hive.getPartieEnCours()->deplacerPiece({ x1, y1 }, { x2, y2 });
     cout << "Piece déplacée de (" << x1 << ", " << y1 << ") a (" << x2 << ", " << y2 << ").\n";
 }
 
 void JeuHive::InterfaceUtilisateur::AnnulerPiece()
 {
-    if (hive.getPartieEnCours()->getCompteurRegles() < hive.getPartieEnCours()->getRegles().GetNombreRetours()) {
+    if (hive.getPartieEnCours()->getCompteurRegles() < hive.getPartieEnCours()->getRegles().getNombreRetours()) {
         hive.getPartieEnCours()->annulerDernierCoup();
-        cout << "Compteur Regles : " << hive.getPartieEnCours()->getCompteurRegles() << endl;
-        hive.getPartieEnCours()->incrementerCompteurRegles();
-        cout << "Dernier coup effacé\n";
     }
     else throw HiveException("Seuil de nombre de coups atteint !\n");
 }
@@ -437,7 +407,7 @@ void JeuHive::InterfaceUtilisateur::afficherMain(const ResumeMain& main) const
         cout << "   Pièces : ";
         int numero = 1;
         for (const auto& piece : main.pieces) {
-            cout << numero << ". " << piece.nom << " ";
+            cout << numero << ". " << piece.nom << " | ";
             ++numero;
         }
         cout << '\n';
@@ -495,6 +465,9 @@ void InterfaceUtilisateur::afficherEvenement(const Evenement& e) const {
     }
     else if (e.getType() == TypeEvenement::CHANGEMENT_JOUEUR) {
         cout << "Changement de joueur" << endl;
+    }
+    else if (e.getType() == TypeEvenement::ANNULER_COUP) {
+        cout << "Annulation du coup" << endl;
     }
 }
 

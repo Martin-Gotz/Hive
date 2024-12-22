@@ -10,7 +10,7 @@ void Plateau::ajouterPieceSurCoo(const Piece* piece, const Coordonnee& coo) {
 
 	if (case_sur_coo == nullptr) {
 		Case* nouv_case = new Case(coo);
-		Cases.insert(make_pair(coo, nouv_case));
+		cases.insert(make_pair(coo, nouv_case));
 		nouv_case->ajouterPiece(piece);
 	}
 	else {
@@ -28,7 +28,7 @@ void Plateau::retirerPieceDeCoo(const Coordonnee& coo) {
 		case_sur_coo->retirerPiece();
 
 		if (case_sur_coo->estVide()) {
-			Cases.erase(coo);
+			cases.erase(coo);
 			delete case_sur_coo;
 		}
 	}
@@ -37,9 +37,9 @@ void Plateau::retirerPieceDeCoo(const Coordonnee& coo) {
 Case* Plateau::getCaseDeCoo(const Coordonnee& coo) const {
 	// renvoie nullptr si rien n'est trouvé
 	// d'où le choix de renvoi d'un pointeur
-	unordered_map<Coordonnee, Case*>::const_iterator case0 = Cases.find(coo);
+	unordered_map<Coordonnee, Case*>::const_iterator case0 = cases.find(coo);
 
-	if (case0 != Cases.end()) {
+	if (case0 != cases.end()) {
 		return case0->second;
 	}
 	else {
@@ -50,7 +50,7 @@ Case* Plateau::getCaseDeCoo(const Coordonnee& coo) const {
 
 Case* JeuHive::Plateau::getCaseDePiece(const Piece& piece) const
 {
-	for (pair<Coordonnee, Case*> paire : Cases) {
+	for (pair<Coordonnee, Case*> paire : cases) {
 		for (const Piece* piece0 : paire.second->getPieces()) {
 			if (piece0 == &piece) {
 				return paire.second;
@@ -65,28 +65,11 @@ bool JeuHive::Plateau::estPlacee(const Piece& piece) const
 	return (getCaseDePiece(piece) != nullptr);
 }
 
-
-/*
-ostream& operator<<(ostream& f, const Plateau& p)
-	{
-		f << "Nombre de cellules : " << p.getNombreCases() << "\n";
-		int i = 0;
-		unordered_map<Coordonnee, Case*>::const_iterator itr;
-		for (itr = p.getCases().begin();
-			itr != p.getCases().end(); itr++)
-		{
-			f << "Case numéro : " << i++ << " Coordonnées : (" << itr->first.get_q() << itr->first.get_r() << ")\n";
-		}
-		return f;
-	}
-
-*/
-
 size_t Plateau::getNombrePieces() const
 {
 	size_t resultat = 0;
 	Case* case0;
-	for (pair<Coordonnee, Case*> paire : Cases) {
+	for (pair<Coordonnee, Case*> paire : cases) {
 		case0 = paire.second;
 		resultat += case0->getNombrePieces();
 	}
@@ -150,8 +133,8 @@ set<Coordonnee> Plateau::ensemblePlacementsPossibles(const Piece& piece, int tou
 	Coordonnee coo_case;
 	unordered_map<Coordonnee, Case*>::const_iterator itr;
 
-	for (itr = Cases.begin();
-		itr != Cases.end(); itr++)
+	for (itr = cases.begin();
+		itr != cases.end(); itr++)
 	{
 		coo_case = itr->first;
 		case_ptr = itr->second;
@@ -243,7 +226,7 @@ bool Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) con
 	}
 	/*
 	for (Case* case0 : visitees) {
-		cout << case0->getString() << " " << case0->getCoo() << "\n";
+		cout << case0->toString() << " " << case0->getCoo() << "\n";
 	}
 	*/
 
@@ -323,7 +306,7 @@ ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligne
 	vector<Coordonnee> coos_selectionner, int marge) const
 {
 	// résultat de l'affichage:
-	// Pour chaque hexagone, la pile de pièce est affichée: un pièce est représentée par un entier(0 pour BLANC, 1 pour
+	// Pour chaque hexagone, la pile de pièce est affichée: un pièce est représentée par une couleur(B pour BLANC, N pour
 	// NOIR) et d'un caractère pour le type d'insecte:
 	// r:reine abeille, a:araignée, s:scarabée, c:sauterelle(criquet), f:fourmi, m: moustique, b:coccinelle
 	// surligne aussi des coos
@@ -408,14 +391,14 @@ ostream& JeuHive::Plateau::afficher(ostream& f, vector<Coordonnee> coos_surligne
 
 		x_case = coo_case.get_q();
 		y_case = coo_case.get_q() + 2 * coo_case.get_r();
-		str_case = case0->getString();
+		str_case = case0->toString();
 
 		case_selectionnee = find(coos_selectionner.begin(), coos_selectionner.end(), coo_case)
 			!= coos_selectionner.end();
 		if (case_selectionnee) {
 			// mise en majuscule des deux derniers caractères
 			for (int i = static_cast<int>(str_case.size() - 2); i < str_case.size(); i++) {
-				str_case[i] = std::toupper(static_cast<unsigned char>(str_case[i]));
+				str_case[i] = toupper(static_cast<unsigned char>(str_case[i]));
 			}
 		}
 
@@ -581,7 +564,7 @@ bool Plateau::estAbeillePlacee(Couleur couleur) const
 {
 	// on test juste chaque pièce de chaque case
 	Case* case0;
-	for (pair<Coordonnee, Case*> paire : Cases) {
+	for (pair<Coordonnee, Case*> paire : cases) {
 		case0 = paire.second;
 		for (const Piece* piece : case0->getPieces()) {
 
@@ -599,7 +582,7 @@ bool Plateau::estAbeillePlacee(Couleur couleur) const
 bool JeuHive::Plateau::estAbeilleEntouree(Couleur couleur) const
 {
 	// Parcourt chaque case du plateau
-	for (const auto& paire : Cases) {
+	for (const auto& paire : cases) {
 		const Case* case0 = paire.second;
 
 		// Parcourt les pièces de la case actuelle
@@ -616,105 +599,6 @@ bool JeuHive::Plateau::estAbeilleEntouree(Couleur couleur) const
 	return false;
 }
 
-
-
-/*
-ostream& JeuHive::operator<<(ostream& f, const Plateau& p)
-{
-	// résultat de l'affichage:
-	// Pour chaque hexagone, la pile de pièce est affichée: un pièce est représentée par un entier(0 pour BLANC, 1 pour
-	// NOIR) et d'un caractère pour le type d'insecte:
-	// A:abeille, a:araignée, S:scarabée, s:sauterelle, f:fourmi, m: moustique, c:coccinelle
-
-
-	// pour afficher dans la console le plateau, peut convertir les coos hexagonales en une hauteur y(1 pour chaque ligne)
-	// et une position x(un certain nombre de caractères)
-	// Pour s'assurer qu'il y ait assez de place, la convertion sera linéaire et se fera de cette manière:
-	// y=2q+r, x=r
-	// les lignes ne s'afficheront bien que si le jeu n'est pas trop étendu sur l'axe gauche-droite,
-	// et on ne peut rien y faire
-
-	if (p.estVide()) {
-		return f;
-	}
-
-	int taille_str = 4;	// la taille que prendra chaque hexagone à afficher
-
-	//on commence par calculer les x et y min et max pour gacher le moins de place possible
-	int min_y = 10000;  // on suppose qu'aucune case ne sera à de telles coordonnées
-	int max_y = -10000;
-	int min_x = 10000;
-	int max_x = -10000;
-
-	Coordonnee coo_case;
-	int x_case;
-	int y_case;
-
-	for (auto paire : p.getCases()) {
-		coo_case = paire.first;
-		x_case = coo_case.get_q();
-		y_case = coo_case.get_q() + 2 * coo_case.get_r();
-		min_y = min(min_y, y_case);
-		max_y = max(max_y, y_case);
-		min_x = min(min_x, x_case);
-		max_x = max(max_x, x_case);
-		taille_str = max(taille_str, paire.second->getNombrePieces() * 2);
-
-	}
-
-	int marge = 1;// espace autour
-	int taille_x = max_x - min_x + 1 + 2 * marge;
-	int taille_y = max_y - min_y + 1 + 2 * marge;
-
-	string str_espaces = string(taille_str, ' ');
-
-	string str_point = " .";
-	str_point.append(string(taille_str - 2, ' '));
-
-
-	// tableau bidimensionnel rempli de str_espaces
-	vector<vector<string>> tab = vector<vector<string>>(taille_y, vector<string>(taille_x, ""));
-
-
-	Case* case0;
-	string str_case;
-	for (auto paire : p.getCases()) {
-		coo_case = paire.first;
-		case0 = paire.second;
-
-		x_case = coo_case.get_q();
-		y_case = coo_case.get_q() + 2 * coo_case.get_r();
-		str_case = case0->getString();
-		str_case.append(string(taille_str - str_case.size(), ' '));
-
-		tab.at(y_case - min_y + marge).at(x_case - min_x + marge) = str_case;
-
-	}
-	// tableau maintenant rempli
-
-
-	for (int i = taille_y - 1; i >= 0; i--) {		// boucle inversée car on print de haut en bas
-		for (int j = 0; j < taille_x; j++) {
-			if (tab.at(i).at(j) == "") {
-				if ((i + j + min_x + min_y) % 2 == 0) {
-					f << str_point;
-				}
-				else {
-					f << str_espaces;
-				}
-			}
-			else {
-				f << tab.at(i).at(j);
-			}
-		}
-		f << "\n";
-	}
-
-	return f;
-
-}
-
-*/
 
 ostream& JeuHive::operator<<(ostream& f, const Plateau& p) {
 	return p.afficher(f, {}, {}, 1);
@@ -745,7 +629,7 @@ vector<Coup*> JeuHive::Plateau::totalCoupsPossibles(int tour, Joueur& joueur)
 	const Piece* piece_actuelle_plateau;
 	set<Coordonnee> coos_deplacements_pieces;
 	Coordonnee coo_origine;
-	for (pair<Coordonnee, Case*> paire : Cases) {
+	for (pair<Coordonnee, Case*> paire : cases) {
 
 		piece_actuelle_plateau = paire.second->getDessus();
 		coo_origine = paire.first;
@@ -770,4 +654,15 @@ vector<Coup*> JeuHive::Plateau::totalCoupsPossibles(int tour, Joueur& joueur)
 
 
 	return coups_possibles;
+}
+
+ResumePlateau Plateau::resumer() const {
+	ResumePlateau resume;
+
+	for (const auto& casePair : cases) {
+		ResumeCase resumeCase = casePair.second->resumer();
+		resume.cases.push_back(resumeCase);
+	}
+
+	return resume;
 }

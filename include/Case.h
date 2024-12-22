@@ -1,4 +1,6 @@
 #pragma once
+
+#include "ResumeClasse.h"
 #include <iostream>
 #include <vector>
 #include "Coordonnee.h"
@@ -26,8 +28,10 @@ namespace JeuHive {
 		int getNombrePieces() const { return static_cast<int>(pieces.size()); }
 		Case(const Coordonnee& coo) : coo(coo) {}
 
-		string getString() const;
+		string toString() const;
+		ResumeCase resumer() const;
 	};
+	ostream& operator<<(ostream& os, const Case& c);
 }
 
 // Case* getCaseByCoord(Coordonnee& c, const Plateau& p)  déplacé dans la classe plateau

@@ -36,8 +36,7 @@ namespace JeuHive {
 
 
 		// Methodes pour gerer les parties
-		void ajouterPartie(Joueur& joueur1, Joueur& joueur2, Regle r);
-		void ajouterPartie(const string& nomJoueur1, TypeJoueur typeJoueur1, const string& nomJoueur2, TypeJoueur typeJoueur2, const Regle r);
+		void ajouterPartie(const string& nomJoueur1, TypeJoueur typeJoueur1, const string& nomJoueur2, TypeJoueur typeJoueur2, int nombreRetours);
 		void supprimerPartie(int idPartie);
 
 		Partie* getPartie(int idPartie);

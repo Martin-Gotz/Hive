@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Evenement.cpp" />
+    <ClCompile Include="src\FabriquePiece.cpp" />
     <ClCompile Include="src\InterfaceUtilisateur.cpp" />
     <ClCompile Include="src\Case.cpp" />
     <ClCompile Include="src\Coordonnee.cpp" />
@@ -143,7 +144,7 @@
     <ClCompile Include="src\Regle.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="IntelligenceA.h" />
+    <ClInclude Include="include\FabriquePiece.h" />
     <ClInclude Include="include\ResumeClasse.h" />
     <ClInclude Include="include\Case.h" />
     <ClInclude Include="include\Coordonnee.h" />

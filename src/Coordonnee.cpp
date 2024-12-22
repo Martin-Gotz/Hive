@@ -51,15 +51,6 @@ Coordonnee Coordonnee::operator+(const Coordonnee& c) const
 }
 
 void Coordonnee::afficher(ostream& f) const {
-	ResumeCoordonnee resume = resumer();
-	f << "q : " << resume.q << " r : " << resume.r << "\n";
-}
-
-ResumeCoordonnee Coordonnee::resumer() const
-{
-	ResumeCoordonnee resume;
-	resume.q = q;
-	resume.q = r;
-	return resume;
+	f << "q : " << q << " r : " << r << "\n";
 }
 
