@@ -167,6 +167,7 @@ bool Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) con
 	// idée de l'algo:
 	// si la pièce n'est pas placée, on renvoie une exception
 	// si la pièce n'est pas au dessus de sa case, elle ne peut pas bouger
+	// si la reine abeille n'est pas placée, impossible de bouger
 	// si la pièce est au dessus de sa case et qu'il y a des pièces en dessous, elle peut bouger
 	// si la case de la pièce n'a pas de voisin (ça ne devrait pas arriver mais on sait jamais), elle peut se déplacer.
 	// sinon:
@@ -187,6 +188,10 @@ bool Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) con
 	Case* case_de_piece = getCaseDeCoo(coo);
 
 	if (&piece != case_de_piece->getDessus()) {
+		return false;
+	}
+	
+	if (!estAbeillePlacee(piece.getCouleur())) {
 		return false;
 	}
 
@@ -494,7 +499,7 @@ void JeuHive::Plateau::jouerDeplacement(CoupDeplacement* coup)
 // cette fonction produit une exception si le coup est invalide
 {
 	set<Coordonnee> deplacements_possibles = (coup->getPiece())->
-		ensembleDeplacementPossibles(*this, (coup->getCooOrigine()));
+		ensembleDeplacementPossibles(*this, coup->getCooOrigine());
 
 
 	if (deplacements_possibles.find(coup->getCooDestination()) != deplacements_possibles.end()) {
