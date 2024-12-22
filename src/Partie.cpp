@@ -222,11 +222,13 @@ void Partie::jouerCoupIA()
         {
             int indexPiece = distance(pieces.begin(), it) + 1; // +1 car l'index est basé sur 1
             placerPiece(indexPiece, coupPlacement->getCooDestination());
+            cout << "IA a placé la pièce " << coupPlacement->getPiece()->getNom() << " en " << coupPlacement->getCooDestination().get_q() << ", " << coupPlacement->getCooDestination().get_r() << endl;
         }
     }
     else if (CoupDeplacement* coupDeplacement = dynamic_cast<CoupDeplacement*>(coupChoisi))
     {
         deplacerPiece(coupDeplacement->getCooOrigine(), coupDeplacement->getCooDestination());
+        cout << "IA a déplacé la pièce " << coupDeplacement->getPiece()->getNom() << " de " << coupDeplacement->getCooOrigine().get_q() << ", " << coupDeplacement->getCooOrigine().get_r() << " à " << coupDeplacement->getCooDestination().get_q() << ", " << coupDeplacement->getCooDestination().get_r() << endl;
     }
 
     //cout << "IA joue le coup : " << coupChoisi->getPiece()->getNom() << " à " << coupChoisi->getCooDestination() << endl;
@@ -241,6 +243,7 @@ void Partie::jouerCoupIA()
     }
     joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
     cout << "\nL'IA a joué son coup !\n";
+
     joueurSuivant();
 }
 
