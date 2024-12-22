@@ -158,6 +158,7 @@
     <ClCompile Include="qt\src\VuePiece.cpp" />
     <ClCompile Include="qt\src\VueCase.cpp" />
     <ClCompile Include="qt\src\VueNouvellePartie.cpp" />
+    <ClCompile Include="qt\src\VuePlateau.cpp" />
     <ClCompile Include="src\Evenement.cpp" />
     <ClCompile Include="src\InterfaceUtilisateur.cpp" />
     <ClCompile Include="src\Case.cpp" />
@@ -175,11 +176,12 @@
     <ClCompile Include="qt\src\VueHive.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="qt\include\VuePlateau.h" />
     <QtMoc Include="qt\include\VuePartie.h" />
     <ClInclude Include="qt\include\VuePiece.h" />
     <QtMoc Include="qt\include\VueNouvellePartie.h" />
     <QtMoc Include="qt\include\VueHive.h" />
-    <ClInclude Include="qt\include\VueCase.h" />
+    <QtMoc Include="qt\include\VueCase.h" />
     <ClInclude Include="include\ResumeClasse.h" />
     <ClInclude Include="include\Case.h" />
     <ClInclude Include="include\Coordonnee.h" />

@@ -11,34 +11,44 @@
 #include <QListWidget>
 #include <QMessageBox>
 #include "include/Hive.h"
-#include "VuePiece.h"
-#include "VueCase.h"
+#include "Coordonnee.h"
+#include "VuePlateau.h"
+#include "ResumeClasse.h"
 
-class VuePartie : public QWidget {
-    Q_OBJECT
+namespace JeuHive {
+    class VuePartie : public QWidget {
+        Q_OBJECT
 
-public:
-    explicit VuePartie(int partieId, QWidget* parent = nullptr);
-    void creerPlateau(int partieId);
-    void placerPiece(const JeuHive::Piece* piece, const QPointF& position);
+    public:
+        explicit VuePartie(int partieId, QWidget* parent = nullptr);
 
-private:
-    QHBoxLayout* layoutPartie;
-    QVBoxLayout* layoutBarreInfo;
-    QGraphicsView* graphicsView;
-    QGraphicsScene* scene;
-    QLabel* labelJoueur1;
-    QLabel* labelJoueur2;
-    QLabel* labelTour;
-    QListWidget* listPiecesJoueur1;
-    QListWidget* listPiecesJoueur2;
-    QPushButton* boutonQuitter;
+    private:
+        QHBoxLayout* layoutPartie;
+        QVBoxLayout* layoutBarreInfo;
+        QGraphicsView* graphicsView;
+        QGraphicsScene* scene;
+        QLabel* labelJoueur1;
+        QLabel* labelJoueur2;
+        QLabel* labelTour;
+        QListWidget* listPiecesJoueur1;
+        QListWidget* listPiecesJoueur2;
+        QPushButton* boutonAbandonner;
+        QPushButton* boutonQuitter;
 
-    void afficherInfosJoueurs(int partieId);
-    void afficherPiecesJoueurs(int partieId);
+        VuePlateau* vuePlateau;
 
-    void closeEvent(QCloseEvent* event) override;
+        void creerPlateau(int partieId);
+        void afficherInfosJoueurs(int partieId);
+        void afficherPiecesJoueurs(int partieId);
 
-signals:
-    void partieFermee(); // Signal émis à la fermeture
-};
+        void placerPiece(int idPiece, const Coordonnee& coord);
+        void deplacerPiece(const Coordonnee& origine, const Coordonnee& destination);
+
+        void quitterPartie();
+        void abandonnerPartie();
+        void closeEvent(QCloseEvent* event) override;
+
+    signals:
+        void partieFermee(); // Signal émis à la fermeture
+    };
+}

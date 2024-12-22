@@ -611,7 +611,8 @@ bool JeuHive::Plateau::estAbeilleEntouree(Couleur couleur) const
 		}
 
 	}
-	throw HiveException("La reine abeille de la couleur specifiee n'est pas encore placee");
+	//throw HiveException("La reine abeille de la couleur specifiee n'est pas encore placee");
+	return false;
 }
 
 

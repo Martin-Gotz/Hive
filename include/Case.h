@@ -1,4 +1,5 @@
-#pragma once
+ï»¿#pragma once
+#include "ResumeClasse.h"
 #include <iostream>
 #include <vector>
 #include "Coordonnee.h"
@@ -22,14 +23,15 @@ namespace JeuHive {
 		const Piece* getDessus() const { return pieces.back(); }
 		const vector<const Piece*>& getPieces() const { return pieces; }
 
-		bool estVide() const { return pieces.empty(); }	// très peu pertinent car une case vide devrait être supprimée
+		bool estVide() const { return pieces.empty(); }	// trÃ¨s peu pertinent car une case vide devrait Ãªtre supprimÃ©e
 		int getNombrePieces() const { return static_cast<int>(pieces.size()); }
 		Case(const Coordonnee& coo) : coo(coo) {}
 
 		string getString() const;
+		ResumeCase resumer() const;
 	};
 }
 
-// Case* getCaseByCoord(Coordonnee& c, const Plateau& p)  déplacé dans la classe plateau
+// Case* getCaseByCoord(Coordonnee& c, const Plateau& p)  dÃ©placÃ© dans la classe plateau
 // vector<Case*> getVoisins(Plateau& plateau) const;      pareil
-// car on ne peut pas include plateau.h dans case.h, ça ferait une inclusion en boucle
+// car on ne peut pas include plateau.h dans case.h, Ã§a ferait une inclusion en boucle

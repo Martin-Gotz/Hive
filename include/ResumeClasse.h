@@ -4,52 +4,47 @@
 
 using namespace std;
 
-// Structure pour afficher une coordonnée (check)
+namespace JeuHive {
+    struct ResumePiece {
+        string nom;
+        string couleur;
+        string symbole;
+        string symboleCouleur;
+    };
 
-// faire case à la place
-struct ResumeCoordonnee {
-    string q;
-    string r;
-};
+    struct ResumeCase {
+        int q;
+        int r;
+        vector<ResumePiece> pieces;
+    };
 
-// Structure pour afficher une pièce (check)
-// faire une concaténation 
+    struct ResumePlateau {
+        vector<ResumeCase> cases;
+    };
 
-struct ResumePiece {
-    string nom;
-    string couleur;
-    string symbole;
-};
+    struct ResumeMain {
+        vector<ResumePiece> pieces;
+        size_t nombre_pieces_restantes;
+        string estVide;
+    };
 
-// Structure pour afficher une main (check)
+    struct ResumeJoueur {
+        string nom;
+        string type;
+        string couleur;
+        ResumeMain main;
+    };
 
-struct ResumeMain {
-    vector<ResumePiece> pieces;
-    int nombre_pieces_restantes;
-    string estVide;
-};
+    struct ResumePartie {
+        int id;
+        ResumeJoueur joueur1;
+        ResumeJoueur joueur2;
+        string etatPartie;
+    };
 
-
-// Structure pour afficher un joueur (check)
-
-struct ResumeJoueur {
-    string nom;
-    string type;
-    string couleur;
-    ResumeMain main;
-};
-
-// Structure pour résumer une partie (check)
-struct ResumePartie {
-    int id;
-    ResumeJoueur joueur1;
-    ResumeJoueur joueur2;
-    string etatPartie;
-};
-
-// Structure pour l'état global de Hive
-struct EtatHive {
-    vector<ResumePartie> parties;
-    int idPartieEnCours = -1;
-};
-
+    // Structure pour l'état global de Hive
+    struct EtatHive {
+        vector<ResumePartie> parties;
+        int idPartieEnCours = -1;
+    };
+}

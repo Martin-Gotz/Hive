@@ -57,3 +57,17 @@ string Case::getString() const
 	return str_case;
 	*/
 }
+
+ResumeCase Case::resumer() const {
+	ResumeCase resume;
+	resume.q = coo.get_q();
+	resume.r = coo.get_r();
+
+	for (const auto& piece : pieces) {
+		if (piece) {
+			resume.pieces.push_back(piece->resumer());
+		}
+	}
+
+	return resume;
+}
