@@ -49,6 +49,11 @@ void Partie::demarrer() {
 
     etatPartie = EtatPartie::EN_COURS;
 
+    if (compteurTour == 1 && joueurActuel->getType() == IA)
+    {
+        jouerCoupIA();
+    }
+
 }
 
 
@@ -206,8 +211,23 @@ void Partie::jouerCoupIA()
     int indexAleatoire = distrib(gen);
     Coup* coupChoisi = coupsPossibles[indexAleatoire];
 
-    // Jouer le coup choisi
-    jouerCoup(coupChoisi);
+    // Vérifier le type de coup choisi
+
+    if (CoupPlacement* coupPlacement = dynamic_cast<CoupPlacement*>(coupChoisi))
+    {
+        // Trouver l'index de la pièce dans la main du joueur
+        const auto& pieces = joueurActuel->getMain().getPieces();
+        auto it = find(pieces.begin(), pieces.end(), coupPlacement->getPiece());
+        if (it != pieces.end())
+        {
+            int indexPiece = distance(pieces.begin(), it) + 1; // +1 car l'index est basé sur 1
+            placerPiece(indexPiece, coupPlacement->getCooDestination());
+        }
+    }
+    else if (CoupDeplacement* coupDeplacement = dynamic_cast<CoupDeplacement*>(coupChoisi))
+    {
+        deplacerPiece(coupDeplacement->getCooOrigine(), coupDeplacement->getCooDestination());
+    }
 
     //cout << "IA joue le coup : " << coupChoisi->getPiece()->getNom() << " à " << coupChoisi->getCooDestination() << endl;
 
@@ -228,7 +248,7 @@ void Partie::joueurSuivant() {
     if (etatPartie != EtatPartie::EN_COURS) {
         throw HiveException("Impossible de passer le tour d'une partie qui n'est pas en cours !");
     }
-    if(verifier_partie())
+    if(verifierEtatPartie())
     { 
         if (joueurActuel->getCouleur() == Couleur::NOIR) {
             compteurTour++;
