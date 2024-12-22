@@ -46,6 +46,7 @@ void Partie::demarrer() {
     }
 
     etatPartie = EtatPartie::EN_COURS;
+
 }
 
 void Partie::modifierRegles(const Regle &r)
@@ -82,6 +83,7 @@ void Partie::initialiser() {
 
     EvenementPartie evt(id, TypeEvenement::DEBUT_PARTIE);
     notifierObservers(evt);
+
 }
 
 void Partie::reprendre() {
@@ -171,15 +173,55 @@ void Partie::jouerCoup(Coup* coup) {
     notifierObservers(evt);
 
     //CompteurRegles--;
-
     delete coup;
+}
+
+void Partie::jouerCoupIA()
+{
+    if (joueurActuel->getType() != IA)
+    {
+        throw HiveException("Erreur, le joueur n'est pas une IA !");
+        return;
+    }
+
+    // Obtenir tous les coups possibles pour le joueur actuel
+    vector<Coup*> coupsPossibles = plateau.totalCoupsPossibles(compteurTour, *joueurActuel);
+
+    if (coupsPossibles.empty())
+    {
+        throw HiveException("Aucun coup possible pour l'IA !");
+        return;
+    }
+
+    // Choisir un coup aléatoire parmi les coups possibles
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> distrib(0, coupsPossibles.size() - 1);
+    int indexAleatoire = distrib(gen);
+    Coup* coupChoisi = coupsPossibles[indexAleatoire];
+
+    // Jouer le coup choisi
+    jouerCoup(coupChoisi);
+
+    //cout << "IA joue le coup : " << coupChoisi->getPiece()->getNom() << " à " << coupChoisi->getCooDestination() << endl;
+
+    // Nettoyer les coups non choisis
+    for (Coup* coup : coupsPossibles)
+    {
+        if (coup != coupChoisi)
+        {
+            delete coup;
+        }
+    }
+    joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
+    cout << "\nL'IA a joué son coup !\n";
+    joueurSuivant();
 }
 
 void Partie::joueurSuivant() {
     if (etatPartie != EtatPartie::EN_COURS) {
         throw HiveException("Impossible de passer le tour d'une partie qui n'est pas en cours !");
     }
-
     if(verifier_partie())
     { 
         if (joueurActuel->getCouleur() == Couleur::NOIR) {
@@ -189,11 +231,18 @@ void Partie::joueurSuivant() {
         }
 
         joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1; // Le getNom est temporaire en attendant l'opérateur de comparaison
-
+        
+        if (joueurActuel->getType() == IA && joueurActuel != nullptr)
+        {
+            jouerCoupIA();
+        }
+        
         EvenementPartie evt(id, TypeEvenement::CHANGEMENT_JOUEUR);
-        notifierObservers(evt);
+        notifierObservers(evt);        
     }
+
 }
+
 
 /*
 void Partie::annulerDernierCoup() {

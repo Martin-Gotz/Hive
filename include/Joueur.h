@@ -34,6 +34,13 @@ namespace JeuHive {
         void ajouterPieceMain(Piece* piece);
 
         ResumeJoueur resumer() const;
+    };  
+
+    class JoueurIA : public Joueur {
+    public:
+        JoueurIA(string nom) : Joueur(nom, IA) {
+            std::srand(std::time(nullptr)); // Initialize random seed
+        }
     };
 
 

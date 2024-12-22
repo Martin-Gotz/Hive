@@ -109,7 +109,6 @@ void InterfaceUtilisateur::gererChoixUtilisateurMenuPartie() {
     }
 }
 
-
 // ===== METHODES RELATIVES A HIVE =====
 
 // Demander à l'utilisateur les informations nécessaires pour ajouter une partie

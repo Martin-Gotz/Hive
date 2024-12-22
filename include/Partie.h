@@ -78,6 +78,7 @@ namespace JeuHive {
 		void placerPiece(int idPiece, const Coordonnee& cooDestination);
 		void deplacerPiece(const Coordonnee& cooOrigine, const Coordonnee& cooDestination);
 		void jouerCoup(Coup* coup);
+		void jouerCoupIA();
 		void joueurSuivant();
 		void annulerDernierCoup();
 

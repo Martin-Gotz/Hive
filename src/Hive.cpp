@@ -113,6 +113,7 @@ void Hive::demarrerPartie(int idPartie) {
 
     partie->demarrer();
     partieEnCours = partie;
+    
 }
 
 // Terminer la partie en cours

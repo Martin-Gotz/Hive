@@ -143,6 +143,7 @@
     <ClCompile Include="src\Regle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="IntelligenceA.h" />
     <ClInclude Include="include\ResumeClasse.h" />
     <ClInclude Include="include\Case.h" />
     <ClInclude Include="include\Coordonnee.h" />
