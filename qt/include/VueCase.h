@@ -28,7 +28,6 @@ namespace JeuHive {
             updateHexagon();
         }
 
-        // Setter pour la couleur
         void setCouleur(Couleur c) {
             couleur = c;
             update();
@@ -54,7 +53,7 @@ namespace JeuHive {
 
             // Si une pièce est présente, dessiner son symbole
             if (piece) {
-                painter.setPen(Qt::black);
+                painter.setPen(couleur == BLANC ? Qt::black : Qt::white);
                 QFont font = painter.font();
                 font.setPointSize(12);
                 painter.setFont(font);
@@ -76,7 +75,7 @@ namespace JeuHive {
 
             hexagon.clear();
             for (int i = 0; i < 6; ++i) {
-                double angle = M_PI / 3.0 * i; // Aucune rotation supplémentaire, le côté plat est maintenant en haut
+                double angle = M_PI / 3.0 * i;
                 hexagon << QPointF(center.x() + size * std::cos(angle), center.y() + size * std::sin(angle));
             }
         }
@@ -88,10 +87,12 @@ namespace JeuHive {
 
         void setPiece(const JeuHive::Piece& p) {
             piece = &p;
+            setCouleur(p.getCouleur());
             update();
         }
 
         void setNoPiece() {
+            setCouleur(BLANC);
             piece = nullptr;
             update();
         }
@@ -100,11 +101,11 @@ namespace JeuHive {
         bool piecePresente() const { return piece != nullptr; }
 
     private:
-        const JeuHive::Piece* piece;
+        const Piece* piece;
         QPen pen;
         QBrush brush;
         QPolygonF hexagon;
-        Couleur couleur;  // Le membre couleur
+        Couleur couleur;
 
     signals:
         void caseClicked(VueCase*);

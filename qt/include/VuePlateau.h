@@ -18,6 +18,7 @@ namespace JeuHive {
         QGraphicsScene* scene;
         QVBoxLayout* layoutPrincipal;
         const Plateau* plateau;
+        const int hexSize = 20;
 
     public:
         explicit VuePlateau(const Plateau* plateau, QWidget* parent = nullptr) : QWidget(parent), plateau(plateau) {
@@ -42,32 +43,74 @@ namespace JeuHive {
 
             // Déterminer le centre du conteneur
             int centerX = containerWidth / 2;
-            int centerY = containerHeight / 2;
+            int centerY = containerHeight / 1.5;
 
-            // Taille d'une case hexagonale (rayon)
+            // Taille d'une case hexagonale
             const int hexSize = 40;
 
+            // Créer un ensemble de coordonnées ajoutées pour éviter les duplications
+            QSet<QPair<int, int>> casesAjoutees;
+            // Conteneur pour les vues de cases déjà ajoutées
+            QMap<QPair<int, int>, VueCase*> casesVue;
+
+            // Ajouter une case vide en 0, 0 si le plateau est vide
+            if (plateau->estVide()) {
+                ajouterCase(centerX, centerY, 0, 0, casesAjoutees, casesVue, nullptr);
+            }
+
+            // Ajouter les cases réelles du plateau
             for (const auto& [coord, caseHive] : plateau->getCases()) {
-                VueCase* vueCase = new VueCase(this);
+                ajouterCaseDeCoordonnee(centerX, centerY, coord, casesAjoutees, casesVue, caseHive);
 
-                int q = coord.get_q();
-                int r = coord.get_r();
-
-                double x = hexSize * (3.0 / 2.0 * q);
-                double y = -hexSize * (std::sqrt(3) * (r + q / 2.0));
-
-                int pixelX = static_cast<int>(x + centerX);
-                int pixelY = static_cast<int>(y + centerY);
-
-                vueCase->setGeometry(pixelX - hexSize, pixelY - hexSize, 2 * hexSize, 2 * hexSize);
-
-                if (caseHive->getDessus()) {
-                    vueCase->setPiece(*caseHive->getDessus());
+                // Ajouter les cases autour du plateau
+                for (const auto& coordAutour : coord.getVoisins()) {
+                    ajouterCaseDeCoordonnee(centerX, centerY, coordAutour, casesAjoutees, casesVue, nullptr);
                 }
-
-                connect(vueCase, &VueCase::caseClicked, this, &VuePlateau::onCaseClicked);
             }
         }
+
+        // Fonction pour ajouter une case à la scène avec une vue correspondante
+        void ajouterCaseDeCoordonnee(int centerX, int centerY, const Coordonnee& coord, QSet<QPair<int, int>>& casesAjoutees, QMap<QPair<int, int>, VueCase*>& casesVue, Case* caseHive) {
+            double x, y;
+            calculerPositionHexagonale(coord.get_q(), coord.get_r(), x, y);
+
+            // Vérification si la case a déjà été ajoutée
+            if (!casesAjoutees.contains(qMakePair(coord.get_q(), coord.get_r()))) {
+                ajouterCase(centerX, centerY, x, y, casesAjoutees, casesVue, caseHive);
+            }
+        }
+
+        // Ajouter une case à la scène
+        void ajouterCase(int centerX, int centerY, double x, double y, QSet<QPair<int, int>>& casesAjoutees, QMap<QPair<int, int>, VueCase*>& casesVue, Case* caseHive) {
+            // Calcul des positions de la vue de la case
+            int pixelX = static_cast<int>(x + centerX);
+            int pixelY = static_cast<int>(y + centerY);
+
+            // Créer la VueCase
+            QPair<int, int> coord = qMakePair(static_cast<int>(x), static_cast<int>(y));
+            if (!casesVue.contains(coord)) {
+                VueCase* vueCase = new VueCase(this);
+                vueCase->setGeometry(pixelX - hexSize, pixelY - hexSize, 2 * hexSize, 2 * hexSize);
+                connect(vueCase, &VueCase::caseClicked, this, &VuePlateau::onCaseClicked);
+                casesVue.insert(coord, vueCase);
+            }
+
+            // Ajouter la pièce si nécessaire
+            if (caseHive && caseHive->getDessus()) {
+                casesVue[coord]->setPiece(*caseHive->getDessus());
+            }
+
+            // Ajouter la coordonnée au set pour éviter la duplication
+            casesAjoutees.insert(coord);
+        }
+
+        // Calculer la position hexagonale
+        void calculerPositionHexagonale(int q, int r, double& x, double& y) {
+            // Calcul de la position hexagonale en pixels
+            x = hexSize * (3.0 / 2.0 * q);
+            y = -hexSize * (std::sqrt(3) * (r + q / 2.0));
+        }
+
 
 
 
@@ -115,18 +158,11 @@ namespace JeuHive {
             update();
         }
 
-
-
         QGraphicsScene* getScene() const {
             return scene;
         }
 
         void resizeEvent(QResizeEvent* event) override {
-            int largeur = this->width();
-            int hauteur = this->height();
-
-            qDebug() << "Nouvelle taille - Largeur:" << largeur << "Hauteur:" << hauteur;
-
             QWidget::resizeEvent(event);
         }
 

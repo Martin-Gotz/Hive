@@ -123,7 +123,7 @@ namespace JeuHive {
         Piece* piece = partie->getJoueurActuel()->getMain().getPieces()[idPiece - 1];
         vuePlateau->placerPiece(piece, coord);
         cout << "Pièce " << idPiece << " placée\n";
-        cout << partie->getPlateau();
+        cout << "\n" << partie->getPlateau();
     }
 
 
