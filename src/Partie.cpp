@@ -183,7 +183,7 @@ void Partie::joueurSuivant() {
             notifierObservers(evt);
         }
 
-        joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1; // Le getNom est temporaire en attendant l'opérateur de comparaison
+        joueurActuel = (joueur1 == joueurActuel) ? &joueur2 : &joueur1; // Le getNom est temporaire en attendant l'opérateur de comparaison
 
         EvenementPartie evt(id, TypeEvenement::CHANGEMENT_JOUEUR);
         notifierObservers(evt);

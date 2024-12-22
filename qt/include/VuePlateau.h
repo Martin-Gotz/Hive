@@ -27,11 +27,10 @@ namespace JeuHive {
             graphicsView->setScene(scene);
 
             graphicsView->setMinimumWidth(600);
-            graphicsView->setMinimumHeight(400);
+            graphicsView->setMinimumHeight(600);
 
-            QVBoxLayout* layoutPrincipal = new QVBoxLayout(this);
+            layoutPrincipal = new QVBoxLayout(this);
             layoutPrincipal->addWidget(graphicsView);
-
             setLayout(layoutPrincipal);
         }
 
@@ -43,10 +42,7 @@ namespace JeuHive {
 
             // Déterminer le centre du conteneur
             int centerX = containerWidth / 2;
-            int centerY = containerHeight / 1.5;
-
-            // Taille d'une case hexagonale
-            const int hexSize = 40;
+            int centerY = containerHeight / 2;
 
             // Créer un ensemble de coordonnées ajoutées pour éviter les duplications
             QSet<QPair<int, int>> casesAjoutees;
@@ -67,6 +63,9 @@ namespace JeuHive {
                     ajouterCaseDeCoordonnee(centerX, centerY, coordAutour, casesAjoutees, casesVue, nullptr);
                 }
             }
+            scene->update();
+            graphicsView->viewport()->repaint();
+            scene->update();
         }
 
         // Fonction pour ajouter une case à la scène avec une vue correspondante
@@ -89,7 +88,15 @@ namespace JeuHive {
             // Créer la VueCase
             QPair<int, int> coord = qMakePair(static_cast<int>(x), static_cast<int>(y));
             if (!casesVue.contains(coord)) {
-                VueCase* vueCase = new VueCase(this);
+                VueCase* vueCase = new VueCase({coord.first, coord.second}, this);
+                scene->addWidget(vueCase);
+                if (vueCase->isVisible()) {
+                    qDebug() << "Case ajoutée et visible";
+                }
+                else {
+                    qDebug() << "Case ajoutée mais pas visible";
+                }
+
                 vueCase->setGeometry(pixelX - hexSize, pixelY - hexSize, 2 * hexSize, 2 * hexSize);
                 connect(vueCase, &VueCase::caseClicked, this, &VuePlateau::onCaseClicked);
                 casesVue.insert(coord, vueCase);
@@ -137,7 +144,7 @@ namespace JeuHive {
             }
 
             afficherPlateau();
-            update();
+            scene->update();
         }
 
 
@@ -155,7 +162,7 @@ namespace JeuHive {
             }
 
             afficherPlateau();
-            update();
+            scene->update();
         }
 
         QGraphicsScene* getScene() const {
@@ -166,14 +173,13 @@ namespace JeuHive {
             QWidget::resizeEvent(event);
         }
 
+
+    signals:
+        void caseClickedSignal(VueCase* caseCliquee);
+
     private slots:
-        void onCaseClicked(VueCase* caseClicked) {
-            if (caseClicked->piecePresente()) {
-                std::cout << "Pièce cliquée: " << caseClicked->getPiece().getNom() << std::endl;
-            }
-            else {
-                std::cout << "Case vide cliquée." << std::endl;
-            }
+        void onCaseClicked(VueCase* caseCliquee) {
+            emit caseClickedSignal(caseCliquee);
         }
     };
 }

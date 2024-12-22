@@ -33,6 +33,7 @@ namespace JeuHive {
         const Plateau* plateau = &Hive::getInstance().getPartieEnCours()->getPlateau();
         // VuePlateau pour afficher le plateau
         vuePlateau = new VuePlateau(plateau, this);
+        connect(vuePlateau, &VuePlateau::caseClickedSignal, this, &VuePartie::gererCaseCliquee);
 
         // Layout horizontal principal
         QHBoxLayout* layoutPartie = new QHBoxLayout(this);
@@ -45,11 +46,6 @@ namespace JeuHive {
         creerPlateau(partieId);
         afficherInfosJoueurs(partieId);
         afficherPiecesJoueurs(partieId);
-
-        placerPiece(1, { 0, 0 });
-        placerPiece(1, { 0, 1 });
-        placerPiece(2, { 1, -1 });
-        placerPiece(2, { 1, 1 });
     }
 
 
@@ -98,17 +94,32 @@ namespace JeuHive {
         listPiecesJoueur1->clear();
         listPiecesJoueur2->clear();
 
-        for (const auto* piece : partie->getJoueur1().getMain().getPieces()) {
-            QString pieceInfo = QString("%1 (%2)").arg(QString::fromStdString(piece->getNom())).arg(QString::fromStdString(piece->getSymbole()));
-            listPiecesJoueur1->addItem(pieceInfo);
-        }
+        // Utilisation d'une méthode privée pour factoriser la logique
+        afficherPiecesJoueur(partie->getJoueur1().getMain().getPieces(), listPiecesJoueur1);
+        afficherPiecesJoueur(partie->getJoueur2().getMain().getPieces(), listPiecesJoueur2);
+    }
 
-        for (const auto* piece : partie->getJoueur2().getMain().getPieces()) {
-            QString pieceInfo = QString("%1 (%2)").arg(QString::fromStdString(piece->getNom())).arg(QString::fromStdString(piece->getSymbole()));
-            listPiecesJoueur2->addItem(pieceInfo);
+    void VuePartie::afficherPiecesJoueur(const std::vector<Piece*>& pieces, QListWidget* listWidget) {
+        int idCounter = 1; // Compteur pour générer des identifiants uniques
+
+        for (const auto* piece : pieces) {
+            QString pieceInfo = QString("%1 - %2 : %3")
+                .arg(idCounter++) // Ajoute un identifiant unique
+                .arg(QString::fromStdString(piece->getNom()))
+                .arg(QString::fromStdString(piece->getSymbole()));
+
+            listWidget->addItem(pieceInfo);
         }
     }
 
+    int VuePartie::getIdPieceSelectionnee(QListWidget* listWidget) {
+        int row = listWidget->currentRow();
+        if (row == -1) {
+            return -1;
+        }
+
+        return row + 1;
+    }
 
 
 
@@ -119,11 +130,21 @@ namespace JeuHive {
 
         if (!partie) return;
 
-        partie->placerPiece(idPiece, coord);
-        Piece* piece = partie->getJoueurActuel()->getMain().getPieces()[idPiece - 1];
-        vuePlateau->placerPiece(piece, coord);
-        cout << "Pièce " << idPiece << " placée\n";
-        cout << "\n" << partie->getPlateau();
+        try {
+            partie->placerPiece(idPiece, coord);
+
+            Piece* piece = partie->getJoueurActuel()->getMain().getPieces()[idPiece - 1];
+            vuePlateau->placerPiece(piece, coord);
+
+            cout << "Pièce " << idPiece << " placée\n";
+            cout << "\n" << partie->getPlateau();
+        }
+        catch (HiveException& e) {
+            QMessageBox::warning(this, "Erreur", "Coup non valide");
+        }
+
+        
+        update();
     }
 
 
@@ -136,6 +157,8 @@ namespace JeuHive {
         partie->deplacerPiece(origine, destination);
         vuePlateau->deplacerPiece(origine, destination);
         cout << "Pièce déplacée\n";
+
+        update();
     }
 
 
@@ -162,5 +185,34 @@ namespace JeuHive {
         }
         emit partieFermee();
         QWidget::closeEvent(event);
+    }
+
+    void VuePartie::gererCaseCliquee(VueCase* caseCliquee) {
+        Partie* partie = Hive::getInstance().getPartieEnCours();
+        placerPiece(1, caseCliquee->getCoord());
+        /*
+        if (partie->estPremierJoueurActuel()) {
+            Joueur* joueur = &partie->getJoueur1();
+            QListWidgetItem* currentItem = listPiecesJoueur1->currentItem();
+            if (currentItem) {
+                int idPiece = getIdPieceSelectionnee(listPiecesJoueur1);
+                placerPiece(idPiece, caseCliquee->getCoord());
+            }
+            else {
+                cout << "rien" << std::endl;
+            }
+        }
+        else {
+            Joueur* joueur = &partie->getJoueur2();
+            QListWidgetItem* currentItem = listPiecesJoueur1->currentItem();
+            if (currentItem) {
+                int idPiece = getIdPieceSelectionnee(listPiecesJoueur1);
+                placerPiece(idPiece, caseCliquee->getCoord());
+            }
+            else {
+                cout << "rien" << std::endl;
+            }
+        }*/
+        listPiecesJoueur1->setCurrentItem(nullptr);
     }
 }

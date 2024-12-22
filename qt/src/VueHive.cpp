@@ -148,6 +148,7 @@ namespace JeuHive {
             QString itemText = currentItem->text();
             int partieId = itemText.split(" ").last().toInt();
             const auto* partie = Hive::getInstance().getPartie(partieId);
+
             if (partie->getEtatPartie() == EtatPartie::TERMINEE) {
                 QMessageBox::warning(this, "Erreur", "Cette partie est déjà terminée.");
                 return;
@@ -161,6 +162,9 @@ namespace JeuHive {
             Hive::getInstance().demarrerPartie(partieId);
             VuePartie* vuePartie = new VuePartie(partieId);
             ouvrirVuePartie[partieId] = vuePartie;
+
+
+            listeParties->clearSelection();
 
             this->setEnabled(false); // Désactiver la fenètre lorsqu'une partie se lance
 

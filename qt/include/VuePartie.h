@@ -41,6 +41,10 @@ namespace JeuHive {
         void afficherInfosJoueurs(int partieId);
         void afficherPiecesJoueurs(int partieId);
 
+        void afficherPiecesJoueur(const std::vector<Piece*>& pieces, QListWidget* listWidget);
+
+        int getIdPieceSelectionnee(QListWidget* listWidget);
+
         void placerPiece(int idPiece, const Coordonnee& coord);
         void deplacerPiece(const Coordonnee& origine, const Coordonnee& destination);
 
@@ -50,5 +54,8 @@ namespace JeuHive {
 
     signals:
         void partieFermee(); // Signal émis à la fermeture
+
+    public slots:
+        void gererCaseCliquee(VueCase* caseCliquee);
     };
 }

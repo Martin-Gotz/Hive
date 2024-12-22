@@ -35,6 +35,10 @@ namespace JeuHive {
         // Ajouter une pièce à la main
         void ajouterPieceMain(Piece* piece);
 
+        bool operator==(Joueur* other) {
+            return (nom == other->nom && couleur == other->couleur);
+        }
+
         ResumeJoueur resumer() const;
     };
 

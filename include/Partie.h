@@ -51,6 +51,12 @@ namespace JeuHive {
 
 		const int getCompteurTour() const { return compteurTour; }
 
+
+
+		bool estPremierJoueurActuel() {
+			return joueur1 == joueurActuel;
+		}
+
 		bool verifier_partie();
 
 		// Methodes principales

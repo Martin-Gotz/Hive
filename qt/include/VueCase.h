@@ -14,7 +14,7 @@ namespace JeuHive {
         Q_OBJECT
 
     public:
-        explicit VueCase(QWidget* parent = nullptr) : QPushButton(parent), piece(nullptr), couleur(BLANC) {
+        explicit VueCase(Coordonnee coord, QWidget* parent = nullptr) : coord(coord), QPushButton(parent), piece(nullptr), couleur(BLANC) {
             pen = QPen(Qt::black);
             brush = QBrush(Qt::white);
             setCheckable(true);
@@ -28,15 +28,9 @@ namespace JeuHive {
             updateHexagon();
         }
 
-        void setCouleur(Couleur c) {
-            couleur = c;
-            update();
-        }
-
         // Dessiner l'hexagone
         void paintEvent(QPaintEvent* event) override {
             QPainter painter(this);
-
             // Définir la couleur de fond en fonction de la couleur de la case
             if (couleur == BLANC) {
                 brush.setColor(Qt::white);
@@ -97,11 +91,22 @@ namespace JeuHive {
             update();
         }
 
+
+        void setCouleur(Couleur c) {
+            couleur = c;
+            update();
+        }
+
+        const Coordonnee& getCoord() const {
+            return coord;
+        }
+
         const JeuHive::Piece& getPiece() const { return *piece; }
         bool piecePresente() const { return piece != nullptr; }
 
     private:
         const Piece* piece;
+        Coordonnee coord;
         QPen pen;
         QBrush brush;
         QPolygonF hexagon;
