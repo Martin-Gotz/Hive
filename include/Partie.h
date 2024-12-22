@@ -85,6 +85,7 @@ namespace JeuHive {
 
 		// Autres méthodes
 		ResumePartie resumer() const;
+		string tostringresumer() const;
 	};
 
 

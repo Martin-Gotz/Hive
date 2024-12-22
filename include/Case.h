@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "ResumeClasse.h"
 #include <iostream>
@@ -24,7 +24,7 @@ namespace JeuHive {
 		const Piece* getDessus() const { return pieces.back(); }
 		const vector<const Piece*>& getPieces() const { return pieces; }
 
-		bool estVide() const { return pieces.empty(); }	// très peu pertinent car une case vide devrait être supprimée
+		bool estVide() const { return pieces.empty(); }	// trÃ¨s peu pertinent car une case vide devrait Ãªtre supprimÃ©e
 		int getNombrePieces() const { return static_cast<int>(pieces.size()); }
 		Case(const Coordonnee& coo) : coo(coo) {}
 

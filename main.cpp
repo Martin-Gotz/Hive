@@ -1,6 +1,8 @@
 using namespace std;
 #include "./include/Hive.h"
 #include "./include/InterfaceUtilisateur.h"
+#include <QApplication>
+#include "VueHive.h"
 
 using namespace std;
 using namespace JeuHive;
@@ -105,9 +107,12 @@ int main() {
 
     Hive& hive = Hive::getInstance();
     InterfaceUtilisateur ui(hive);
-    ui.gererChoixUtilisateur();
+    //ui.gererChoixUtilisateur();
 
 
+    QApplication app(argc, argv);
+    VueHive vueHive;
+    vueHive.show();
 
     return 0;
 }

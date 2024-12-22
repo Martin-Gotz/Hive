@@ -34,7 +34,7 @@ namespace JeuHive {
 
 		~Hive();
 
-
+		vector<Partie*> getAllParties() const { return parties; }
 		// Methodes pour gerer les parties
 		void ajouterPartie(const string& nomJoueur1, TypeJoueur typeJoueur1, const string& nomJoueur2, TypeJoueur typeJoueur2, int nombreRetours);
 		void supprimerPartie(int idPartie);
@@ -47,6 +47,7 @@ namespace JeuHive {
 		// Gestion de la partie en cours
 		void demarrerPartie(int idPartie);
 		void terminerPartie();
+		//void terminerPartie(int idPartie); // on en aurait pas besoin en réalité
 		void mettrePartieEnPause();
 
 		Partie* getPartieEnCours() { return partieEnCours; }

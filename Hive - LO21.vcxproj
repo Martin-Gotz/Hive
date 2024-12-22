@@ -127,6 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="qt\src\VuePartie.cpp" />
+    <ClCompile Include="qt\src\VuePiece.cpp" />
+    <ClCompile Include="qt\src\VueCase.cpp" />
+    <ClCompile Include="qt\src\VueNouvellePartie.cpp" />
+    <ClCompile Include="qt\src\VuePlateau.cpp" />
     <ClCompile Include="src\Evenement.cpp" />
     <ClCompile Include="src\FabriquePiece.cpp" />
     <ClCompile Include="src\InterfaceUtilisateur.cpp" />
@@ -142,10 +147,15 @@
     <ClCompile Include="src\Piece.cpp" />
     <ClCompile Include="src\Plateau.cpp" />
     <ClCompile Include="src\Regle.cpp" />
+    <ClCompile Include="qt\src\VueHive.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\FabriquePiece.h" />
-    <ClInclude Include="include\JoueurIa.h" />
+    <QtMoc Include="qt\include\VuePlateau.h" />
+    <QtMoc Include="qt\include\VuePartie.h" />
+    <ClInclude Include="qt\include\VuePiece.h" />
+    <QtMoc Include="qt\include\VueNouvellePartie.h" />
+    <QtMoc Include="qt\include\VueHive.h" />
+    <QtMoc Include="qt\include\VueCase.h" />
     <ClInclude Include="include\ResumeClasse.h" />
     <ClInclude Include="include\Case.h" />
     <ClInclude Include="include\Coordonnee.h" />
@@ -162,6 +172,11 @@
     <ClInclude Include="include\Plateau.h" />
     <ClInclude Include="include\Regle.h" />
     <ClInclude Include="include\InterfaceUtilisateur.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="qt\ui\MainWindow.ui" />
+    <QtUic Include="qt\ui\MainWindow.ui" />
+    <QtUic Include="qt\ui\MainWindow.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

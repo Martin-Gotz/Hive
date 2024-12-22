@@ -6,6 +6,7 @@
 #include "Enums.h"
 #include "Exceptions.h"
 #include "Coup.h"
+#include "Joueur.h"
 #include <set>
 #include "Joueur.h"
 
@@ -66,6 +67,10 @@ namespace JeuHive {
 		void inverserCoup(Coup* coup);
 		void inverserPlacement(CoupPlacement* coup);
 		void inverserDeplacement(CoupDeplacement* coup);
+		
+
+		//vector<Coup*> totalCoupsPossibles(int tour, Joueur& joueur);
+		
 
 		Couleur Gagnant() const;
 
