@@ -18,10 +18,10 @@ void VuePiece::mousePressEvent(QGraphicsSceneMouseEvent* event) {
         return;
     }
     
-    
+    /*
     VuePartie* vuePartie = qobject_cast<VuePartie*>(scene()->views().first()->parentWidget());
     if (vuePartie) {
         vuePartie->placerPiece(piece, event->scenePos());
     }
-    
+    */
 }
