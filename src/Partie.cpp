@@ -269,7 +269,10 @@ void Partie::joueurSuivant() {
         EvenementPartie evt(id, TypeEvenement::CHANGEMENT_JOUEUR);
         notifierObservers(evt);        
     }
-
+    else
+    {
+        throw HiveException("Le vainqueur a déjà été déterminé !");
+    }
 }
 
 
@@ -327,7 +330,6 @@ ResumePartie Partie::resumer() const {
 bool Partie::verifierEtatPartie() {
     if (plateau.estPartieFinie())
     {
-        terminer();
         switch (plateau.Gagnant())
         {
         case BLANC:
@@ -335,7 +337,7 @@ bool Partie::verifierEtatPartie() {
             {
                 Victorieux = &joueur1;
             }
-            else
+            else 
             {
                 Victorieux = &joueur2;
             }
@@ -350,6 +352,7 @@ bool Partie::verifierEtatPartie() {
             }
         }
         cout << Victorieux->getNom() << " a gagné ! \n";
+        terminer();
         return false;
     }
     else return true;
