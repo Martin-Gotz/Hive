@@ -65,8 +65,6 @@ namespace JeuHive {
 			nouv_coos_glissement = plateau.getCooVoisinesGlissement(coo_actuelle, &coo);
 			nouv_coos = {};
 
-			//cout << " coo actuelle: " << coo_actuelle << "  coo precedente " << coo_precedente << "\n";
-
 			// suppression des retours arrière
 			for (Coordonnee nouv_coo_glissement : nouv_coos_glissement) {
 				// Si la coordonnée précedente est celle atteignable par un glissement, on n'y va pas
@@ -75,14 +73,6 @@ namespace JeuHive {
 					nouv_coos.insert(nouv_coo_glissement);
 				}
 			}
-
-			/*
-			cout << coo_actuelle << "coo_actuelle \n";
-			for (Coordonnee debug : nouv_coos) {
-				cout << "     nouv_coo " << debug << "\n";
-			}
-			*/
-
 
 			if (generation == nbr_mouvements - 1) {
 				for (Coordonnee nouv_coo : nouv_coos) {

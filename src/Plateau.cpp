@@ -229,19 +229,8 @@ bool Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) con
 		visitees.insert(case_actuelle);
 		file_attente.erase(file_attente.begin());
 	}
-	/*
-	for (Case* case0 : visitees) {
-		cout << case0->toString() << " " << case0->getCoo() << "\n";
-	}
-	*/
-
 
 	return visitees.size() == getNombreCases() - 1;
-
-
-
-
-
 }
 
 set<Coordonnee> Plateau::getCooVoisinesGlissement(const Coordonnee& coo, const Coordonnee* ignorer_coo) const
@@ -548,7 +537,6 @@ void JeuHive::Plateau::inverserDeplacement(CoupDeplacement* coup)
 
 
 vector<Case*> Plateau::getVoisinsDeCoo(const Coordonnee& coo) const
-// on ne peut pas écrire case car c'est un mot clé
 {
 	vector<Case*> voisins;
 	vector<Coordonnee> coo_voisines = coo.getVoisins();

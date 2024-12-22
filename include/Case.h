@@ -34,6 +34,3 @@ namespace JeuHive {
 	ostream& operator<<(ostream& os, const Case& c);
 }
 
-// Case* getCaseByCoord(Coordonnee& c, const Plateau& p)  déplacé dans la classe plateau
-// vector<Case*> getVoisins(Plateau& plateau) const;      pareil
-// car on ne peut pas include plateau.h dans case.h, ça ferait une inclusion en boucle

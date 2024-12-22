@@ -8,7 +8,6 @@
 #include "Coup.h"
 #include <set>
 #include "Joueur.h"
-//#include <sstream>
 
 using namespace std;
 namespace JeuHive {
