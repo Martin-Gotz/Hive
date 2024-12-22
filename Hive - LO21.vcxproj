@@ -145,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\FabriquePiece.h" />
+    <ClInclude Include="include\JoueurIa.h" />
     <ClInclude Include="include\ResumeClasse.h" />
     <ClInclude Include="include\Case.h" />
     <ClInclude Include="include\Coordonnee.h" />
