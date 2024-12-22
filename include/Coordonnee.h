@@ -37,7 +37,6 @@ namespace JeuHive {
 
 		// Methode utilitaire pour afficher l'etat de la partie
 		void afficher(ostream& f) const;
-		ResumeCoordonnee resumer() const;
 	};
 
 	ostream& operator<<(ostream& f, const Coordonnee& c);

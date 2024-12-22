@@ -1,4 +1,6 @@
 #pragma once
+
+#include "ResumeClasse.h"
 #include <iostream>
 #include <vector>
 #include "Coordonnee.h"
@@ -27,6 +29,7 @@ namespace JeuHive {
 		Case(const Coordonnee& coo) : coo(coo) {}
 
 		string toString() const;
+		ResumeCase resumer() const;
 	};
 	ostream& operator<<(ostream& os, const Case& c);
 }

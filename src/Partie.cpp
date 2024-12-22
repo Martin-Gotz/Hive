@@ -48,6 +48,12 @@ void Partie::demarrer() {
     }
 
     etatPartie = EtatPartie::EN_COURS;
+
+    if (compteurTour == 1 && joueurActuel->getType() == IA)
+    {
+        jouerCoupIA();
+    }
+
 }
 
 
@@ -80,6 +86,7 @@ void Partie::initialiser() {
 
     EvenementPartie evt(id, TypeEvenement::DEBUT_PARTIE);
     notifierObservers(evt);
+
 }
 
 void Partie::reprendre() {
@@ -176,16 +183,74 @@ void Partie::jouerCoup(Coup* coup) {
     EvenementPartie evt(id, typeEvt);
     notifierObservers(evt);
 
-    decrementerCompteurRegles();
-
+    //CompteurRegles--;
     delete coup;
+}
+
+void Partie::jouerCoupIA()
+{
+    if (joueurActuel->getType() != IA)
+    {
+        throw HiveException("Erreur, le joueur n'est pas une IA !");
+        return;
+    }
+
+    // Obtenir tous les coups possibles pour le joueur actuel
+    vector<Coup*> coupsPossibles = plateau.totalCoupsPossibles(compteurTour, *joueurActuel);
+
+    if (coupsPossibles.empty())
+    {
+        throw HiveException("Aucun coup possible pour l'IA !");
+        return;
+    }
+
+    // Choisir un coup aléatoire parmi les coups possibles
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> distrib(0, coupsPossibles.size() - 1);
+    int indexAleatoire = distrib(gen);
+    Coup* coupChoisi = coupsPossibles[indexAleatoire];
+
+    // Vérifier le type de coup choisi
+
+    if (CoupPlacement* coupPlacement = dynamic_cast<CoupPlacement*>(coupChoisi))
+    {
+        // Trouver l'index de la pièce dans la main du joueur
+        const auto& pieces = joueurActuel->getMain().getPieces();
+        auto it = find(pieces.begin(), pieces.end(), coupPlacement->getPiece());
+        if (it != pieces.end())
+        {
+            int indexPiece = distance(pieces.begin(), it) + 1; // +1 car l'index est basé sur 1
+            placerPiece(indexPiece, coupPlacement->getCooDestination());
+            cout << "IA a placé la pièce " << coupPlacement->getPiece()->getNom() << " en " << coupPlacement->getCooDestination().get_q() << ", " << coupPlacement->getCooDestination().get_r() << endl;
+        }
+    }
+    else if (CoupDeplacement* coupDeplacement = dynamic_cast<CoupDeplacement*>(coupChoisi))
+    {
+        deplacerPiece(coupDeplacement->getCooOrigine(), coupDeplacement->getCooDestination());
+        cout << "IA a déplacé la pièce " << coupDeplacement->getPiece()->getNom() << " de " << coupDeplacement->getCooOrigine().get_q() << ", " << coupDeplacement->getCooOrigine().get_r() << " à " << coupDeplacement->getCooDestination().get_q() << ", " << coupDeplacement->getCooDestination().get_r() << endl;
+    }
+
+    //cout << "IA joue le coup : " << coupChoisi->getPiece()->getNom() << " à " << coupChoisi->getCooDestination() << endl;
+
+    // Nettoyer les coups non choisis
+    for (Coup* coup : coupsPossibles)
+    {
+        if (coup != coupChoisi)
+        {
+            delete coup;
+        }
+    }
+    joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
+    cout << "\nL'IA a joué son coup !\n";
+
+    joueurSuivant();
 }
 
 void Partie::joueurSuivant() {
     if (etatPartie != EtatPartie::EN_COURS) {
         throw HiveException("Impossible de passer le tour d'une partie qui n'est pas en cours !");
     }
-
     if(verifierEtatPartie())
     { 
         if (joueurActuel->getCouleur() == Couleur::NOIR) {
@@ -195,12 +260,31 @@ void Partie::joueurSuivant() {
         }
 
         joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1; // Le getNom est temporaire en attendant l'opérateur de comparaison
-
+        
+        if (joueurActuel->getType() == IA && joueurActuel != nullptr)
+        {
+            jouerCoupIA();
+        }
+        
         EvenementPartie evt(id, TypeEvenement::CHANGEMENT_JOUEUR);
-        notifierObservers(evt);
+        notifierObservers(evt);        
     }
+
 }
 
+
+/*
+void Partie::annulerDernierCoup() {
+    if (historique.estVide()) {
+        throw HiveException("Il n'y a aucun coup � annuler.");
+    }
+    Coup dernierCoup = historique.getDernierCoup();
+    plateau.annulerCoup(dernierCoup);
+    historique.supprimerDernierCoup();
+    EvenementPartie evt("Dernier coup annulé : " + dernierCoup.getDescription(), id, EvenementPartie::TypeEvenement::ANNULER_COUP);
+    notifierObservers(evt);
+}
+*/
 
 // Formatage des données pour l'abstraction de l'affichage
 ResumePartie Partie::resumer() const {
