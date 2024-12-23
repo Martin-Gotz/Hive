@@ -54,7 +54,7 @@ namespace JeuHive {
 
         if (JeuHive::Hive::getInstance().nombreParties() > 0) {
             affichagePartie->setText("Affichage des parties : ");
-            for (const auto* parties : JeuHive::Hive::getInstance().getAllParties()) {
+            for (const Partie* parties : JeuHive::Hive::getInstance().getAllParties()) {
                 QString itemText = QString("Partie numéro : %1").arg(parties->getId());
                 listeParties->addItem(itemText);
             }
@@ -71,7 +71,7 @@ namespace JeuHive {
             QString nomjoueur2 = dialog.getNomJoueur2();
             JeuHive::TypeJoueur typeJoueur1 = dialog.getTypeJoueur1();
             JeuHive::TypeJoueur typeJoueur2 = dialog.getTypeJoueur2();
-            JeuHive::Hive::getInstance().ajouterPartie(nomjoueur1.toStdString(), typeJoueur1, nomjoueur2.toStdString(), typeJoueur2);
+            JeuHive::Hive::getInstance().ajouterPartie(nomjoueur1.toStdString(), typeJoueur1, nomjoueur2.toStdString(), typeJoueur2, 0); // Ajouter le choix du nombre de retours en arrière
             chargerPartiesExistantes();
         }
     }

@@ -1,6 +1,5 @@
 ﻿#include "../include/Partie.h"
 #include <random>
-#include <sstream>
 using namespace JeuHive;
 using namespace std;
 
@@ -248,8 +247,6 @@ void Partie::jouerCoupIA()
     joueurSuivant();
 }
 
-
-
 void Partie::joueurSuivant() {
     if (etatPartie != EtatPartie::EN_COURS) {
         throw HiveException("Impossible de passer le tour d'une partie qui n'est pas en cours !");
@@ -326,19 +323,7 @@ ResumePartie Partie::resumer() const {
     return resume;
 }
 
-string Partie::tostringresumer() const {
-    ostringstream retour;
-    ResumePartie resume = resumer();
-    retour << "Résumé de l'état de la partie :" << resume.etatPartie << endl
-        << "Nom du joueur 1 : " << resume.joueur1.nom << endl
-        //<< "Couleur du joueur 1 : " << resume.joueur1.couleur << endl
-        << "Type de joueur 1 : " << resume.joueur1.type << endl
-        << "============" << endl
-        << "Nom du joueur 2 : " << resume.joueur2.nom << endl
-        //<< "Couleur du joueur 2 : " << resume.joueur2.couleur << endl
-        << "Type de joueur 2 : " << resume.joueur2.type << endl;
-    return retour.str();
-}
+
 
 
 
