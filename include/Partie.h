@@ -59,6 +59,11 @@ namespace JeuHive {
 
 		const int getCompteurRegles() const { return compteurRegles; }
 
+
+		bool estPremierJoueurActuel() {
+			return joueur1 == joueurActuel;
+		}
+
 		void initialiserCompteurRegles() { compteurRegles = 0; }
 		void incrementerCompteurRegles() { ++compteurRegles; }
 		void decrementerCompteurRegles() { if (compteurRegles > 0) --compteurRegles; else compteurRegles = 0; }

@@ -55,11 +55,11 @@ namespace JeuHive {
             }
 
             // Ajouter les cases réelles du plateau
-            for (auto& [coord, caseHive] : plateau->getCases()) {
+            for (const auto& [coord, caseHive] : plateau->getCases()) {
                 ajouterCaseDeCoordonnee(centerX, centerY, coord, casesAjoutees, casesVue, caseHive);
 
                 // Ajouter les cases autour du plateau
-                for (auto& coordAutour : coord.getVoisins()) {
+                for (const auto& coordAutour : coord.getVoisins()) {
                     ajouterCaseDeCoordonnee(centerX, centerY, coordAutour, casesAjoutees, casesVue, nullptr);
                 }
             }

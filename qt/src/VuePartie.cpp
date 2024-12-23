@@ -46,9 +46,6 @@ namespace JeuHive {
         creerPlateau(partieId);
         afficherInfosJoueurs(partieId);
         afficherPiecesJoueurs(partieId);
-
-        placerPiece(1, { 0, 0 });
-        placerPiece(2, { 0, 1 });
     }
 
 
@@ -190,8 +187,6 @@ namespace JeuHive {
 
     void VuePartie::gererCaseCliquee(VueCase* caseCliquee) {
         Partie* partie = Hive::getInstance().getPartieEnCours();
-        placerPiece(1, caseCliquee->getCoord());
-        /*
         if (partie->estPremierJoueurActuel()) {
             Joueur* joueur = &partie->getJoueur1();
             QListWidgetItem* currentItem = listPiecesJoueur1->currentItem();
@@ -213,7 +208,7 @@ namespace JeuHive {
             else {
                 cout << "rien" << std::endl;
             }
-        }*/
+        }
         listPiecesJoueur1->setCurrentItem(nullptr);
     }
 }

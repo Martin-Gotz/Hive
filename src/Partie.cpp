@@ -255,7 +255,7 @@ void Partie::joueurSuivant() {
             notifierObservers(evt);
         }
 
-        joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1; // Le getNom est temporaire en attendant l'opérateur de comparaison
+        joueurActuel = estPremierJoueurActuel() ? &joueur2 : &joueur1;
         
         if (joueurActuel->getType() == IA && joueurActuel != nullptr)
         {
