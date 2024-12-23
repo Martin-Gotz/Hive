@@ -247,26 +247,6 @@ void Partie::jouerCoupIA()
     default:
         coupChoisi = IA_DifficulteF();
     }
-    /*
-
-    // Obtenir tous les coups possibles pour le joueur actuel
-    vector<Coup*> coupsPossibles = plateau.totalCoupsPossibles(compteurTour, *joueurActuel);
-
-    if (coupsPossibles.empty())
-    {
-        throw HiveException("Aucun coup possible pour l'IA !");
-        return;
-    }
-
-    // Choisir un coup aléatoire parmi les coups possibles
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution<> distrib(0, coupsPossibles.size() - 1);
-    int indexAleatoire = distrib(gen);
-    Coup* coupChoisi = coupsPossibles[indexAleatoire];
-
-    // Vérifier le type de coup choisi
-    */
     if (CoupPlacement* coupPlacement = dynamic_cast<CoupPlacement*>(coupChoisi))
     {
         // Trouver l'index de la pièce dans la main du joueur
@@ -285,16 +265,6 @@ void Partie::jouerCoupIA()
         cout << "IA a déplacé la pièce " << coupDeplacement->getPiece()->getNom() << " de " << coupDeplacement->getCooOrigine().get_q() << ", " << coupDeplacement->getCooOrigine().get_r() << " à " << coupDeplacement->getCooDestination().get_q() << ", " << coupDeplacement->getCooDestination().get_r() << endl;
     }
 
-    //cout << "IA joue le coup : " << coupChoisi->getPiece()->getNom() << " à " << coupChoisi->getCooDestination() << endl;
-    /*
-    // Nettoyer les coups non choisis
-    for (Coup* coup : coupsPossibles)
-    {
-        if (coup != coupChoisi)
-        {
-            delete coup;
-        }
-    }*/
     joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
     cout << "\nL'IA a joué son coup !\n";
 
