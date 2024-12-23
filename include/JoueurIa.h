@@ -39,6 +39,13 @@ namespace JeuHive {
         void setTour(int t) {
             tour = t;
         }
+
+        void actualiser(Joueur* j, Plateau *p, int t)
+        {
+            setJoueur(j);
+            setPlateau(p);
+            setTour(t);
+        }
     };
 
     class JoueurIaMoyen : public JoueurIa {
