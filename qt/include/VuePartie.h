@@ -40,8 +40,9 @@ namespace JeuHive {
         void creerPlateau(int partieId);
         void afficherInfosJoueurs(int partieId);
         void afficherPiecesJoueurs(int partieId);
-
         void afficherPiecesJoueur(const std::vector<Piece*>& pieces, QListWidget* listWidget);
+
+        void actualiser();
 
         int getIdPieceSelectionnee(QListWidget* listWidget);
 
