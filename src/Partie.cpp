@@ -22,10 +22,28 @@ Partie::Partie(Joueur& j1, Joueur& j2, int nombreRetours, int dif) :
     compteurTour(0),
     nombreRetours(nombreRetours),
     difficulte(dif),
-    Victorieux(nullptr)
+    Victorieux(nullptr),
+    j(nullptr)
 {
     prochain_id++; // Incrémentation du compteur statique pour suivre le nombre de parties créé
     regles.setNombreRetours(nombreRetours);
+    /*
+    if (joueur2.getType() == IA) {
+        switch (difficulte) {
+        case 1:
+            j = new JoueurIaFacile(&joueur2, compteurTour, &plateau);
+            break;
+        case 2:
+            j = new JoueurIaMoyen(&joueur2, compteurTour, &plateau);
+            break;
+        case 3:
+            j = new JoueurIaDifficile(&joueur2, compteurTour, &plateau);
+            break;
+        default:
+            j = new JoueurIaFacile(&joueur2, compteurTour, &plateau);
+            break;
+        }
+    }*/
 }
 
 
@@ -225,6 +243,8 @@ Coup* Partie::IA_DifficulteD() {
     return IA_DifficulteF();
 }
 
+
+
 void Partie::jouerCoupIA()
 {
     if (joueurActuel->getType() != IA)
@@ -232,8 +252,28 @@ void Partie::jouerCoupIA()
         throw HiveException("Erreur, le joueur n'est pas une IA !");
         return;
     }
-    JoueurIaAleatoire j = JoueurIaAleatoire(joueurActuel, compteurTour, &plateau);
+    //JoueurIaAleatoire j = JoueurIaAleatoire(joueurActuel, compteurTour, &plateau);
+    if (joueur2.getType() == IA) {
+        switch (difficulte) {
+        case 1:
+            j = new JoueurIaFacile(&joueur2, compteurTour, &plateau);
+            break;
+        case 2:
+            j = new JoueurIaMoyen(&joueur2, compteurTour, &plateau);
+            break;
+        case 3:
+            j = new JoueurIaDifficile(&joueur2, compteurTour, &plateau);
+            break;
+        default:
+            j = new JoueurIaFacile(&joueur2, compteurTour, &plateau);
+            break;
+        }
+    }
     Coup* coupChoisi = nullptr;
+    // actualisation du plateau ?
+
+    coupChoisi = j->choisirCoup();
+    /*
     switch (difficulte)
     {
     case(1):
@@ -249,6 +289,8 @@ void Partie::jouerCoupIA()
     default:
         coupChoisi = j.choisirCoup();
     }
+    */
+    //coupChoisi = j.choisirCoup();
     if (CoupPlacement* coupPlacement = dynamic_cast<CoupPlacement*>(coupChoisi))
     {
         // Trouver l'index de la pièce dans la main du joueur
@@ -269,7 +311,7 @@ void Partie::jouerCoupIA()
 
     joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
     cout << "\nL'IA a joué son coup !\n";
-
+    delete j;
     joueurSuivant();
 }
 

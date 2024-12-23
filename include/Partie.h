@@ -28,6 +28,7 @@ namespace JeuHive {
 		unsigned int compteurRegles; // permet de vérifier que le seuil de nombre de retours maximum n'est pas dépassé
 		int difficulte;
 		static int prochain_id;
+		JoueurIa* j;
 
 	public:
 		Partie(Joueur& j1, Joueur& j2, int nombreRetours, int diff);
