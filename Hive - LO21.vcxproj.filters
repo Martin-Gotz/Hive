@@ -139,9 +139,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="qt\include\VueCase.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </QtMoc>
     <QtMoc Include="qt\include\VueHive.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </QtMoc>
@@ -152,6 +149,9 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </QtMoc>
     <QtMoc Include="qt\include\VuePlateau.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </QtMoc>
+    <QtMoc Include="qt\include\VueCase.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </QtMoc>
   </ItemGroup>
