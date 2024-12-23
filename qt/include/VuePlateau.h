@@ -143,16 +143,26 @@ namespace JeuHive {
 
         void placerPiece(const Piece* piece, const Coordonnee& destination) {
             auto casesMap = plateau->getCases();
-            Case* it = casesMap[destination];
 
-            Coordonnee position = it->getCoo();
+
+            if (casesMap.find(destination) == casesMap.end() || casesMap[destination] == nullptr) {
+                qDebug() << "Erreur : la destination est invalide ou inexistante.";
+                return;
+            }
+
+            Case* it = casesMap[destination];
+            if (!it) {
+                qDebug() << "Erreur : la case est un pointeur nul.";
+                return;
+            }
+
+            const Coordonnee& position = it->getCoo();
             QPointF pointF(static_cast<qreal>(position.get_q()), static_cast<qreal>(position.get_r()));
 
             VueCase* vueCase = dynamic_cast<VueCase*>(scene->itemAt(pointF, QTransform()));
             if (vueCase) {
                 vueCase->setPiece(*piece);
             }
-
             afficherPlateau();
             scene->update();
         }
@@ -168,7 +178,6 @@ namespace JeuHive {
     private slots:
         void onCaseClicked(VueCase* vueCase) {
             emit caseClickedSignal(vueCase);
-            cout << "clic : " << vueCase->getCoord().get_q() << " " << vueCase->getCoord().get_r() << endl;
         }
     };
 }

@@ -21,7 +21,12 @@ namespace JeuHive {
 		const Coordonnee& getCoo() const { return coo; }
 		void ajouterPiece(const Piece* piece) { pieces.push_back(piece); }
 		void retirerPiece() { pieces.pop_back(); }
-		const Piece* getDessus() const { return pieces.back(); }
+		const Piece* getDessus() const {
+			if (pieces.empty()) {
+				return nullptr; // Renvoie nullptr si le vecteur est vide.
+			}
+			return pieces.back();
+		}
 		const vector<const Piece*>& getPieces() const { return pieces; }
 
 		bool estVide() const { return pieces.empty(); }	// très peu pertinent car une case vide devrait être supprimée

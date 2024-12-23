@@ -56,27 +56,30 @@ namespace JeuHive {
             setPlateau(plateau);
         }
 
-
         Coup* choisirCoup() override {
-            if (getPlateau()) {
-                const vector<Coup*> coupsPossibles = getPlateau()->totalCoupsPossibles(getTour(), *getJoueur());
-
-                if (coupsPossibles.empty()) {
-                    throw HiveException("Aucun coup possible pour l'IA !");
-                }
-
-                // Choisir un coup aléatoire parmi les coups possibles
-                random_device rd;
-                mt19937 gen(rd());
-                uniform_int_distribution<> distrib(0, coupsPossibles.size() - 1);
-                int indexAleatoire = distrib(gen);
-                Coup* coupChoisi = coupsPossibles[indexAleatoire];
-
-                return coupChoisi;
-            }
-            else {
+            if (!getPlateau()) {
                 throw HiveException("Pas de plateau");
             }
+
+            const vector<Coup*> coupsPossibles = getPlateau()->totalCoupsPossibles(getTour(), *getJoueur());
+
+            if (coupsPossibles.empty()) {
+                throw HiveException("Aucun coup possible pour l'IA !");
+            }
+
+            // Choisir un coup aléatoire parmi les coups possibles
+            random_device rd;
+            mt19937 gen(rd());
+            uniform_int_distribution<> distrib(0, coupsPossibles.size() - 1);
+
+            int indexAleatoire = distrib(gen);
+            if (indexAleatoire < 0 || indexAleatoire >= coupsPossibles.size()) {
+                throw HiveException("Index aléatoire hors limites");
+            }
+
+            Coup* coupChoisi = coupsPossibles[indexAleatoire];
+
+            return coupChoisi;
         }
     };
 
@@ -88,30 +91,30 @@ namespace JeuHive {
             setPlateau(plateau);
         }
 
-
         Coup* choisirCoup() override {
-            if (getPlateau()) {
-                const vector<Coup*> coupsPossibles = getPlateau()->totalCoupsPossibles(getTour(), *getJoueur());
-
-                if (coupsPossibles.empty()) {
-                    throw HiveException("Aucun coup possible pour l'IA !");
-                }
-
-                Coup* coupChoisi = nullptr;
-                int minDistance = INT_MAX;
-                for (Coup* coup : coupsPossibles) {
-                    int distance = abs(coup->getCooDestination().get_q()) + abs(coup->getCooDestination().get_r());
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        coupChoisi = coup;
-                    }
-                }
-
-                return coupChoisi;
-            }
-            else {
+            if (!getPlateau()) {
                 throw HiveException("Pas de plateau");
             }
+
+            const vector<Coup*> coupsPossibles = getPlateau()->totalCoupsPossibles(getTour(), *getJoueur());
+
+            if (coupsPossibles.empty()) {
+                throw HiveException("Aucun coup possible pour l'IA !");
+            }
+
+            // Choisir un coup aléatoire parmi les coups possibles
+            random_device rd;
+            mt19937 gen(rd());
+            uniform_int_distribution<> distrib(0, coupsPossibles.size() - 1);
+
+            int indexAleatoire = distrib(gen);
+            if (indexAleatoire < 0 || indexAleatoire >= coupsPossibles.size()) {
+                throw HiveException("Index aléatoire hors limites");
+            }
+
+            Coup* coupChoisi = coupsPossibles[indexAleatoire];
+
+            return coupChoisi;
         }
     };
 
@@ -123,27 +126,30 @@ namespace JeuHive {
             setPlateau(plateau);
         }
 
-
         Coup* choisirCoup() override {
-            if (getPlateau()) {
-                const vector<Coup*> coupsPossibles = getPlateau()->totalCoupsPossibles(getTour(), *getJoueur());
-
-                if (coupsPossibles.empty()) {
-                    throw HiveException("Aucun coup possible pour l'IA !");
-                }
-
-                // Choisir un coup aléatoire parmi les coups possibles
-                random_device rd;
-                mt19937 gen(rd());
-                uniform_int_distribution<> distrib(0, coupsPossibles.size() - 1);
-                int indexAleatoire = distrib(gen);
-                Coup* coupChoisi = coupsPossibles[indexAleatoire];
-
-                return coupChoisi;
-            }
-            else {
+            if (!getPlateau()) {
                 throw HiveException("Pas de plateau");
             }
+
+            const vector<Coup*> coupsPossibles = getPlateau()->totalCoupsPossibles(getTour(), *getJoueur());
+
+            if (coupsPossibles.empty()) {
+                throw HiveException("Aucun coup possible pour l'IA !");
+            }
+
+            // Choisir un coup aléatoire parmi les coups possibles
+            random_device rd;
+            mt19937 gen(rd());
+            uniform_int_distribution<> distrib(0, coupsPossibles.size() - 1);
+
+            int indexAleatoire = distrib(gen);
+            if (indexAleatoire < 0 || indexAleatoire >= coupsPossibles.size()) {
+                throw HiveException("Index aléatoire hors limites");
+            }
+
+            Coup* coupChoisi = coupsPossibles[indexAleatoire];
+
+            return coupChoisi;
         }
 
     };

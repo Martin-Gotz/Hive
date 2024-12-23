@@ -37,10 +37,9 @@ namespace JeuHive {
 
         VuePlateau* vuePlateau;
 
-        void creerPlateau(int partieId);
-        void afficherInfosJoueurs(int partieId);
-        void afficherPiecesJoueurs(int partieId);
-        void afficherPiecesJoueur(const std::vector<Piece*>& pieces, QListWidget* listWidget);
+        void afficherInfosJoueurs();
+        void afficherPiecesJoueurs();
+        void afficherPiecesJoueur(const Joueur& joueur, QListWidget* listWidget);
 
         void actualiser();
 
