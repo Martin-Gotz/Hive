@@ -209,8 +209,7 @@ void Partie::jouerCoup(Coup* coup) {
         : TypeEvenement::PIECE_DEPLACEE;
     EvenementPartie evt(id, typeEvt);
     notifierObservers(evt);
-
-    //CompteurRegles--;
+    decrementerCompteurRegles();
     delete coup;
 }
 
@@ -382,21 +381,24 @@ void JeuHive::Partie::annulerDernierCoup()
 
     EvenementPartie evt(id, TypeEvenement::ANNULER_COUP);
     notifierObservers(evt);
-
     dernierCoup = nullptr;
+    joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
+    joueurSuivant();
 }
 
 
-void JeuHive::Partie::verifierAnnulation()
+bool JeuHive::Partie::verifierAnnulation()
 {
     if (compteurRegles > regles.getNombreRetours())
     {
-        throw HiveException("Le nombre de retours en arrière est trop important");
+        //throw HiveException("Le nombre de retours en arrière est trop important");
+        return false;
     }
     else
     {
        annulerDernierCoup();
-       compteurRegles++;
+       incrementerCompteurRegles();
+       return true;
     }
 }
 

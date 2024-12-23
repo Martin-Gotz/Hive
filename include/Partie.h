@@ -89,12 +89,8 @@ namespace JeuHive {
 		void joueurSuivant();
 		void annulerDernierCoup();
 
-		void verifierAnnulation(); 
+		bool verifierAnnulation(); 
 
-		
-		Coup* IA_DifficulteF();
-		Coup* IA_DifficulteM();
-		Coup* IA_DifficulteD();
 
 		// Autres méthodes
 		ResumePartie resumer() const;

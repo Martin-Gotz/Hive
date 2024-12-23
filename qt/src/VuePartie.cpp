@@ -23,6 +23,11 @@ namespace JeuHive {
         labelTour = new QLabel("Tour actuel", this);
         layoutBarreInfo->addWidget(labelTour);
 
+
+        boutonRetourArriere = new QPushButton("Retour en arrière", this);
+        connect(boutonRetourArriere, &QPushButton::clicked, this, &VuePartie::retourArriere);
+        layoutBarreInfo->addWidget(boutonRetourArriere);
+
         boutonQuitter = new QPushButton("Quitter", this);
         layoutBarreInfo->addWidget(boutonQuitter);
         connect(boutonQuitter, &QPushButton::clicked, this, &VuePartie::quitterPartie);
@@ -41,6 +46,8 @@ namespace JeuHive {
         layoutPartie->addWidget(vuePlateau);
         layoutPartie->addLayout(layoutBarreInfo);
 
+
+
         setLayout(layoutPartie);
 
         // Initialisation des informations de la partie
@@ -57,6 +64,24 @@ namespace JeuHive {
         }
         vuePlateau->afficherPlateau();
     }
+
+
+    void VuePartie::retourArriere() {
+        Partie* partie = Hive::getInstance().getPartieEnCours();
+        if (partie) {
+            if (partie->getPlateau().getNombrePieces() == 0) {
+                QMessageBox::information(this, "Information", "Aucun coup à annuler.");
+                return;
+            }
+            if (!partie->verifierAnnulation())
+            {
+                QMessageBox::information(this, "Information", "Vous avez atteint le seuil de coups à annuler !");
+                return;
+            }
+            vuePlateau->afficherPlateau();
+        }
+    }
+
 
 
     void VuePartie::afficherInfosJoueurs(int partieId) {
