@@ -8,6 +8,7 @@
 #include "Coup.h"
 #include "Evenement.h"
 #include "ResumeClasse.h"
+#include "JoueurIa.h"
 
 namespace JeuHive {
 	class Partie : public Observable
@@ -45,6 +46,7 @@ namespace JeuHive {
 		Joueur& getJoueur2() { return joueur2; }
 
 		const Plateau& getPlateau() const { return plateau; }
+		Plateau& getPlateau() { return plateau; }
 
 		const HistoriqueCoup& getHistorique() const { return historique; }
 		

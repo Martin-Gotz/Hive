@@ -232,20 +232,22 @@ void Partie::jouerCoupIA()
         throw HiveException("Erreur, le joueur n'est pas une IA !");
         return;
     }
+    JoueurIaAleatoire j = JoueurIaAleatoire(joueurActuel, compteurTour, &plateau);
     Coup* coupChoisi = nullptr;
     switch (difficulte)
     {
     case(1):
-        coupChoisi = IA_DifficulteF();
+        //coupChoisi = IA_DifficulteF();
+        coupChoisi = j.choisirCoup();
         break;
     case(2):
-        coupChoisi = IA_DifficulteM();
+        coupChoisi = j.choisirCoup();
         break;
     case(3):
-        coupChoisi = IA_DifficulteD();
+        coupChoisi = j.choisirCoup();
         break;
     default:
-        coupChoisi = IA_DifficulteF();
+        coupChoisi = j.choisirCoup();
     }
     if (CoupPlacement* coupPlacement = dynamic_cast<CoupPlacement*>(coupChoisi))
     {

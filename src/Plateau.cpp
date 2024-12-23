@@ -649,6 +649,8 @@ vector<Coup*> JeuHive::Plateau::totalCoupsPossibles(int tour, Joueur& joueur)
 	return coups_possibles;
 }
 
+
+
 ResumePlateau Plateau::resumer() const {
 	ResumePlateau resume;
 
