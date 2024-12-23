@@ -46,6 +46,9 @@ namespace JeuHive {
         creerPlateau(partieId);
         afficherInfosJoueurs(partieId);
         afficherPiecesJoueurs(partieId);
+
+        placerPiece(1, { 0, 0 });
+        placerPiece(2, { 0, 1 });
     }
 
 
@@ -132,7 +135,6 @@ namespace JeuHive {
 
         try {
             partie->placerPiece(idPiece, coord);
-
             Piece* piece = partie->getJoueurActuel()->getMain().getPieces()[idPiece - 1];
             vuePlateau->placerPiece(piece, coord);
 
@@ -140,9 +142,8 @@ namespace JeuHive {
             cout << "\n" << partie->getPlateau();
         }
         catch (HiveException& e) {
-            QMessageBox::warning(this, "Erreur", "Coup non valide");
+            QMessageBox::warning(this, "Erreur", QString::fromStdString(e.getInfo()));
         }
-
         
         update();
     }
