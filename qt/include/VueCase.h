@@ -103,7 +103,7 @@ namespace JeuHive {
     public:
         void mousePressEvent(QGraphicsSceneMouseEvent* event) override {
             emit caseClicked(this);
-            QGraphicsItem::mousePressEvent(event);
+            //QGraphicsItem::mousePressEvent(event);
         }
 
     signals:
