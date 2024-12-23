@@ -207,44 +207,7 @@ void Partie::jouerCoup(Coup* coup) {
     //CompteurRegles--;
     delete coup;
 }
-/*
-Coup* Partie::IA_DifficulteF() {
-    // Obtenir tous les coups possibles pour le joueur actuel
-    vector<Coup*> coupsPossibles = plateau.totalCoupsPossibles(compteurTour, *joueurActuel);
 
-    if (coupsPossibles.empty())
-    {
-        throw HiveException("Aucun coup possible pour l'IA !");
-        return nullptr;
-    }
-
-    // Choisir un coup aléatoire parmi les coups possibles
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution<> distrib(0, coupsPossibles.size() - 1);
-    int indexAleatoire = distrib(gen);
-    Coup* coupChoisi = coupsPossibles[indexAleatoire];
-    // Nettoyer les coups non choisis
-    for (Coup* coup : coupsPossibles)
-    {
-        if (coup != coupChoisi)
-        {
-            delete coup;
-        }
-    }
-    return coupChoisi;
-}
-
-Coup* Partie::IA_DifficulteM() {
-    // Exemple fictif, pour implémenter une autre IA, veuillez y mettre le code
-    return IA_DifficulteF();
-}
-
-Coup* Partie::IA_DifficulteD() {
-    // Exemple fictif, pour implémenter une autre IA, veuillez y mettre le code
-    return IA_DifficulteF();
-}
-*/
 
 
 void Partie::jouerCoupIA()
@@ -254,50 +217,9 @@ void Partie::jouerCoupIA()
         throw HiveException("Erreur, le joueur n'est pas une IA !");
         return;
     }
-    //JoueurIaAleatoire j = JoueurIaAleatoire(joueurActuel, compteurTour, &plateau);
-    /*
-    if (joueur2.getType() == IA) {
-        switch (difficulte) {
-        case 1:
-            j = new JoueurIaFacile(joueurActuel, compteurTour, &plateau);
-            break;
-        case 2:
-            j = new JoueurIaMoyen(joueurActuel, compteurTour, &plateau);
-            break;
-        case 3:
-            j = new JoueurIaDifficile(joueurActuel, compteurTour, &plateau);
-            break;
-        default:
-            j = new JoueurIaFacile(joueurActuel, compteurTour, &plateau);
-            break;
-        }
-    }
-    */
-    j->setTour(compteurTour);
-    j->setJoueur(joueurActuel);
-    j->setPlateau(&plateau);
+    j->actualiser(joueurActuel, &plateau, compteurTour);
     Coup* coupChoisi = j->choisirCoup();
-    // actualisation du plateau ?
 
-    //coupChoisi = j->choisirCoup();
-    /*
-    switch (difficulte)
-    {
-    case(1):
-        //coupChoisi = IA_DifficulteF();
-        coupChoisi = j.choisirCoup();
-        break;
-    case(2):
-        coupChoisi = j.choisirCoup();
-        break;
-    case(3):
-        coupChoisi = j.choisirCoup();
-        break;
-    default:
-        coupChoisi = j.choisirCoup();
-    }
-    */
-    //coupChoisi = j.choisirCoup();
     if (CoupPlacement* coupPlacement = dynamic_cast<CoupPlacement*>(coupChoisi))
     {
         // Trouver l'index de la pièce dans la main du joueur
@@ -318,7 +240,6 @@ void Partie::jouerCoupIA()
 
     joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
     cout << "\nL'IA a joué son coup !\n";
-    //delete j;
     joueurSuivant();
 }
 
@@ -351,18 +272,6 @@ void Partie::joueurSuivant() {
 }
 
 
-/*
-void Partie::annulerDernierCoup() {
-    if (historique.estVide()) {
-        throw HiveException("Il n'y a aucun coup � annuler.");
-    }
-    Coup dernierCoup = historique.getDernierCoup();
-    plateau.annulerCoup(dernierCoup);
-    historique.supprimerDernierCoup();
-    EvenementPartie evt("Dernier coup annulé : " + dernierCoup.getDescription(), id, EvenementPartie::TypeEvenement::ANNULER_COUP);
-    notifierObservers(evt);
-}
-*/
 
 // Formatage des données pour l'abstraction de l'affichage
 ResumePartie Partie::resumer() const {
