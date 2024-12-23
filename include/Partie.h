@@ -31,7 +31,7 @@ namespace JeuHive {
 		JoueurIa* j;
 
 	public:
-		Partie(Joueur& j1, Joueur& j2, int nombreRetours, int diff);
+		Partie(Joueur& j1, Joueur& j2, JoueurIa *Ia, int nombreRetours, int diff);
 		~Partie() = default;
 
 		// Accesseurs
@@ -86,7 +86,7 @@ namespace JeuHive {
 
 		void verifierAnnulation(); 
 
-
+		
 		Coup* IA_DifficulteF();
 		Coup* IA_DifficulteM();
 		Coup* IA_DifficulteD();
@@ -99,8 +99,8 @@ namespace JeuHive {
 
 	class FabriquePartie {
 	public:
-		static Partie* creerPartie(Joueur& joueur1, Joueur& joueur2, int nombreRetours, int difficulte) {
-			return new Partie(joueur1, joueur2, nombreRetours, difficulte);
+		static Partie* creerPartie(Joueur& joueur1, Joueur& joueur2, JoueurIa* Ia, int nombreRetours, int difficulte) {
+			return new Partie(joueur1, joueur2, Ia, nombreRetours, difficulte);
 		}
 	};
 }

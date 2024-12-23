@@ -480,6 +480,7 @@ void JeuHive::Plateau::jouerPlacement(CoupPlacement* coup)
 	}
 	else {
 		throw HiveException("Ce coup n'est pas valide");
+		return;
 	}
 
 }

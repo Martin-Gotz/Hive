@@ -8,6 +8,7 @@
 #include "Partie.h"
 #include "Evenement.h"
 #include "ResumeClasse.h"
+#include "JoueurIa.h"
 
 using namespace std;
 

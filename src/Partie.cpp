@@ -9,7 +9,7 @@ int Partie::prochain_id = 1;
 
 
 //Constructeurs
-Partie::Partie(Joueur& j1, Joueur& j2, int nombreRetours, int dif) :
+Partie::Partie(Joueur& j1, Joueur& j2, JoueurIa* Ia, int nombreRetours, int dif) :
     id(prochain_id),
     joueur1(j1),
     joueur2(j2),
@@ -23,7 +23,7 @@ Partie::Partie(Joueur& j1, Joueur& j2, int nombreRetours, int dif) :
     nombreRetours(nombreRetours),
     difficulte(dif),
     Victorieux(nullptr),
-    j(nullptr)
+    j(Ia)
 {
     prochain_id++; // Incrémentation du compteur statique pour suivre le nombre de parties créé
     regles.setNombreRetours(nombreRetours);
@@ -169,12 +169,14 @@ void Partie::deplacerPiece(const Coordonnee& cooOrigine, const Coordonnee& cooDe
 
     if (case0 == nullptr) {
         throw HiveException("Aucune pièce n'est située à ces coordonnées");
+        return;
     }
 
     const Piece* piece = case0->getDessus();
 
     if (piece->getCouleur() != joueurActuel->getCouleur()) {
         throw HiveException("Vous ne pouvez déplacer que vos propres pièces !");
+        return;
     }
 
     // Construire un coup de déplacement
@@ -205,7 +207,7 @@ void Partie::jouerCoup(Coup* coup) {
     //CompteurRegles--;
     delete coup;
 }
-
+/*
 Coup* Partie::IA_DifficulteF() {
     // Obtenir tous les coups possibles pour le joueur actuel
     vector<Coup*> coupsPossibles = plateau.totalCoupsPossibles(compteurTour, *joueurActuel);
@@ -242,7 +244,7 @@ Coup* Partie::IA_DifficulteD() {
     // Exemple fictif, pour implémenter une autre IA, veuillez y mettre le code
     return IA_DifficulteF();
 }
-
+*/
 
 
 void Partie::jouerCoupIA()
@@ -253,26 +255,31 @@ void Partie::jouerCoupIA()
         return;
     }
     //JoueurIaAleatoire j = JoueurIaAleatoire(joueurActuel, compteurTour, &plateau);
+    /*
     if (joueur2.getType() == IA) {
         switch (difficulte) {
         case 1:
-            j = new JoueurIaFacile(&joueur2, compteurTour, &plateau);
+            j = new JoueurIaFacile(joueurActuel, compteurTour, &plateau);
             break;
         case 2:
-            j = new JoueurIaMoyen(&joueur2, compteurTour, &plateau);
+            j = new JoueurIaMoyen(joueurActuel, compteurTour, &plateau);
             break;
         case 3:
-            j = new JoueurIaDifficile(&joueur2, compteurTour, &plateau);
+            j = new JoueurIaDifficile(joueurActuel, compteurTour, &plateau);
             break;
         default:
-            j = new JoueurIaFacile(&joueur2, compteurTour, &plateau);
+            j = new JoueurIaFacile(joueurActuel, compteurTour, &plateau);
             break;
         }
     }
-    Coup* coupChoisi = nullptr;
+    */
+    j->setTour(compteurTour);
+    j->setJoueur(joueurActuel);
+    j->setPlateau(&plateau);
+    Coup* coupChoisi = j->choisirCoup();
     // actualisation du plateau ?
 
-    coupChoisi = j->choisirCoup();
+    //coupChoisi = j->choisirCoup();
     /*
     switch (difficulte)
     {
@@ -311,7 +318,7 @@ void Partie::jouerCoupIA()
 
     joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
     cout << "\nL'IA a joué son coup !\n";
-    delete j;
+    //delete j;
     joueurSuivant();
 }
 

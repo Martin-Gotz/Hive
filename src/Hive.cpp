@@ -19,8 +19,19 @@ void Hive::ajouterPartie(const string& nomJoueur1, TypeJoueur typeJoueur1, const
     Joueur joueur1(nomJoueur1, typeJoueur1);
     Joueur joueur2(nomJoueur2, typeJoueur2);
 
+    JoueurIa* jIa = nullptr;
+    if (typeJoueur2 == IA) {
+        switch (difficulte) {
+        case(1):
+            jIa = new JoueurIaFacile(&joueur2, nullptr);
+        case(2):
+            jIa = new JoueurIaMoyen(&joueur2, nullptr);
+        case(3):
+            jIa = new JoueurIaDifficile(&joueur2, nullptr);
+        }
+    }
     // Créer une nouvelle partie en utilisant la factory
-    parties.push_back(FabriquePartie::creerPartie(joueur1, joueur2, nombreRetours, difficulte));
+    parties.push_back(FabriquePartie::creerPartie(joueur1, joueur2, jIa, nombreRetours, difficulte));
     EvenementHive evt("Nouvelle partie creee \n");
     notifierObservers(evt);
 }

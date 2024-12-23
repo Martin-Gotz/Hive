@@ -8,12 +8,21 @@ namespace JeuHive {
     private:
         Joueur* joueur;
         Plateau* plateau;
-
+        int tour;
     public:
-        JoueurIa(Joueur* joueur) : joueur(joueur), plateau(nullptr) {}
+        JoueurIa(Joueur* joueur) : joueur(joueur), plateau(nullptr) { tour = 1; }
 
         virtual Coup* choisirCoup() = 0;
         virtual ~JoueurIa() = default;
+
+        void setJoueur(Joueur* j)
+        {
+            joueur = j;
+        }
+
+        int getTour() const {
+            return tour;
+        }
 
         Joueur* getJoueur() const {
             return joueur;
@@ -26,20 +35,24 @@ namespace JeuHive {
         Plateau* getPlateau() const {
             return plateau;
         }
+
+        void setTour(int t) {
+            tour = t;
+        }
     };
 
-    class JoueurIaFacile : public JoueurIa {
+    class JoueurIaMoyen : public JoueurIa {
     private:
-        int tour;
 
     public:
-        JoueurIaFacile(Joueur* joueur, int tour, Plateau* plateau) : JoueurIa(joueur), tour(tour) {
+        JoueurIaMoyen(Joueur* joueur, Plateau* plateau) : JoueurIa(joueur) {
             setPlateau(plateau);
         }
 
+
         Coup* choisirCoup() override {
             if (getPlateau()) {
-                const vector<Coup*> coupsPossibles = getPlateau()->totalCoupsPossibles(tour, *getJoueur());
+                const vector<Coup*> coupsPossibles = getPlateau()->totalCoupsPossibles(getTour(), *getJoueur());
 
                 if (coupsPossibles.empty()) {
                     throw HiveException("Aucun coup possible pour l'IA !");
@@ -60,28 +73,32 @@ namespace JeuHive {
         }
     };
 
-    class JoueurIaMoyen : public JoueurIa {
+    class JoueurIaFacile : public JoueurIa {
     private:
-        int tour;
+   
     public:
-        JoueurIaMoyen(Joueur* joueur, int tour, Plateau* plateau) : JoueurIa(joueur), tour(tour) {
+        JoueurIaFacile(Joueur* joueur, Plateau* plateau) : JoueurIa(joueur) {
             setPlateau(plateau);
         }
 
+
         Coup* choisirCoup() override {
             if (getPlateau()) {
-                const vector<Coup*> coupsPossibles = getPlateau()->totalCoupsPossibles(tour, *getJoueur());
+                const vector<Coup*> coupsPossibles = getPlateau()->totalCoupsPossibles(getTour(), *getJoueur());
 
                 if (coupsPossibles.empty()) {
                     throw HiveException("Aucun coup possible pour l'IA !");
                 }
 
-                // Choisir un coup aléatoire parmi les coups possibles
-                random_device rd;
-                mt19937 gen(rd());
-                uniform_int_distribution<> distrib(0, coupsPossibles.size() - 1);
-                int indexAleatoire = distrib(gen);
-                Coup* coupChoisi = coupsPossibles[indexAleatoire];
+                Coup* coupChoisi = nullptr;
+                int minDistance = INT_MAX;
+                for (Coup* coup : coupsPossibles) {
+                    int distance = abs(coup->getCooDestination().get_q()) + abs(coup->getCooDestination().get_r());
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        coupChoisi = coup;
+                    }
+                }
 
                 return coupChoisi;
             }
@@ -93,15 +110,16 @@ namespace JeuHive {
 
     class JoueurIaDifficile : public JoueurIa {
     private:
-        int tour;
+    
     public:
-        JoueurIaDifficile(Joueur* joueur, int tour, Plateau* plateau) : JoueurIa(joueur), tour(tour) {
+        JoueurIaDifficile(Joueur* joueur, Plateau* plateau) : JoueurIa(joueur) {
             setPlateau(plateau);
         }
 
+
         Coup* choisirCoup() override {
             if (getPlateau()) {
-                const vector<Coup*> coupsPossibles = getPlateau()->totalCoupsPossibles(tour, *getJoueur());
+                const vector<Coup*> coupsPossibles = getPlateau()->totalCoupsPossibles(getTour(), *getJoueur());
 
                 if (coupsPossibles.empty()) {
                     throw HiveException("Aucun coup possible pour l'IA !");
@@ -120,5 +138,6 @@ namespace JeuHive {
                 throw HiveException("Pas de plateau");
             }
         }
+
     };
 }
