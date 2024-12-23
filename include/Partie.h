@@ -25,16 +25,17 @@ namespace JeuHive {
 		int compteurTour;
 		int nombreRetours;
 		unsigned int compteurRegles; // permet de vérifier que le seuil de nombre de retours maximum n'est pas dépassé
-
+		int difficulte;
 		static int prochain_id;
 
 	public:
-		Partie(Joueur& j1, Joueur& j2, int nombreRetours);
+		Partie(Joueur& j1, Joueur& j2, int nombreRetours, int diff);
 		~Partie() = default;
 
 		// Accesseurs
 		int getId() const { return id; }
-
+		const int getDifficulte() const { return difficulte; }
+		int getDifficulte() { return difficulte; }
 		const static int getProchainId() { return prochain_id; }
 
 		const Joueur& getJoueur1() const { return joueur1; }
@@ -83,6 +84,10 @@ namespace JeuHive {
 		void verifierAnnulation(); 
 
 
+		Coup* IA_DifficulteF();
+		Coup* IA_DifficulteM();
+		Coup* IA_DifficulteD();
+
 		// Autres méthodes
 		ResumePartie resumer() const;
 	};
@@ -91,8 +96,8 @@ namespace JeuHive {
 
 	class FabriquePartie {
 	public:
-		static Partie* creerPartie(Joueur& joueur1, Joueur& joueur2, int nombreRetours) {
-			return new Partie(joueur1, joueur2, nombreRetours);
+		static Partie* creerPartie(Joueur& joueur1, Joueur& joueur2, int nombreRetours, int difficulte) {
+			return new Partie(joueur1, joueur2, nombreRetours, difficulte);
 		}
 	};
 }

@@ -122,6 +122,7 @@ void InterfaceUtilisateur::gererChoixUtilisateurMenuPartie() {
 
 // Demander à l'utilisateur les informations nécessaires pour ajouter une partie
 void InterfaceUtilisateur::ajouterPartie() {
+    int DifficulteIA = 1;
     string nomJoueur1, nomJoueur2;
     do {
         cout << "Entrez le nom du joueur 1 : ";
@@ -136,6 +137,7 @@ void InterfaceUtilisateur::ajouterPartie() {
 
     if (typeJoueur2 == TypeJoueur::IA) {
         nomJoueur2 = "IA";
+        DifficulteIA = demanderDifficulteIA();
     }
     else {
         do {
@@ -150,7 +152,19 @@ void InterfaceUtilisateur::ajouterPartie() {
     // Parametrage du nombre de retours possibles
     int nbRetours = demanderNombreDeRetours();
 
-    hive.ajouterPartie(nomJoueur1, TypeJoueur::HUMAIN, nomJoueur2, typeJoueur2, nbRetours);
+    hive.ajouterPartie(nomJoueur1, TypeJoueur::HUMAIN, nomJoueur2, typeJoueur2, nbRetours, DifficulteIA);
+}
+
+
+int InterfaceUtilisateur::demanderDifficulteIA() {
+    int difficulte = -1;
+    cout << "Entrez la difficulté de l'IA (1 : facile, 2 : moyen, 3 : difficile) : ";
+    while (!(cin >> difficulte) || difficulte < 1 || difficulte > 3) {
+        cout << "Entrée invalide, veuillez saisir un entier entre 1 et 3 : ";
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+    return difficulte;
 }
 
 // gérer l'entrée utilisateur correspondant aux types des joueurs

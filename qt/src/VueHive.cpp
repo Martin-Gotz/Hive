@@ -71,7 +71,7 @@ namespace JeuHive {
             QString nomjoueur2 = dialog.getNomJoueur2();
             JeuHive::TypeJoueur typeJoueur1 = dialog.getTypeJoueur1();
             JeuHive::TypeJoueur typeJoueur2 = dialog.getTypeJoueur2();
-            JeuHive::Hive::getInstance().ajouterPartie(nomjoueur1.toStdString(), typeJoueur1, nomjoueur2.toStdString(), typeJoueur2, 0); // Ajouter le choix du nombre de retours en arrière
+            JeuHive::Hive::getInstance().ajouterPartie(nomjoueur1.toStdString(), typeJoueur1, nomjoueur2.toStdString(), typeJoueur2, 0, 1); // Ajouter le choix du nombre de retours en arrière
             chargerPartiesExistantes();
         }
     }

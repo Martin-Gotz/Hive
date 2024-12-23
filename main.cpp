@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
 
     Hive& hive = Hive::getInstance();
     InterfaceUtilisateur ui(hive);
-    //ui.gererChoixUtilisateur();
+    ui.gererChoixUtilisateur();
 
 
     QApplication app(argc, argv);
