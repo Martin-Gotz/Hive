@@ -31,7 +31,7 @@ void Hive::ajouterPartie(const string& nomJoueur1, TypeJoueur typeJoueur1, const
         }
     }
     // Créer une nouvelle partie en utilisant la factory
-    parties.push_back(FabriquePartie::creerPartie(joueur1, joueur2, jIa, nombreRetours, difficulte));
+    parties.push_back(FabriquePartie::creerPartie(joueur1, joueur2, jIa, nombreRetours));
     EvenementHive evt("Nouvelle partie creee \n");
     notifierObservers(evt);
 }

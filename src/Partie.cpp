@@ -9,7 +9,7 @@ int Partie::prochain_id = 1;
 
 
 //Constructeurs
-Partie::Partie(Joueur& j1, Joueur& j2, JoueurIa* Ia, int nombreRetours, int dif) :
+Partie::Partie(Joueur& j1, Joueur& j2, JoueurIa* Ia, int nombreRetours) :
     id(prochain_id),
     joueur1(j1),
     joueur2(j2),
@@ -21,7 +21,7 @@ Partie::Partie(Joueur& j1, Joueur& j2, JoueurIa* Ia, int nombreRetours, int dif)
     joueurActuel(nullptr),
     compteurTour(0),
     nombreRetours(nombreRetours),
-    difficulte(dif),
+    //difficulte(dif),
     Victorieux(nullptr),
     j(Ia)
 {
@@ -173,6 +173,12 @@ void Partie::deplacerPiece(const Coordonnee& cooOrigine, const Coordonnee& cooDe
     }
 
     const Piece* piece = case0->getDessus();
+
+    if (piece->getCouleur() != joueurActuel->getCouleur() && joueurActuel->getType() == IA) {
+        joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
+        joueurSuivant();
+        // si l'IA fait n'importe quoi
+    }
 
     if (piece->getCouleur() != joueurActuel->getCouleur()) {
         throw HiveException("Vous ne pouvez déplacer que vos propres pièces !");
