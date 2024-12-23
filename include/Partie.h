@@ -26,18 +26,18 @@ namespace JeuHive {
 		int compteurTour;
 		int nombreRetours;
 		unsigned int compteurRegles; // permet de vérifier que le seuil de nombre de retours maximum n'est pas dépassé
-		int difficulte;
+		//int difficulte;
 		static int prochain_id;
 		JoueurIa* j;
 
 	public:
-		Partie(Joueur& j1, Joueur& j2, JoueurIa *Ia, int nombreRetours, int diff);
+		Partie(Joueur& j1, Joueur& j2, JoueurIa *Ia, int nombreRetours);
 		~Partie() = default;
 
 		// Accesseurs
 		int getId() const { return id; }
-		const int getDifficulte() const { return difficulte; }
-		int getDifficulte() { return difficulte; }
+		//const int getDifficulte() const { return difficulte; }
+		//int getDifficulte() { return difficulte; }
 		const static int getProchainId() { return prochain_id; }
 
 		const Joueur& getJoueur1() const { return joueur1; }
@@ -104,8 +104,8 @@ namespace JeuHive {
 
 	class FabriquePartie {
 	public:
-		static Partie* creerPartie(Joueur& joueur1, Joueur& joueur2, JoueurIa* Ia, int nombreRetours, int difficulte) {
-			return new Partie(joueur1, joueur2, Ia, nombreRetours, difficulte);
+		static Partie* creerPartie(Joueur& joueur1, Joueur& joueur2, JoueurIa* Ia, int nombreRetours) {
+			return new Partie(joueur1, joueur2, Ia, nombreRetours);
 		}
 	};
 }
