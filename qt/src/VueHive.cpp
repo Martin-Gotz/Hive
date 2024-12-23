@@ -71,7 +71,21 @@ namespace JeuHive {
             QString nomjoueur2 = dialog.getNomJoueur2();
             JeuHive::TypeJoueur typeJoueur1 = dialog.getTypeJoueur1();
             JeuHive::TypeJoueur typeJoueur2 = dialog.getTypeJoueur2();
-            JeuHive::Hive::getInstance().ajouterPartie(nomjoueur1.toStdString(), typeJoueur1, nomjoueur2.toStdString(), typeJoueur2, 0, 1); // Ajouter le choix du nombre de retours en arrière
+            QString iaLevel = dialog.getIaLevel();
+            int nombreRetoursArriere = dialog.getNombreRetoursArriere();
+            int level = 1;
+            if (typeJoueur2 == JeuHive::IA) {
+                if (iaLevel == "Facile") {
+                    level = 1;
+                }
+                else if (iaLevel == "Moyen") {
+                    level = 2;
+                }
+                else if (iaLevel == "Difficile") {
+                    level = 3;
+                }
+            }
+            JeuHive::Hive::getInstance().ajouterPartie(nomjoueur1.toStdString(), typeJoueur1, nomjoueur2.toStdString(), typeJoueur2, nombreRetoursArriere, level); // Ajouter le choix du nombre de retours en arrière
             chargerPartiesExistantes();
         }
     }

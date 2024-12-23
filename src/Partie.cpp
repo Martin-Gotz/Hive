@@ -209,8 +209,7 @@ void Partie::jouerCoup(Coup* coup) {
         : TypeEvenement::PIECE_DEPLACEE;
     EvenementPartie evt(id, typeEvt);
     notifierObservers(evt);
-
-    //CompteurRegles--;
+    decrementerCompteurRegles();
     delete coup;
 }
 
@@ -243,7 +242,6 @@ void Partie::jouerCoupIA()
         deplacerPiece(coupDeplacement->getCooOrigine(), coupDeplacement->getCooDestination());
         cout << "IA a déplacé la pièce " << coupDeplacement->getPiece()->getNom() << " de " << coupDeplacement->getCooOrigine().get_q() << ", " << coupDeplacement->getCooOrigine().get_r() << " à " << coupDeplacement->getCooDestination().get_q() << ", " << coupDeplacement->getCooDestination().get_r() << endl;
     }
-
     joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
     cout << "\nL'IA a joué son coup !\n";
     joueurSuivant();
@@ -382,21 +380,24 @@ void JeuHive::Partie::annulerDernierCoup()
 
     EvenementPartie evt(id, TypeEvenement::ANNULER_COUP);
     notifierObservers(evt);
-
     dernierCoup = nullptr;
+    joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
+    joueurSuivant();
 }
 
 
-void JeuHive::Partie::verifierAnnulation()
+bool JeuHive::Partie::verifierAnnulation()
 {
-    if (compteurRegles > regles.getNombreRetours())
+    if (compteurRegles >= regles.getNombreRetours())
     {
-        throw HiveException("Le nombre de retours en arrière est trop important");
+        //throw HiveException("Le nombre de retours en arrière est trop important");
+        return false;
     }
     else
     {
        annulerDernierCoup();
-       compteurRegles++;
+       incrementerCompteurRegles();
+       return true;
     }
 }
 

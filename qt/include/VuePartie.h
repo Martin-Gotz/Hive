@@ -30,8 +30,10 @@ namespace JeuHive {
         QLabel* labelJoueur1;
         QLabel* labelJoueur2;
         QLabel* labelTour;
+        QLabel* labelRetoursRestants;
         QListWidget* listPiecesJoueur1;
         QListWidget* listPiecesJoueur2;
+        QPushButton* boutonRetourArriere;
         QPushButton* boutonAbandonner;
         QPushButton* boutonQuitter;
 
@@ -47,6 +49,8 @@ namespace JeuHive {
 
         void placerPiece(int idPiece, const Coordonnee& coord);
         void deplacerPiece(const Coordonnee& origine, const Coordonnee& destination);
+        void retourArriere();
+        void mettreAJourLabelRetoursRestants();
 
         void quitterPartie();
         void abandonnerPartie();

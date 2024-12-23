@@ -23,6 +23,14 @@ namespace JeuHive {
         labelTour = new QLabel("Tour actuel", this);
         layoutBarreInfo->addWidget(labelTour);
 
+        labelRetoursRestants = new QLabel("Retours restants: 0", this); 
+        layoutBarreInfo->addWidget(labelRetoursRestants);
+
+
+        boutonRetourArriere = new QPushButton("Retour en arrière", this);
+        connect(boutonRetourArriere, &QPushButton::clicked, this, &VuePartie::retourArriere);
+        layoutBarreInfo->addWidget(boutonRetourArriere);
+
         boutonQuitter = new QPushButton("Quitter", this);
         layoutBarreInfo->addWidget(boutonQuitter);
         connect(boutonQuitter, &QPushButton::clicked, this, &VuePartie::quitterPartie);
@@ -41,10 +49,36 @@ namespace JeuHive {
         layoutPartie->addWidget(vuePlateau);
         layoutPartie->addLayout(layoutBarreInfo);
 
+
+
         setLayout(layoutPartie);
 
         // Initialisation des informations de la partie
         actualiser();
+    }
+
+    void VuePartie::retourArriere() {
+        Partie* partie = Hive::getInstance().getPartieEnCours();
+        if (partie) {
+            if (partie->getPlateau().getNombrePieces() == 0) {
+                QMessageBox::information(this, "Information", "Aucun coup à annuler.");
+                return;
+            }
+            if (!partie->verifierAnnulation())
+            {
+                QMessageBox::information(this, "Information", "Vous avez atteint le seuil de coups à annuler !");
+                return;
+            }
+            vuePlateau->afficherPlateau();
+            mettreAJourLabelRetoursRestants();
+        }
+    }
+    void VuePartie::mettreAJourLabelRetoursRestants() {
+        Partie* partie = Hive::getInstance().getPartieEnCours();
+        if (partie) {
+            int retoursRestants = partie->getRegles().getNombreRetours() - partie->getCompteurRegles();
+            labelRetoursRestants->setText(QString("Retours restants: %1").arg(retoursRestants));
+        }
     }
 
 
@@ -139,7 +173,7 @@ namespace JeuHive {
 
             // Place la pièce
             vuePlateau->placerPiece(piece, coord);
-
+            mettreAJourLabelRetoursRestants();
             cout << "\n" << partie->getPlateau();
         }
         catch (HiveException& e) {
@@ -157,7 +191,7 @@ namespace JeuHive {
     void VuePartie::deplacerPiece(const Coordonnee& origine, const Coordonnee& destination) {
         Hive& hive = Hive::getInstance();
         Partie* partie = hive.getPartieEnCours();
-
+        mettreAJourLabelRetoursRestants();
         if (!partie) return;
 
         partie->deplacerPiece(origine, destination);
