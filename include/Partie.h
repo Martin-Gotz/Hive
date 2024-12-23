@@ -65,7 +65,7 @@ namespace JeuHive {
 		}
 
 		void initialiserCompteurRegles() { compteurRegles = 0; }
-		void incrementerCompteurRegles() { ++compteurRegles; }
+		void incrementerCompteurRegles() { if (compteurRegles < regles.getNombreRetours()) ++compteurRegles; else compteurRegles = regles.getNombreRetours(); }
 		void decrementerCompteurRegles() { if (compteurRegles > 0) --compteurRegles; else compteurRegles = 0; }
 
 		const Regle getRegles() const { return regles; }

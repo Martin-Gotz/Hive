@@ -23,6 +23,9 @@ namespace JeuHive {
         labelTour = new QLabel("Tour actuel", this);
         layoutBarreInfo->addWidget(labelTour);
 
+        labelRetoursRestants = new QLabel("Retours restants: 0", this); 
+        layoutBarreInfo->addWidget(labelRetoursRestants);
+
 
         boutonRetourArriere = new QPushButton("Retour en arrière", this);
         connect(boutonRetourArriere, &QPushButton::clicked, this, &VuePartie::retourArriere);
@@ -54,6 +57,7 @@ namespace JeuHive {
         creerPlateau(partieId);
         afficherInfosJoueurs(partieId);
         afficherPiecesJoueurs(partieId);
+        mettreAJourLabelRetoursRestants();
     }
 
     void VuePartie::creerPlateau(int partieId) {
@@ -79,8 +83,17 @@ namespace JeuHive {
                 return;
             }
             vuePlateau->afficherPlateau();
+            mettreAJourLabelRetoursRestants();
         }
     }
+    void VuePartie::mettreAJourLabelRetoursRestants() {
+        Partie* partie = Hive::getInstance().getPartieEnCours();
+        if (partie) {
+            int retoursRestants = partie->getRegles().getNombreRetours() - partie->getCompteurRegles();
+            labelRetoursRestants->setText(QString("Retours restants: %1").arg(retoursRestants));
+        }
+    }
+
 
 
 
@@ -166,7 +179,7 @@ namespace JeuHive {
             update();
             Piece* piece = partie->getJoueurActuel()->getMain().getPieces()[idPiece - 1];
             vuePlateau->placerPiece(piece, coord);
-
+            mettreAJourLabelRetoursRestants();
             cout << "\n" << partie->getPlateau();
         }
         catch (HiveException& e) {
@@ -184,7 +197,7 @@ namespace JeuHive {
     void VuePartie::deplacerPiece(const Coordonnee& origine, const Coordonnee& destination) {
         Hive& hive = Hive::getInstance();
         Partie* partie = hive.getPartieEnCours();
-
+        mettreAJourLabelRetoursRestants();
         if (!partie) return;
 
         partie->deplacerPiece(origine, destination);
