@@ -56,6 +56,11 @@ namespace JeuHive {
 
         // Initialisation des informations de la partie
         actualiser();
+
+        placerPiece(1, { 0, 0 });
+        placerPiece(1, { 1, 0 });
+        placerPiece(3, { -1, 0 });
+        placerPiece(3, { 1, 1 });
     }
 
     void VuePartie::retourArriere() {
@@ -190,7 +195,6 @@ namespace JeuHive {
             cout << "Pièce " << idPiece << endl;
             cout << "Coord : " << coord.get_q() << " " << coord.get_r() << endl;
             partie->placerPiece(idPiece, coord);
-            update();
 
             vector<Piece*> pieces = partie->getJoueurActuel()->getMain().getPieces();
             int index = idPiece - 1;
@@ -229,11 +233,17 @@ namespace JeuHive {
         Partie* partie = hive.getPartieEnCours();
         if (!partie) return;
 
-        partie->deplacerPiece(origine, destination);
-        vuePlateau->deplacerPiece(origine, destination);
-        cout << "Pièce déplacée\n";
-        mettreAJourLabelRetoursRestants();
+        try {
+            partie->deplacerPiece(origine, destination);
+            vuePlateau->deplacerPiece(origine, destination);
+            cout << "\n" << partie->getPlateau();
+            mettreAJourLabelRetoursRestants();
+        }
+        catch (HiveException& e) {
+            QMessageBox::warning(this, "Erreur", QString::fromStdString(e.getInfo()));
+        }
 
+        actualiser();
         update();
         verifierGagnant();
     }
@@ -267,7 +277,8 @@ namespace JeuHive {
         QWidget::closeEvent(event);
     }
 
-    void VuePartie::gererCaseCliquee(VueCase* caseCliquee) {
+
+    void VuePartie::gererPlacementPiece(VueCase* caseCliquee) {
         Partie* partie = Hive::getInstance().getPartieEnCours();
 
         if (partie->estPremierJoueurActuel()) {
@@ -278,6 +289,9 @@ namespace JeuHive {
                 int idPiece = listPiecesJoueur1->currentRow() + 1;
                 placerPiece(idPiece, caseCliquee->getCoord());
             }
+            else {
+                gererDeplacementPiece(caseCliquee);
+            }
         }
         else {
             Joueur* joueur = &partie->getJoueur2();
@@ -287,8 +301,47 @@ namespace JeuHive {
                 int idPiece = listPiecesJoueur2->currentRow() + 1;
                 placerPiece(idPiece, caseCliquee->getCoord());
             }
+            else {
+                gererDeplacementPiece(caseCliquee);
+            }
         }
         listPiecesJoueur1->setCurrentItem(nullptr);
         listPiecesJoueur2->setCurrentItem(nullptr);
     }
+
+
+    void VuePartie::gererDeplacementPiece(VueCase* caseCliquee)
+    {
+        Partie* partie = Hive::getInstance().getPartieEnCours();
+
+        if (caseCliquee->piecePresente()) {
+            // Si une case est déjà sélectionnée, on tente un déplacement
+            if (caseSelectionnee) {
+                // Déplacement de la pièce de la case sélectionnée vers la case cliquée
+                deplacerPiece(caseSelectionnee->getCoord(), caseCliquee->getCoord());
+                caseSelectionnee = nullptr;
+            }
+            else {
+                // Si aucune case n'est sélectionnée, on sélectionne la case cliquée
+                caseSelectionnee = caseCliquee;
+                // Effet visuel
+                //caseCliquee->mettreEnSelection(true);
+            }
+        }
+        else {
+            // Si la case ne contient pas de pièce et qu'une case est sélectionnée, on essaie de déplacer
+            if (caseSelectionnee) {
+                deplacerPiece(caseSelectionnee->getCoord(), caseCliquee->getCoord());
+                caseSelectionnee = nullptr;
+            }
+        }
+    }
+
+
+
+    void VuePartie::gererCaseCliquee(VueCase* caseCliquee) 
+    {
+        gererPlacementPiece(caseCliquee);
+    }
+
 }

@@ -39,6 +39,8 @@ namespace JeuHive {
 
         VuePlateau* vuePlateau;
 
+        VueCase* caseSelectionnee = nullptr;
+
         void afficherInfosJoueurs();
         void afficherPiecesJoueurs();
         void afficherPiecesJoueur(const Joueur& joueur, QListWidget* listWidget);
@@ -54,6 +56,9 @@ namespace JeuHive {
         void quitterPartie();
         void abandonnerPartie();
         void closeEvent(QCloseEvent* event) override;
+
+        void gererPlacementPiece(VueCase* caseCliquee);
+        void gererDeplacementPiece(VueCase* caseCliquee);
 
     signals:
         void partieFermee(); // Signal émis à la fermeture

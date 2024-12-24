@@ -116,22 +116,33 @@ namespace JeuHive {
         void deplacerPiece(const Coordonnee& origine, const Coordonnee& destination) {
             auto casesMap = plateau->getCases();
 
-            Case* itOrigine = casesMap[origine];
-            Case* itDestination = casesMap[destination];
+            if (casesMap.find(origine) == casesMap.end() || casesMap[origine] == nullptr) {
+                qDebug() << "Erreur : la case d'origine est invalide ou inexistante.";
+                return;
+            }
 
-            Coordonnee positionOrigine = itOrigine->getCoo();
-            QPointF pointOrigine(static_cast<qreal>(positionOrigine.get_q()), static_cast<qreal>(positionOrigine.get_r()));
+            Case* caseOrigine = casesMap[origine];
+            if (caseOrigine->estVide()) {
+                qDebug() << "Erreur : la case d'origine ne contient pas de pièce.";
+                return;
+            }
 
-            Coordonnee positionDestination = itDestination->getCoo();
-            QPointF pointDestination(static_cast<qreal>(positionDestination.get_q()), static_cast<qreal>(positionDestination.get_r()));
+            if (casesMap.find(destination) == casesMap.end() || casesMap[destination] == nullptr) {
+                qDebug() << "Erreur : la destination est invalide ou inexistante.";
+                return;
+            }
 
-            VueCase* vueOrigine = dynamic_cast<VueCase*>(scene->itemAt(pointOrigine, QTransform()));
-            VueCase* vueDestination = dynamic_cast<VueCase*>(scene->itemAt(pointDestination, QTransform()));
 
-            if (vueOrigine && vueOrigine->piecePresente() && vueDestination) {
-                const Piece& piece = vueOrigine->getPiece();
-                vueOrigine->setNoPiece();
-                vueDestination->setPiece(piece);
+            caseOrigine->retirerPiece();
+
+
+            Case* caseDestination = casesMap[destination];
+            const Coordonnee& positionDest = caseDestination->getCoo();
+            QPointF pointF(static_cast<qreal>(positionDest.get_q()), static_cast<qreal>(positionDest.get_r()));
+
+            VueCase* vueCaseDestination = dynamic_cast<VueCase*>(scene->itemAt(pointF, QTransform()));
+            if (vueCaseDestination) {
+                vueCaseDestination->setPiece(*caseOrigine->getDessus());
             }
 
             afficherPlateau();

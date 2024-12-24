@@ -102,7 +102,7 @@ namespace JeuHive {
             return coord;
         }
 
-        const JeuHive::Piece& getPiece() const { return *piece; }
+        const Piece& getPiece() const { return *piece; }
         bool piecePresente() const { return piece != nullptr; }
 
     public:
