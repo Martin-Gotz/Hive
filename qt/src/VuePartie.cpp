@@ -65,13 +65,19 @@ namespace JeuHive {
                 QMessageBox::information(this, "Information", "Aucun coup à annuler.");
                 return;
             }
-            if (!partie->verifierAnnulation())
-            {
-                QMessageBox::information(this, "Information", "Vous avez atteint le seuil de coups à annuler !");
-                return;
+
+            try {
+                if (!partie->verifierAnnulation())
+                {
+                    QMessageBox::information(this, "Information", "Vous avez atteint le seuil de coups à annuler !");
+                    return;
+                }
             }
-            vuePlateau->afficherPlateau();
-            mettreAJourLabelRetoursRestants();
+            catch (HiveException& e) {
+                QMessageBox::warning(this, "Erreur", QString::fromStdString(e.getInfo()));
+            }
+
+            actualiser();
         }
     }
     void VuePartie::mettreAJourLabelRetoursRestants() {
@@ -161,6 +167,7 @@ namespace JeuHive {
     void VuePartie::actualiser() {
         afficherInfosJoueurs();
         afficherPiecesJoueurs();
+        mettreAJourLabelRetoursRestants();
         vuePlateau->afficherPlateau();
     }
 
@@ -205,9 +212,6 @@ namespace JeuHive {
         }
         catch (HiveException& e) {
             QMessageBox::warning(this, "Erreur", QString::fromStdString(e.getInfo()));
-        }
-        catch (...) {
-            qDebug() << "Exception inconnue capturée.";
         }
 
         actualiser();

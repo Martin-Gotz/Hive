@@ -39,6 +39,7 @@ void VueNouvellePartie::initialiser() {
     retoursArriereEdit->setValidator(new QIntValidator(0, 5, this)); // Limite de 0 à 100 retours en arrière
     layout->addWidget(retoursArriereEdit);
     retoursArriereEdit->setText("0");
+    retoursArriereEdit->setEnabled(false);
 
 
     boutonOk = new QPushButton("OK", this);
@@ -56,11 +57,14 @@ void VueNouvellePartie::initialiser() {
             nomJoueur2Edit->setText("IA");
             nomJoueur2Edit->setEnabled(false);
             iaLevelComboBox->setEnabled(true);
+            retoursArriereEdit->setEnabled(true);
         }
         else {
             nomJoueur2Edit->clear();
             nomJoueur2Edit->setEnabled(true);
             iaLevelComboBox->setEnabled(false);
+            retoursArriereEdit->setText("0");
+            retoursArriereEdit->setEnabled(false);
         }
         });
 
@@ -108,12 +112,8 @@ int VueNouvellePartie::getNombreRetoursArriere() const {
 
 
 void VueNouvellePartie::supprimerPartie() {
-    // Implémentation de la suppression de la partie
-    // Vous pouvez ajouter ici le code nécessaire pour supprimer la partie
-    // Par exemple, réinitialiser les champs de texte ou effectuer d'autres actions nécessaires
     nomJoueur1Edit->clear();
     nomJoueur2Edit->clear();
     iaLevelComboBox->setCurrentIndex(0);
     retoursArriereEdit->clear();
-    // Vous pouvez également émettre un signal ou appeler une fonction pour notifier la suppression
 }

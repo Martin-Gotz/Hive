@@ -10,6 +10,8 @@
 #include <QComboBox>
 #include "Enums.h"
 
+using namespace JeuHive;
+
 class VueNouvellePartie : public QDialog {
     Q_OBJECT
 
@@ -18,8 +20,8 @@ public:
 
     QString getNomJoueur1() const;
     QString getNomJoueur2() const;
-    JeuHive::TypeJoueur getTypeJoueur1();
-    JeuHive::TypeJoueur getTypeJoueur2();
+    TypeJoueur getTypeJoueur1();
+    TypeJoueur getTypeJoueur2();
     QString getIaLevel() const;
     int getNombreRetoursArriere() const;
 

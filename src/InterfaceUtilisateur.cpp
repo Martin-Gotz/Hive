@@ -132,12 +132,15 @@ void InterfaceUtilisateur::ajouterPartie() {
         }
     } while (nomJoueur1.empty());
 
+    int nbRetours = 0;
+
     TypeJoueur typeJoueur2 = demanderTypeJoueur("joueur 2");
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     if (typeJoueur2 == TypeJoueur::IA) {
         nomJoueur2 = "IA";
         DifficulteIA = demanderDifficulteIA();
+        nbRetours = demanderNombreDeRetours();
     }
     else {
         do {
@@ -148,9 +151,6 @@ void InterfaceUtilisateur::ajouterPartie() {
             }
         } while (nomJoueur2.empty());
     }
-
-    // Parametrage du nombre de retours possibles
-    int nbRetours = demanderNombreDeRetours();
 
     hive.ajouterPartie(nomJoueur1, TypeJoueur::HUMAIN, nomJoueur2, typeJoueur2, nbRetours, DifficulteIA);
 }
