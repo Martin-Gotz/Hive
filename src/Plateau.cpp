@@ -187,6 +187,10 @@ bool Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) con
 
 	const Case* case_de_piece = getCaseDeCoo(coo);
 
+	if (!case_de_piece) {
+		return false;
+	}
+
 	if (&piece != case_de_piece->getDessus()) {
 		return false;
 	}

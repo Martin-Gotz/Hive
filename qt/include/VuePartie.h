@@ -44,8 +44,6 @@ namespace JeuHive {
         void afficherPiecesJoueur(const Joueur& joueur, QListWidget* listWidget);
         void actualiser();
 
-        int getIdPieceSelectionnee(QListWidget* listWidget);
-
         void placerPiece(int idPiece, const Coordonnee& coord);
         void deplacerPiece(const Coordonnee& origine, const Coordonnee& destination);
         void retourArriere();

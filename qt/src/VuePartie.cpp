@@ -178,7 +178,7 @@ namespace JeuHive {
 
         if (partieTerminee) {
             QMessageBox::warning(this, "Erreur", "La partie est terminée. Vous ne pouvez plus placer de pièces.");
-            return; // Ne rien faire si la partie est terminée
+            return;
         }
 
         Hive& hive = Hive::getInstance();
@@ -202,10 +202,8 @@ namespace JeuHive {
                 return;
             }
 
-            // Accès sécurisé à l'élément
             Piece* piece = pieces[index];
 
-            // Place la pièce
             vuePlateau->placerPiece(piece, coord);
             mettreAJourLabelRetoursRestants();
             cout << "\n" << partie->getPlateau();
@@ -224,17 +222,17 @@ namespace JeuHive {
 
         if (partieTerminee) {
             QMessageBox::warning(this, "Erreur", "La partie est terminée. Vous ne pouvez plus déplacer de pièces.");
-            return; // Ne rien faire si la partie est terminée
+            return;
         }
 
         Hive& hive = Hive::getInstance();
         Partie* partie = hive.getPartieEnCours();
-        mettreAJourLabelRetoursRestants();
         if (!partie) return;
 
         partie->deplacerPiece(origine, destination);
         vuePlateau->deplacerPiece(origine, destination);
         cout << "Pièce déplacée\n";
+        mettreAJourLabelRetoursRestants();
 
         update();
         verifierGagnant();
