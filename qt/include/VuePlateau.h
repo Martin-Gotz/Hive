@@ -67,7 +67,7 @@ namespace JeuHive {
         }
 
         // Fonction pour ajouter une case à la scène avec une vue correspondante
-        void ajouterCaseDeCoordonnee(int centerX, int centerY, const Coordonnee& coord, QSet<QPair<int, int>>& casesAjoutees, QMap<QPair<int, int>, VueCase*>& casesVue, Case* caseHive) {
+        void ajouterCaseDeCoordonnee(int centerX, int centerY, const Coordonnee& coord, QSet<QPair<int, int>>& casesAjoutees, QMap<QPair<int, int>, VueCase*>& casesVue, const Case* caseHive) {
             double x, y;
             calculerPositionHexagonale(coord.get_q(), coord.get_r(), x, y);
 
@@ -94,8 +94,8 @@ namespace JeuHive {
                 }
 
                 // Ajouter la pièce si nécessaire
-                if (caseHive && caseHive->getDessus()) {
-                    casesVue[coordPair]->setPiece(*caseHive->getDessus());
+                if (caseHive && &caseHive->getDessus()) {
+                    casesVue[coordPair]->setPiece(caseHive->getDessus());
                 }
 
                 // Ajouter la coordonnée au set pour éviter la duplication

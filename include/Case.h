@@ -21,11 +21,9 @@ namespace JeuHive {
 		const Coordonnee& getCoo() const { return coo; }
 		void ajouterPiece(const Piece* piece) { pieces.push_back(piece); }
 		void retirerPiece() { pieces.pop_back(); }
-		const Piece* getDessus() const {
-			if (pieces.empty()) {
-				return nullptr; // Renvoie nullptr si le vecteur est vide.
-			}
-			return pieces.back();
+		const Piece& getDessus() const {
+			const Piece& piece = *pieces.back();
+			return piece;
 		}
 		const vector<const Piece*>& getPieces() const { return pieces; }
 
