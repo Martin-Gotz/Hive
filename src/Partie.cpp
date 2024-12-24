@@ -119,17 +119,15 @@ void Partie::terminer() {
 }
 
 
-
-
-
-
 void Partie::placerPiece(int idPiece, const Coordonnee& cooDestination) {
     if (joueurActuel->getMain().estVide()) {
         throw HiveException("Plus de pièce dans la main !");
+        return;
     }
 
     if (idPiece <= 0 || idPiece > joueurActuel->getMain().getPieces().size()) {
         throw HiveException("ID de pièce invalide !");
+        return;
     }
 
     Piece* piece = joueurActuel->getMain().getPieces()[idPiece - 1];
@@ -157,8 +155,9 @@ void Partie::deplacerPiece(const Coordonnee& cooOrigine, const Coordonnee& cooDe
 
     const Piece* piece = case0->getDessus();
 
+
     if (piece->getCouleur() != joueurActuel->getCouleur() && joueurActuel->getType() == IA) {
-        joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
+        //joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
         joueurSuivant();
     }
 
