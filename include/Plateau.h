@@ -47,7 +47,7 @@ namespace JeuHive {
 
 		// ------------------ méthodes liées au mouvements et aux placements-------------------
 
-		set<Coordonnee> ensemblePlacementsPossibles(const Piece& piece, int tour) const;
+		set<Coordonnee> ensemblePlacementsPossibles(const Piece* piece, int tour) const;
 
 		bool deplacementPossible(const Piece& piece, const Coordonnee& coo) const;
 		// vérifie juste que la ruche ne devienne pas coupée

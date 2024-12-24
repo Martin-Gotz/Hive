@@ -76,7 +76,7 @@ size_t Plateau::getNombrePieces() const
 	return resultat;
 }
 
-set<Coordonnee> Plateau::ensemblePlacementsPossibles(const Piece& piece, int tour) const
+set<Coordonnee> Plateau::ensemblePlacementsPossibles(const Piece* piece, int tour) const
 {
 	// les placements possibles devront respecter ces conditions: 
 	// 1)  être seront en contact avec une pièce de même couleur mais pas avec la couleur opposée
@@ -96,7 +96,7 @@ set<Coordonnee> Plateau::ensemblePlacementsPossibles(const Piece& piece, int tou
 	// voisines d'une pièce de la couleur opposée. Ce résultat s'obtient en prenant la différence des deux ensembles
 	// avec set_difference
 
-	if (estPlacee(piece)) {
+	if (estPlacee(*piece)) {
 		throw HiveException("La piece est deja placee");
 	}
 
@@ -115,11 +115,11 @@ set<Coordonnee> Plateau::ensemblePlacementsPossibles(const Piece& piece, int tou
 		return resultat;
 	}
 
-	if (tour == 4 && !estAbeillePlacee(piece.getCouleur())) {
+	if (tour == 4 && !estAbeillePlacee(piece->getCouleur())) {
 		// commentaire au cas où l'autre méthode ne marche pas
 		//const Abeille* ab = dynamic_cast<const Abeille*>(&piece);  // bricolage
 		//bool estAbeille = (ab != nullptr);
-		if (!piece.estAbeille()) {
+		if (!piece->estAbeille()) {
 			return resultat;	// ne contient aucun élément
 		}
 	}
@@ -146,7 +146,7 @@ set<Coordonnee> Plateau::ensemblePlacementsPossibles(const Piece& piece, int tou
 			if (getCaseDeCoo(coo_voisine) != nullptr) {
 				continue;
 			}
-			if (piece_dessus->getCouleur() == piece.getCouleur()) {
+			if (piece && piece_dessus->getCouleur() == piece->getCouleur()) {
 				voisinsBonneCouleur.insert(coo_voisine);
 			}
 			else {
@@ -477,7 +477,7 @@ void JeuHive::Plateau::jouerCoup(Coup& coup)
 void JeuHive::Plateau::jouerPlacement(CoupPlacement* coup)
 // cette fonction produit une exception si le coup est invalide
 {
-	set<Coordonnee> placements_possibles = ensemblePlacementsPossibles(*(coup->getPiece()), coup->getTour());
+	set<Coordonnee> placements_possibles = ensemblePlacementsPossibles((coup->getPiece()), coup->getTour());
 
 	if (placements_possibles.find(coup->getCooDestination()) != placements_possibles.end()) {
 		ajouterPieceSurCoo((coup->getPiece()), coup->getCooDestination());
@@ -642,7 +642,7 @@ vector<Coup*> JeuHive::Plateau::totalCoupsPossibles(int tour, Joueur& joueur)
 	set<Coordonnee> coos_placements_pieces;
 	for (Piece* piece_actuelle_main : joueur.getMain().getPieces()) {
 
-		coos_placements_pieces = ensemblePlacementsPossibles(*piece_actuelle_main, tour);
+		coos_placements_pieces = ensemblePlacementsPossibles(piece_actuelle_main, tour);
 
 		for (Coordonnee coo_placement_possible : coos_placements_pieces) {
 			nouv_coup = new CoupPlacement(piece_actuelle_main, coo_placement_possible, tour);
