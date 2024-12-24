@@ -21,29 +21,11 @@ Partie::Partie(Joueur& j1, Joueur& j2, JoueurIa* Ia, int nombreRetours) :
     joueurActuel(nullptr),
     compteurTour(0),
     nombreRetours(nombreRetours),
-    //difficulte(dif),
     Victorieux(nullptr),
     j(Ia)
 {
     prochain_id++; // Incrémentation du compteur statique pour suivre le nombre de parties créé
     regles.setNombreRetours(nombreRetours);
-    /*
-    if (joueur2.getType() == IA) {
-        switch (difficulte) {
-        case 1:
-            j = new JoueurIaFacile(&joueur2, compteurTour, &plateau);
-            break;
-        case 2:
-            j = new JoueurIaMoyen(&joueur2, compteurTour, &plateau);
-            break;
-        case 3:
-            j = new JoueurIaDifficile(&joueur2, compteurTour, &plateau);
-            break;
-        default:
-            j = new JoueurIaFacile(&joueur2, compteurTour, &plateau);
-            break;
-        }
-    }*/
 }
 
 
@@ -155,8 +137,6 @@ void Partie::placerPiece(int idPiece, const Coordonnee& cooDestination) {
     // Jouer le coup
     jouerCoup(coup);
 
-    
-
     // Retirer la pièce de la main du joueur
     joueurActuel->retirerPiece(piece);
 
@@ -177,7 +157,6 @@ void Partie::deplacerPiece(const Coordonnee& cooOrigine, const Coordonnee& cooDe
     if (piece->getCouleur() != joueurActuel->getCouleur() && joueurActuel->getType() == IA) {
         joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
         joueurSuivant();
-        // si l'IA fait n'importe quoi
     }
 
     if (piece->getCouleur() != joueurActuel->getCouleur()) {
@@ -209,7 +188,6 @@ void Partie::jouerCoup(Coup* coup) {
         : TypeEvenement::PIECE_DEPLACEE;
     EvenementPartie evt(id, typeEvt);
     notifierObservers(evt);
-    decrementerCompteurRegles();
     delete coup;
 }
 
@@ -257,6 +235,10 @@ void Partie::joueurSuivant() {
             compteurTour++;
             EvenementPartie evt(id, TypeEvenement::TOUR_SUIVANT);
             notifierObservers(evt);
+        }
+
+        if (joueurActuel->getCouleur() == joueur1.getCouleur()) {
+            decrementerCompteurRegles();
         }
 
         joueurActuel = estPremierJoueurActuel() ? &joueur2 : &joueur1;
@@ -348,41 +330,59 @@ bool Partie::verifierEtatPartie() {
 
 void JeuHive::Partie::annulerDernierCoup()
 {
-    if (historique.getlisteCoups().empty()) {
-        throw HiveException("Il n'y a aucun coup à annuler.");
+    if (historique.getlisteCoups().size() < 2) {
+        throw HiveException("Il n'y a pas assez de coups à annuler.");
     }
 
     Coup* dernierCoup = historique.getlisteCoups().back();
     historique.annulerDernierCoup();
-    joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
 
+    // Déterminer le joueur ayant joué le dernier coup
+    Joueur* joueurDernierCoup = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
+
+    Coup* avantDernierCoup = historique.getlisteCoups().back();
+    historique.annulerDernierCoup();
+
+    // Déterminer le joueur ayant joué l'avant-dernier coup
+    Joueur* joueurAvantDernierCoup = (joueurDernierCoup->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
+
+    // Annuler les actions du dernier coup
     if (dernierCoup) {
-        CoupDeplacement* deplacement = dynamic_cast<CoupDeplacement*>(dernierCoup);
-        if (deplacement) {
-            // Remettre la pièce à sa position d'origine
-            plateau.inverserDeplacement(deplacement);
-        }
-
-        CoupPlacement* placement = dynamic_cast<CoupPlacement*>(dernierCoup);
-        if (placement) {
-            // Retirer la pièce du plateau et la remettre dans la main du joueur
-            plateau.inverserPlacement(placement);
-            joueurActuel->ajouterPieceMain(const_cast<Piece*>(placement->getPiece()));
-        }
-
-        // Décrémenter le compteur de tours si nécessaire
-        if (joueurActuel->getCouleur() == Couleur::NOIR) {
-            compteurTour--;
-        }
+        annulerCoupAction(dernierCoup, joueurDernierCoup);
     }
 
+    // Annuler les actions de l'avant-dernier coup
+    if (avantDernierCoup) {
+        annulerCoupAction(avantDernierCoup, joueurAvantDernierCoup);
+    }
+
+    // Décrémenter le compteur de tours deux fois si nécessaire
+    compteurTour -= 1;
     incrementerCompteurRegles();
 
+    // Notifier l'annulation des deux coups
+    //incrementerCompteurRegles();
     EvenementPartie evt(id, TypeEvenement::ANNULER_COUP);
     notifierObservers(evt);
-    dernierCoup = nullptr;
-    joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
-    joueurSuivant();
+
+    // Mettre à jour le joueur actuel
+    joueurActuel = joueurAvantDernierCoup;
+}
+
+void JeuHive::Partie::annulerCoupAction(Coup* coup, Joueur* joueur)
+{
+    CoupDeplacement* deplacement = dynamic_cast<CoupDeplacement*>(coup);
+    if (deplacement) {
+        // Remettre la pièce à sa position d'origine
+        plateau.inverserDeplacement(deplacement);
+    }
+
+    CoupPlacement* placement = dynamic_cast<CoupPlacement*>(coup);
+    if (placement) {
+        // Retirer la pièce du plateau et la remettre dans la main du joueur
+        plateau.inverserPlacement(placement);
+        joueur->ajouterPieceMain(const_cast<Piece*>(placement->getPiece()));
+    }
 }
 
 
@@ -396,7 +396,6 @@ bool JeuHive::Partie::verifierAnnulation()
     else
     {
        annulerDernierCoup();
-       incrementerCompteurRegles();
        return true;
     }
 }

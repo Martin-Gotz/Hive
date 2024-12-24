@@ -88,6 +88,7 @@ namespace JeuHive {
 		void jouerCoupIA();
 		void joueurSuivant();
 		void annulerDernierCoup();
+		void annulerCoupAction(Coup* coup, Joueur* joueur);
 
 		bool verifierAnnulation(); 
 
