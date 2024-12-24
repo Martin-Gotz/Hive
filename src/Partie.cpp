@@ -27,7 +27,7 @@ Partie::Partie(Joueur& j1, Joueur& j2, JoueurIa* Ia, int nombreRetours) :
     prochain_id++; // Incrémentation du compteur statique pour suivre le nombre de parties créé
     regles.setNombreRetours(nombreRetours);
 }
-}
+
 
 
 // Methodes principales
