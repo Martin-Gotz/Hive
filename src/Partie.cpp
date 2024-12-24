@@ -27,23 +27,6 @@ Partie::Partie(Joueur& j1, Joueur& j2, JoueurIa* Ia, int nombreRetours) :
 {
     prochain_id++; // Incrémentation du compteur statique pour suivre le nombre de parties créé
     regles.setNombreRetours(nombreRetours);
-    /*
-    if (joueur2.getType() == IA) {
-        switch (difficulte) {
-        case 1:
-            j = new JoueurIaFacile(&joueur2, compteurTour, &plateau);
-            break;
-        case 2:
-            j = new JoueurIaMoyen(&joueur2, compteurTour, &plateau);
-            break;
-        case 3:
-            j = new JoueurIaDifficile(&joueur2, compteurTour, &plateau);
-            break;
-        default:
-            j = new JoueurIaFacile(&joueur2, compteurTour, &plateau);
-            break;
-        }
-    }*/
 }
 
 
@@ -114,6 +97,7 @@ void Partie::reprendre() {
 }
 
 void Partie::mettreEnPause() {
+    if (etatPartie == EtatPartie::TERMINEE) return;
     if (etatPartie != EtatPartie::EN_COURS) {
         throw HiveException("La partie n'est pas en cours");
     }
@@ -260,7 +244,6 @@ void Partie::joueurSuivant() {
         }
 
         joueurActuel = estPremierJoueurActuel() ? &joueur2 : &joueur1;
-        
         if (joueurActuel->getType() == IA && joueurActuel != nullptr)
         {
             jouerCoupIA();
@@ -268,10 +251,6 @@ void Partie::joueurSuivant() {
         
         EvenementPartie evt(id, TypeEvenement::CHANGEMENT_JOUEUR);
         notifierObservers(evt);        
-    }
-    else
-    {
-        throw HiveException("Le vainqueur a déjà été déterminé !");
     }
 }
 
@@ -314,7 +293,6 @@ ResumePartie Partie::resumer() const {
 
 
 
-
 bool Partie::verifierEtatPartie() {
     if (plateau.estPartieFinie())
     {
@@ -340,7 +318,6 @@ bool Partie::verifierEtatPartie() {
             }
         }
         cout << Victorieux->getNom() << " a gagné ! \n";
-        terminer();
         return false;
     }
     else return true;
@@ -355,7 +332,6 @@ void JeuHive::Partie::annulerDernierCoup()
     Coup* dernierCoup = historique.getlisteCoups().back();
     historique.annulerDernierCoup();
     joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;
-
     if (dernierCoup) {
         CoupDeplacement* deplacement = dynamic_cast<CoupDeplacement*>(dernierCoup);
         if (deplacement) {

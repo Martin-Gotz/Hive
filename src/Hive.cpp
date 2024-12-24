@@ -90,9 +90,6 @@ int Hive::nombreParties() const {
 }
 
 
-
-
-
 // Gestion de la partie en cours
 
 void Hive::demarrerPartie(int idPartie) {
