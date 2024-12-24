@@ -56,11 +56,6 @@ namespace JeuHive {
 
         // Initialisation des informations de la partie
         actualiser();
-
-        placerPiece(1, { 0, 0 });
-        placerPiece(1, { 1, 0 });
-        placerPiece(3, { -1, 0 });
-        placerPiece(3, { 1, 1 });
     }
 
     void VuePartie::retourArriere() {
