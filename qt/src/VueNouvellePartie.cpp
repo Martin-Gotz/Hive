@@ -38,6 +38,7 @@ void VueNouvellePartie::initialiser() {
     retoursArriereEdit = new QLineEdit(this);
     retoursArriereEdit->setValidator(new QIntValidator(0, 5, this)); // Limite de 0 à 100 retours en arrière
     layout->addWidget(retoursArriereEdit);
+    retoursArriereEdit->setText("0");
 
 
     boutonOk = new QPushButton("OK", this);

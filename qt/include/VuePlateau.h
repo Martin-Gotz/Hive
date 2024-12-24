@@ -18,7 +18,7 @@ namespace JeuHive {
         QGraphicsScene* scene;
         QVBoxLayout* layoutPrincipal;
         const Plateau* plateau;
-        const int hexSize = 20;
+        const int hexSize = 25;
 
     public:
         explicit VuePlateau(const Plateau* plateau, QWidget* parent = nullptr) : QWidget(parent), plateau(plateau) {

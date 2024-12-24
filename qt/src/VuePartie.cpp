@@ -8,6 +8,10 @@ namespace JeuHive {
         // Layout vertical pour les informations
         layoutBarreInfo = new QVBoxLayout();
 
+
+        labelTour = new QLabel("Tour actuel", this);
+        layoutBarreInfo->addWidget(labelTour);
+
         labelJoueur1 = new QLabel("Joueur 1", this);
         layoutBarreInfo->addWidget(labelJoueur1);
 
@@ -19,9 +23,6 @@ namespace JeuHive {
 
         listPiecesJoueur2 = new QListWidget(this);
         layoutBarreInfo->addWidget(listPiecesJoueur2);
-
-        labelTour = new QLabel("Tour actuel", this);
-        layoutBarreInfo->addWidget(labelTour);
 
         labelRetoursRestants = new QLabel("Retours restants: 0", this); 
         layoutBarreInfo->addWidget(labelRetoursRestants);
@@ -123,13 +124,10 @@ namespace JeuHive {
     }
 
     void VuePartie::afficherPiecesJoueur(const Joueur& joueur, QListWidget* listWidget) {
-        int idCounter = 1;
-
         vector<Piece*> pieces = joueur.getMain().getPieces();
         
         for (const auto* piece : pieces) {
-            QString pieceInfo = QString("%1 - %2 : %3")
-                .arg(idCounter++) // Ajoute un identifiant unique
+            QString pieceInfo = QString("%1 : %2")
                 .arg(QString::fromStdString(piece->getNom()))
                 .arg(QString::fromStdString(piece->getSymbole()));
 

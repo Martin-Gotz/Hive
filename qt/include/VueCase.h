@@ -21,24 +21,29 @@ namespace JeuHive {
         explicit VueCase(const Coordonnee& coord) : coord(coord), piece(nullptr), couleur(BLANC) {
             pen = QPen(Qt::black);
             brush = QBrush(Qt::white);
-            setFlag(QGraphicsItem::ItemIsSelectable);  // Permet la sélection de l'élément dans la scène
-            setFlag(QGraphicsItem::ItemIsMovable);    // Permet de déplacer l'élément
+            setFlag(QGraphicsItem::ItemIsSelectable);
+            setAcceptHoverEvents(true);
             updateHexagon();
         }
 
         // Définir la forme de l'hexagone
         QRectF boundingRect() const override {
-            return QRectF(0, 0, 40, 40); // La zone où l'élément peut être dessiné
+            return QRectF(0, 0, 50, 50);
         }
 
         // Dessiner l'hexagone
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override {
-            // Définir la couleur de fond en fonction de la couleur de la case
-            if (couleur == BLANC) {
-                brush.setColor(Qt::white);
+            // Changer la couleur en fonction de l'état (survol ou normal)
+            if (isHovered) {
+                brush.setColor(Qt::lightGray); // Couleur lors du survol
             }
             else {
-                brush.setColor(Qt::black);
+                if (couleur == BLANC) {
+                    brush.setColor(Qt::white);
+                }
+                else {
+                    brush.setColor(Qt::black);
+                }
             }
 
             // Dessiner l'hexagone
@@ -101,9 +106,21 @@ namespace JeuHive {
         bool piecePresente() const { return piece != nullptr; }
 
     public:
+        // Gestion de l'événement de clic
         void mousePressEvent(QGraphicsSceneMouseEvent* event) override {
-            QGraphicsItem::mousePressEvent(event);
             emit caseClicked(this);
+        }
+
+        // Gestion de l'événement de survol (entrée souris)
+        void hoverEnterEvent(QGraphicsSceneHoverEvent* event) override {
+            isHovered = true;
+            update();
+        }
+
+        // Gestion de l'événement de survol (sortie souris)
+        void hoverLeaveEvent(QGraphicsSceneHoverEvent* event) override {
+            isHovered = false;
+            update();
         }
 
     signals:
@@ -116,5 +133,6 @@ namespace JeuHive {
         QBrush brush;
         QPolygonF hexagon;
         Couleur couleur;
+        bool isHovered = false;
     };
 }
