@@ -152,7 +152,6 @@
     <ClCompile Include="qt\src\VueHive.cpp" />
     <ClCompile Include="qt\src\VueNouvellePartie.cpp" />
     <ClCompile Include="qt\src\VuePartie.cpp" />
-    <ClCompile Include="qt\src\VuePiece.cpp" />
     <ClCompile Include="qt\src\VuePlateau.cpp" />
     <ClCompile Include="src\Evenement.cpp" />
     <ClCompile Include="src\FabriquePiece.cpp" />
@@ -189,7 +188,6 @@
     <ClInclude Include="include\Plateau.h" />
     <ClInclude Include="include\Regle.h" />
     <ClInclude Include="include\InterfaceUtilisateur.h" />
-    <ClInclude Include="qt\include\VuePiece.h" />
     <QtMoc Include="qt\include\VuePlateau.h" />
     <QtMoc Include="qt\include\VuePartie.h" />
     <QtMoc Include="qt\include\VueNouvellePartie.h" />

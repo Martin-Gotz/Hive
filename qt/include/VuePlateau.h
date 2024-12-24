@@ -6,7 +6,6 @@
 #include <unordered_map>
 #include "Plateau.h"
 #include "Case.h"
-#include "VuePiece.h"
 #include "VueCase.h"
 
 namespace JeuHive {

@@ -72,9 +72,6 @@
     <ClCompile Include="qt\src\VuePartie.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="qt\src\VuePiece.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="qt\src\VuePlateau.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -132,9 +129,6 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="include\JoueurIa.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="qt\include\VuePiece.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

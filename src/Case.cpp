@@ -15,7 +15,7 @@ const Piece* JeuHive::Case::getDessus() const {
 		return dessus;
 	}
 	catch (exception& e) {
-		throw HiveException(e.what());
+		return nullptr;
 	}
 }
 
