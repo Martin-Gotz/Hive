@@ -11,7 +11,6 @@ namespace JeuHive {
 
         labelTour = new QLabel("Tour actuel", this);
         layoutBarreInfo->addWidget(labelTour);
-        labelTour->setStyleSheet("font-size: 18px; font-weight: bold; color: black; background-color: white; padding: 5px;");
 
         labelJoueur1 = new QLabel("Joueur 1", this);
         layoutBarreInfo->addWidget(labelJoueur1);
