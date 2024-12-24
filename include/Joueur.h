@@ -33,7 +33,7 @@ namespace JeuHive {
         // Ajouter une pièce à la main
         void ajouterPieceMain(Piece* piece);
 
-        bool operator==(Joueur* other) {
+        bool operator==(Joueur* other) const {
             return (nom == other->nom && couleur == other->couleur);
         }
 

@@ -11,6 +11,7 @@ namespace JeuHive {
 
         labelTour = new QLabel("Tour actuel", this);
         layoutBarreInfo->addWidget(labelTour);
+        labelTour->setStyleSheet("font-size: 18px; font-weight: bold; color: black; background-color: white; padding: 5px;");
 
         labelJoueur1 = new QLabel("Joueur 1", this);
         layoutBarreInfo->addWidget(labelJoueur1);
@@ -113,7 +114,7 @@ namespace JeuHive {
 
 
     void VuePartie::afficherInfosJoueurs() {
-        const auto* partie = Hive::getInstance().getPartieEnCours();
+        const Partie* partie = Hive::getInstance().getPartieEnCours();
         if (!partie) {
             cout << "Aucune partie en cours";
             return;
@@ -130,11 +131,33 @@ namespace JeuHive {
             .arg(partie->getJoueur2().getCouleur() == Couleur::BLANC ? "Blanc" : "Noir")
             .arg(partie->getJoueur2().getMain().getPieces().size());
 
-        QString tourInfo = QString("Tour actuel: %1")
+        QString tourInfo = QString("C'est a %1 de jouer")
             .arg(QString::fromStdString(partie->getJoueurActuel()->getNom()));
 
-        labelJoueur1->setText(joueur1Info);
-        labelJoueur2->setText(joueur2Info);
+        if (partie->estPremierJoueurActuel()) {
+            labelJoueur1->setStyleSheet("background-color: lightgreen; font-weight: bold; color: darkgreen;");
+            labelJoueur2->setStyleSheet("background-color: white; font-weight: normal; color: black;");
+        }
+        else {
+            labelJoueur1->setStyleSheet("background-color: white; font-weight: normal; color: black;");
+            labelJoueur2->setStyleSheet("background-color: lightgreen; font-weight: bold; color: darkgreen;");
+        }
+
+        if (partie->getJoueur1().getCouleur() == BLANC) {
+            listPiecesJoueur1->setStyleSheet("background-color: white; color: black;");
+            listPiecesJoueur2->setStyleSheet("background-color: black; color: white;");
+        }
+        else {
+            listPiecesJoueur1->setStyleSheet("background-color: black; color: white;");
+            listPiecesJoueur2->setStyleSheet("background-color: white; color: black;");
+        }
+
+        if (partie->getJoueurActuel()->getCouleur() == BLANC) {
+            labelTour->setStyleSheet("font-size: 18px; font-weight: bold; color: black; background-color: white; padding: 5px;");
+        }
+        else {
+            labelTour->setStyleSheet("font-size: 18px; font-weight: bold; color: white; background-color: black; padding: 5px;");
+        }
         labelTour->setText(tourInfo);
     }
 

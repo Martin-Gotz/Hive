@@ -60,7 +60,7 @@ namespace JeuHive {
 		const int getCompteurRegles() const { return compteurRegles; }
 
 
-		bool estPremierJoueurActuel() {
+		bool estPremierJoueurActuel() const {
 			return joueur1 == joueurActuel;
 		}
 
