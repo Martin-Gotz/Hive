@@ -42,7 +42,6 @@ namespace JeuHive {
         void afficherInfosJoueurs();
         void afficherPiecesJoueurs();
         void afficherPiecesJoueur(const Joueur& joueur, QListWidget* listWidget);
-
         void actualiser();
 
         int getIdPieceSelectionnee(QListWidget* listWidget);
@@ -52,6 +51,8 @@ namespace JeuHive {
         void retourArriere();
         void mettreAJourLabelRetoursRestants();
 
+        bool partieTerminee;
+        void verifierGagnant();
         void quitterPartie();
         void abandonnerPartie();
         void closeEvent(QCloseEvent* event) override;

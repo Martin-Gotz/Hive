@@ -29,6 +29,7 @@ Partie::Partie(Joueur& j1, Joueur& j2, JoueurIa* Ia, int nombreRetours) :
 }
 
 
+
 // Methodes principales
 void Partie::demarrer() {
     if (etatPartie == EtatPartie::EN_COURS) {
@@ -96,6 +97,7 @@ void Partie::reprendre() {
 }
 
 void Partie::mettreEnPause() {
+    if (etatPartie == EtatPartie::TERMINEE) return;
     if (etatPartie != EtatPartie::EN_COURS) {
         throw HiveException("La partie n'est pas en cours");
     }
@@ -242,7 +244,6 @@ void Partie::joueurSuivant() {
         }
 
         joueurActuel = estPremierJoueurActuel() ? &joueur2 : &joueur1;
-        
         if (joueurActuel->getType() == IA && joueurActuel != nullptr)
         {
             jouerCoupIA();
@@ -250,10 +251,6 @@ void Partie::joueurSuivant() {
         
         EvenementPartie evt(id, TypeEvenement::CHANGEMENT_JOUEUR);
         notifierObservers(evt);        
-    }
-    else
-    {
-        throw HiveException("Le vainqueur a déjà été déterminé !");
     }
 }
 
@@ -296,7 +293,6 @@ ResumePartie Partie::resumer() const {
 
 
 
-
 bool Partie::verifierEtatPartie() {
     if (plateau.estPartieFinie())
     {
@@ -322,7 +318,6 @@ bool Partie::verifierEtatPartie() {
             }
         }
         cout << Victorieux->getNom() << " a gagné ! \n";
-        terminer();
         return false;
     }
     else return true;

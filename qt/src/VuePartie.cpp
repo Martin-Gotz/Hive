@@ -4,7 +4,7 @@
 using namespace std;
 
 namespace JeuHive {
-    VuePartie::VuePartie(int partieId, QWidget* parent) : QWidget(parent) {
+    VuePartie::VuePartie(int partieId, QWidget* parent) : QWidget(parent), partieTerminee(false) {
         // Layout vertical pour les informations
         layoutBarreInfo = new QVBoxLayout();
 
@@ -88,6 +88,29 @@ namespace JeuHive {
         }
     }
 
+    void VuePartie::verifierGagnant()
+    {
+        Partie* partie = Hive::getInstance().getPartieEnCours();
+        if (!partie) return;
+        Joueur* gagnant = nullptr;
+        if (!partie->verifierEtatPartie())
+        {
+            Couleur couleurGagnante = partie->getPlateau().Gagnant();
+            if (couleurGagnante == Couleur::BLANC) {
+                gagnant = (partie->getJoueur1().getCouleur() == Couleur::BLANC) ? &partie->getJoueur1() : &partie->getJoueur2();
+            }
+            else if (couleurGagnante == Couleur::NOIR) {
+                gagnant = (partie->getJoueur1().getCouleur() == Couleur::NOIR) ? &partie->getJoueur1() : &partie->getJoueur2();
+            }
+        }
+        if (gagnant) {
+            QString message = QString("Le gagnant est %1").arg(QString::fromStdString(gagnant->getNom()));
+            QMessageBox::information(this, "Partie terminee", message); 
+            partieTerminee = true;
+            partie->terminer();
+        }
+    }
+
 
     void VuePartie::afficherInfosJoueurs() {
         const auto* partie = Hive::getInstance().getPartieEnCours();
@@ -152,6 +175,12 @@ namespace JeuHive {
 
     // Actions
     void VuePartie::placerPiece(int idPiece, const Coordonnee& coord) {
+
+        if (partieTerminee) {
+            QMessageBox::warning(this, "Erreur", "La partie est terminée. Vous ne pouvez plus placer de pièces.");
+            return; // Ne rien faire si la partie est terminée
+        }
+
         Hive& hive = Hive::getInstance();
         Partie* partie = hive.getPartieEnCours();
 
@@ -187,10 +216,17 @@ namespace JeuHive {
 
         actualiser();
         update();
+        verifierGagnant();
     }
 
 
     void VuePartie::deplacerPiece(const Coordonnee& origine, const Coordonnee& destination) {
+
+        if (partieTerminee) {
+            QMessageBox::warning(this, "Erreur", "La partie est terminée. Vous ne pouvez plus déplacer de pièces.");
+            return; // Ne rien faire si la partie est terminée
+        }
+
         Hive& hive = Hive::getInstance();
         Partie* partie = hive.getPartieEnCours();
         mettreAJourLabelRetoursRestants();
@@ -201,6 +237,7 @@ namespace JeuHive {
         cout << "Pièce déplacée\n";
 
         update();
+        verifierGagnant();
     }
 
 
@@ -209,7 +246,10 @@ namespace JeuHive {
     void VuePartie::quitterPartie()
     {
         Hive& hive = Hive::getInstance();
-        hive.mettrePartieEnPause();
+        if (hive.getPartieEnCours() && hive.getPartieEnCours()->getEtatPartie() != TERMINEE)
+        {
+            hive.mettrePartieEnPause();
+        }
         this->close();
     }
 
