@@ -71,7 +71,7 @@ namespace JeuHive {
             calculerPositionHexagonale(coord.get_q(), coord.get_r(), x, y);
 
             // Vérification si la case a déjà été ajoutée
-            if (!casesAjoutees.contains(qMakePair(coord.get_q(), coord.get_r()))) {
+            if (!casesAjoutees.contains(qMakePair(coord.get_q(), coord.get_r())) || casesAjoutees.contains(qMakePair(0, 0))) {
                 // Calcul des positions de la vue de la case
                 int pixelX = static_cast<int>(x + centerX);
                 int pixelY = static_cast<int>(y + centerY);
@@ -93,7 +93,7 @@ namespace JeuHive {
                 }
 
                 // Ajouter la pièce si nécessaire
-                if (caseHive && caseHive->getDessus()) {
+                if (caseHive) {
                     casesVue[coordPair]->setPiece(*caseHive->getDessus());
                 }
 
@@ -106,7 +106,7 @@ namespace JeuHive {
         void calculerPositionHexagonale(int q, int r, double& x, double& y) const {
             // Calcul de la position hexagonale en pixels
             x = hexSize * (3.0 / 2.0 * q);
-            y = -hexSize * (std::sqrt(3) * (r + q / 2.0));
+            y = -hexSize * (sqrt(3) * (r + q / 2.0));
         }
 
 
