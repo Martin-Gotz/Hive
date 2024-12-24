@@ -108,6 +108,7 @@ void Partie::mettreEnPause() {
 }
 
 void Partie::terminer() {
+    if (etatPartie == EtatPartie::TERMINEE) return;
     if (etatPartie != EtatPartie::EN_COURS) {
         throw HiveException("Impossible de terminer une partie qui n'est pas en cours !");
     }
