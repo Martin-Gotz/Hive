@@ -6,6 +6,7 @@
 #include "Coordonnee.h"
 #include "Piece.h"
 #include <stack>
+#include "Exceptions.h"
 
 
 using namespace std;
@@ -21,10 +22,7 @@ namespace JeuHive {
 		const Coordonnee& getCoo() const { return coo; }
 		void ajouterPiece(const Piece* piece) { pieces.push_back(piece); }
 		void retirerPiece() { pieces.pop_back(); }
-		const Piece& getDessus() const {
-			const Piece& piece = *pieces.back();
-			return piece;
-		}
+		const Piece* getDessus() const;
 		const vector<const Piece*>& getPieces() const { return pieces; }
 
 		bool estVide() const { return pieces.empty(); }	// très peu pertinent car une case vide devrait être supprimée

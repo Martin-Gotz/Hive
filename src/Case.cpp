@@ -4,6 +4,21 @@
 using namespace JeuHive;
 using namespace std;
 
+const Piece* JeuHive::Case::getDessus() const {
+	try {
+		if (pieces.empty()) {
+			return nullptr;
+		}
+		const Piece* dessus = pieces.back();
+		if (!dessus) {
+		}
+		return dessus;
+	}
+	catch (exception& e) {
+		throw HiveException(e.what());
+	}
+}
+
 string Case::toString() const
 {
 	string str_case;

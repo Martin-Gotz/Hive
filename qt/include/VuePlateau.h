@@ -94,8 +94,8 @@ namespace JeuHive {
                 }
 
                 // Ajouter la pièce si nécessaire
-                if (caseHive && &caseHive->getDessus()) {
-                    casesVue[coordPair]->setPiece(caseHive->getDessus());
+                if (caseHive && caseHive->getDessus()) {
+                    casesVue[coordPair]->setPiece(*caseHive->getDessus());
                 }
 
                 // Ajouter la coordonnée au set pour éviter la duplication

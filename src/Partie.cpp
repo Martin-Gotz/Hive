@@ -152,7 +152,7 @@ void Partie::deplacerPiece(const Coordonnee& cooOrigine, const Coordonnee& cooDe
         return;
     }
 
-    const Piece* piece = &case0->getDessus();
+    const Piece* piece = case0->getDessus();
 
     if (piece->getCouleur() != joueurActuel->getCouleur() && joueurActuel->getType() == IA) {
         joueurActuel = (joueurActuel->getNom() == joueur1.getNom()) ? &joueur2 : &joueur1;

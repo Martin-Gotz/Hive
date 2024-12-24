@@ -140,7 +140,7 @@ set<Coordonnee> Plateau::ensemblePlacementsPossibles(const Piece& piece, int tou
 		case_ptr = itr->second;
 
 		coo_voisines = coo_case.getVoisins();
-		piece_dessus = &case_ptr->getDessus();
+		piece_dessus = case_ptr->getDessus();
 
 		for (auto coo_voisine : coo_voisines) {
 			if (getCaseDeCoo(coo_voisine) != nullptr) {
@@ -185,9 +185,9 @@ bool Plateau::deplacementPossible(const Piece& piece, const Coordonnee& coo) con
 		throw HiveException("la piece n'est pas encore placee");
 	}
 
-	Case* case_de_piece = getCaseDeCoo(coo);
+	const Case* case_de_piece = getCaseDeCoo(coo);
 
-	if (&piece != &case_de_piece->getDessus()) {
+	if (&piece != case_de_piece->getDessus()) {
 		return false;
 	}
 	
@@ -625,7 +625,7 @@ vector<Coup*> JeuHive::Plateau::totalCoupsPossibles(int tour, Joueur& joueur)
 	Coordonnee coo_origine;
 	for (pair<Coordonnee, Case*> paire : cases) {
 
-		piece_actuelle_plateau = &paire.second->getDessus();
+		piece_actuelle_plateau = paire.second->getDessus();
 		coo_origine = paire.first;
 		coos_deplacements_pieces = piece_actuelle_plateau->ensembleDeplacementPossibles(*this, coo_origine);
 
