@@ -5,12 +5,12 @@ using namespace JeuHive;
 using namespace std;
 
 const Piece* JeuHive::Case::getDessus() const {
-	try {
+	if (pieces.empty()) {
+		return nullptr;
+	}
+	else {
 		const Piece* dessus = pieces.back();
 		return dessus;
-	}
-	catch (exception& e) {
-		return nullptr;
 	}
 }
 

@@ -93,7 +93,7 @@ namespace JeuHive {
                 }
 
                 // Ajouter la pièce si nécessaire
-                if (caseHive) {
+                if (caseHive && caseHive->getDessus()) {
                     casesVue[coordPair]->setPiece(*caseHive->getDessus());
                 }
 

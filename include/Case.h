@@ -14,7 +14,7 @@ using namespace std;
 
 namespace JeuHive {
 	class Case
-	{
+	{ 
 	private:
 		Coordonnee coo;
 		vector<const Piece*> pieces;
