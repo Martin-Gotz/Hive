@@ -606,11 +606,11 @@ Couleur JeuHive::Plateau::Gagnant() const
 	}
 	else if ((estAbeillePlacee(BLANC) && estAbeilleEntouree(BLANC)))
 	{
-		return BLANC;
+		return NOIR;
 	}
 	else if ((estAbeillePlacee(NOIR) && estAbeilleEntouree(NOIR)))
 	{
-		return NOIR;
+		return BLANC;
 	}
 	else throw HiveException("Problème lors de la détermination du gagnant\n");
 }
