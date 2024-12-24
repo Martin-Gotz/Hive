@@ -120,35 +120,34 @@ namespace JeuHive {
         }
 
         cout << partie->getJoueur1().getCouleur();
-        QString joueur1Info = QString("Joueur 1: %1\nCouleur: %2\nPièces: %3")
+        QString joueur1Info = QString("Joueur 1: %1\nPièces: %2")
             .arg(QString::fromStdString(partie->getJoueur1().getNom()))
-            .arg(partie->getJoueur1().getCouleur() == Couleur::BLANC ? "Blanc" : "Noir")
             .arg(partie->getJoueur1().getMain().getPieces().size());
 
-        QString joueur2Info = QString("Joueur 2: %1\nCouleur: %2\nPièces: %3")
+        QString joueur2Info = QString("Joueur 2: %1\nPièces: %2")
             .arg(QString::fromStdString(partie->getJoueur2().getNom()))
-            .arg(partie->getJoueur2().getCouleur() == Couleur::BLANC ? "Blanc" : "Noir")
             .arg(partie->getJoueur2().getMain().getPieces().size());
 
         QString tourInfo = QString("C'est a %1 de jouer")
             .arg(QString::fromStdString(partie->getJoueurActuel()->getNom()));
 
-        if (partie->estPremierJoueurActuel()) {
-            labelJoueur1->setStyleSheet("background-color: lightgreen; font-weight: bold; color: darkgreen;");
-            labelJoueur2->setStyleSheet("background-color: white; font-weight: normal; color: black;");
-        }
-        else {
-            labelJoueur1->setStyleSheet("background-color: white; font-weight: normal; color: black;");
-            labelJoueur2->setStyleSheet("background-color: lightgreen; font-weight: bold; color: darkgreen;");
-        }
 
         if (partie->getJoueur1().getCouleur() == BLANC) {
-            listPiecesJoueur1->setStyleSheet("background-color: white; color: black;");
-            listPiecesJoueur2->setStyleSheet("background-color: black; color: white;");
+            labelJoueur1->setStyleSheet("background-color: white; color: black;");
+            labelJoueur2->setStyleSheet("background-color: black; color: white;");
         }
         else {
-            listPiecesJoueur1->setStyleSheet("background-color: black; color: white;");
-            listPiecesJoueur2->setStyleSheet("background-color: white; color: black;");
+            labelJoueur1->setStyleSheet("background-color: black; color: white;");
+            labelJoueur2->setStyleSheet("background-color: white; color: black;");
+        }
+
+        if (partie->estPremierJoueurActuel()) {
+            listPiecesJoueur1->setEnabled(true);
+            listPiecesJoueur2->setEnabled(false);
+        }
+        else {
+            listPiecesJoueur1->setEnabled(false);
+            listPiecesJoueur2->setEnabled(true);
         }
 
         if (partie->getJoueurActuel()->getCouleur() == BLANC) {
@@ -157,6 +156,9 @@ namespace JeuHive {
         else {
             labelTour->setStyleSheet("font-size: 18px; font-weight: bold; color: white; background-color: black; padding: 5px;");
         }
+
+        labelJoueur1->setText(joueur1Info);
+        labelJoueur2->setText(joueur2Info);
         labelTour->setText(tourInfo);
     }
 
